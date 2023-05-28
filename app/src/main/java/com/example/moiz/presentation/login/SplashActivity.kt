@@ -28,7 +28,9 @@ class SplashActivity : AppCompatActivity() {
                     if (it != "") MainActivity::class.java else LoginActivity::class.java
                 )
                 startActivity(intent)
+                finish()
             }, 3000)
         }
+
     }
 }
