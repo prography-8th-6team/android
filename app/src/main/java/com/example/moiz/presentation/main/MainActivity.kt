@@ -19,8 +19,6 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: LoginViewModel by viewModels()
-
     private var mBinding: ActivityMainBinding? = null
     private val binding get() = mBinding!!
 
