@@ -1,5 +1,7 @@
 package com.example.moiz.data.network
 
+import com.example.moiz.data.network.service.TravelService
+import com.example.moiz.data.network.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +30,11 @@ class NetworkModule {
     @Singleton
     fun provideUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTravelService(retrofit: Retrofit): TravelService =
+        retrofit.create(TravelService::class.java)
 
     @Provides
     @Singleton

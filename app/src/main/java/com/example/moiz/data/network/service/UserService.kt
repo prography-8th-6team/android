@@ -1,4 +1,4 @@
-package com.example.moiz.data.network
+package com.example.moiz.data.network.service
 
 import com.example.moiz.data.network.dto.UserResponseDto
 import com.example.moiz.domain.model.TokenEntity
