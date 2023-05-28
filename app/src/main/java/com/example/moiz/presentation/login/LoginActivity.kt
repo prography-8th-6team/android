@@ -3,7 +3,12 @@ package com.example.moiz.presentation.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.service.autofill.UserData
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.datastore.core.DataStore
+import androidx.lifecycle.asLiveData
+import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ActivityLoginBinding
 import com.example.moiz.presentation.main.MainActivity
 import com.kakao.sdk.auth.model.OAuthToken
@@ -11,11 +16,13 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
+    private val viewModel: LoginViewModel by viewModels()
     private var mBinding: ActivityLoginBinding? = null
     private val binding get() = mBinding!!
 
@@ -26,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initViewModel()
     }
 
     override fun onDestroy() {
@@ -33,19 +41,23 @@ class LoginActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    private fun initViewModel() {
+        viewModel.token.observe(this) {
+            runBlocking {
+                UserDataStore.setUserToken(this@LoginActivity, it.token.toString())
+            }
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun initView() {
         binding.btnKakao.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-            /*
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
                     Timber.e(error.message)
                 } else if (token != null) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("token", token.accessToken)
-                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                    finish()
+                    viewModel.getKakaoToken(token.accessToken)
                 }
             }
 
@@ -53,23 +65,18 @@ class LoginActivity : AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     if (error != null) {
                         Timber.e(error.message)
-
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                             return@loginWithKakaoTalk
                         }
 
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                     } else if (token != null) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("token", token.accessToken)
-                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                        finish()
+                        viewModel.getKakaoToken(token.accessToken)
                     }
                 }
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
-             */
         }
     }
 }

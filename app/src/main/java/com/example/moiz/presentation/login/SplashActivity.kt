@@ -10,8 +10,8 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -22,15 +22,13 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         UserDataStore.getUserToken(this@SplashActivity).asLiveData().observe(this) {
-            Timber.d(it)
             Handler().postDelayed(Runnable {
                 val intent = Intent(
                     this@SplashActivity,
-                    if (it.isEmpty()) LoginActivity::class.java else MainActivity::class.java
+                    if (it != "") MainActivity::class.java else LoginActivity::class.java
                 )
                 startActivity(intent)
             }, 3000)
         }
     }
-
 }

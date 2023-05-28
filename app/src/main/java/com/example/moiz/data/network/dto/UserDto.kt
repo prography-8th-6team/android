@@ -11,5 +11,5 @@ data class UserResponseDto(
 
 data class KakaoToken(
     @SerializedName("token")
-    val token: Int
+    val token: String?
 )
