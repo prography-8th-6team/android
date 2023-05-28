@@ -1,7 +1,5 @@
 package com.example.moiz.domain.usecase
 
-import com.example.moiz.data.network.NetworkResult
-import com.example.moiz.data.network.dto.KakaoToken
 import com.example.moiz.data.network.dto.UserResponseDto
 import com.example.moiz.domain.repository.UserRepository
 import javax.inject.Inject
