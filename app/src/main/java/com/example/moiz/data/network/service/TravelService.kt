@@ -4,6 +4,7 @@ import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.data.network.dto.UserResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -29,8 +30,11 @@ interface TravelService {
     ): Response<ResponseTravelCreateDto>
 
     // 여행 상세 API
-    @GET("v1/travel/{id}")
-    suspend fun getTravelDetail(@Path("id") id: Int): Response<TravelDto>
+    @GET("v1/travels/{id}")
+    suspend fun getTravelDetail(
+        @Header("Authorization") token : String?,
+        @Path("id") id: Int
+    ): Response<ResponseTravelDetailDto>
 
     // 여행 수정 API
     @PUT("v1/travels/{id}")

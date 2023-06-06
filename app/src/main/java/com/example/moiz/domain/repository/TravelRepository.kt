@@ -14,7 +14,7 @@ interface TravelRepository {
         token: String,
     ): ResponseTravelCreateDto
 
-    suspend fun getTravelDetail(travelId: Int): TravelDto
+    suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto
 
     suspend fun putTravel(
         token: String,

@@ -4,6 +4,7 @@ import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.data.network.dto.UserResponseDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
 import javax.inject.Inject
@@ -33,8 +34,15 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun getTravelDetail(travelId: Int): TravelDto {
-        return travelService.getTravelDetail(travelId).body()!!
+    override suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto {
+        return if (travelService.getTravelDetail(token, travelId).isSuccessful) {
+            travelService.getTravelDetail(token, travelId).body()!!
+        } else {
+            ResponseTravelDetailDto(
+                message = travelService.getTravelDetail(token, travelId).message(),
+                results = null
+            )
+        }
     }
 
     override suspend fun putTravel(

@@ -1,8 +1,6 @@
 package com.example.moiz.data.network.dto
 
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
-import java.util.Date
 
 data class TravelDto(
     @SerializedName("id")
@@ -81,4 +79,38 @@ data class ResponseTravelCreateDto(
     val message:String,
     @SerializedName("results")
     val results:TravelCreateDto?
+)
+
+data class ResponseTravelDetailDto(
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("results")
+    val results: TravelDetailDto?,
+)
+
+data class TravelDetailDto(
+    @SerializedName("id")
+    val id: Int?,
+    @SerializedName("description")
+    val description: String?,
+    @SerializedName("members")
+    val members: List<String>?,
+    @SerializedName("title")
+    val title: String?,
+    @SerializedName("start_date")
+    val start_date: String?,
+    @SerializedName("end_date")
+    val end_date: String?,
+    @SerializedName("color")
+    val color: String?,
+    @SerializedName("currency")
+    val currency: String?,
+    @SerializedName("total_captured_amount")
+    val total_captured_amount: Double?,
+    @SerializedName("total_amount")
+    val total_amount: Double?,
+    @SerializedName("my_total_billing")
+    val my_total_billing: Double?,
+    @SerializedName("billings")
+    val billings: List<BillingDto>?
 )
