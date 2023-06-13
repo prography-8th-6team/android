@@ -1,12 +1,17 @@
 package com.example.moiz.presentation.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moiz.R
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
@@ -40,6 +45,41 @@ class TravelDetailFragment : Fragment() {
     }
 
     private fun initViews() = with(binding) {
+        ivAdditional.setOnClickListener {
+            val inflater =
+                view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val popupView = inflater.inflate(R.layout.item_travel_detail_popup, null)
+
+            val popupWindow =
+                PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            popupWindow.isOutsideTouchable = true
+            popupWindow.isFocusable = true
+            popupWindow.showAsDropDown(ivAdditional, -80, 20)
+
+            popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
+                // 여행 공유
+            }
+            popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
+                // 여행 수정
+            }
+            popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
+                // 여행 삭제
+            }
+        }
+
+        nsvTravelDetail.run {
+            header = llDetailTab
+            temp = llToolbar
+        }
+
+        ivAddAccount.setOnClickListener {
+            findNavController().navigate(R.id.goto_add_billing)
+        }
+
         viewModel.list.observe(viewLifecycleOwner) { data ->
             tvTitle.text = data.title
             tvData.text = data.start_date + "~" + data.end_date
@@ -65,7 +105,7 @@ class TravelDetailFragment : Fragment() {
     }
 
     private fun itemOnClick(data: BillingDto) {
-
+        // 가계부 상세 이동
     }
 
 }

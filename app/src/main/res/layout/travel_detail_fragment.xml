@@ -27,13 +27,14 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/iv_additional"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_toolbar_additional" />
 
     </LinearLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <com.example.moiz.presentation.detail.CustomNestedScrollView
         android:id="@+id/nsv_travel_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -164,6 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:paddingTop="18dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -172,7 +174,7 @@
                 app:layout_constraintTop_toBottomOf="@id/ll_detail_tab" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </com.example.moiz.presentation.detail.CustomNestedScrollView>
 
     <ImageView
         android:id="@+id/iv_add_account"
