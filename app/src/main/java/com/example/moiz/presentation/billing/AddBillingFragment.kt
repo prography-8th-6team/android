@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.service.autofill.UserData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import com.example.moiz.R
+import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.databinding.FragmentAddBillingBinding
@@ -247,11 +250,14 @@ class AddBillingFragment : Fragment() {
         tvAddBilling.setOnClickListener {
             temp.title = etName.text.toString()
             if (temp.title.isNotEmpty() && temp.paid_by != 0 && temp.paid_date.isNotEmpty() && temp.currency.isNotEmpty() && temp.settlements.isNotEmpty()) {
-                viewModel.postBillings(
-                    1,
-                    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHBpcmVkIjoiMjAyMy0wNi0xOSAyMzoxNToxOSIsImlhdCI6MTY4NTk3NDUxOS4zMTM2MX0.XpoyqvlBN9WBpUjBoP5mtLdK3p5GPF16OdkTL8bTEik",
-                    temp
-                )
+                UserDataStore.getUserToken(requireContext()).asLiveData()
+                    .observe(viewLifecycleOwner) {
+                        viewModel.postBillings(
+                            1,
+                            "Bearer $it",
+                            temp
+                        )
+                    }
             } else {
                 Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }

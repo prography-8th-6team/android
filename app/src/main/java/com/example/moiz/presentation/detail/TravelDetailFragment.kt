@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
+import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.Currency
 
 @AndroidEntryPoint
@@ -37,10 +40,14 @@ class TravelDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getTravelDetail(
-            1,
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHBpcmVkIjoiMjAyMy0wNi0xOSAyMzoxNToxOSIsImlhdCI6MTY4NTk3NDUxOS4zMTM2MX0.XpoyqvlBN9WBpUjBoP5mtLdK3p5GPF16OdkTL8bTEik"
-        )
+        UserDataStore.getUserToken(requireContext()).asLiveData()
+            .observe(viewLifecycleOwner) {
+                viewModel.getTravelDetail(
+                    1,
+                    "Bearer $it"
+                )
+            }
+
         initViews()
     }
 
