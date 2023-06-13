@@ -1,10 +1,13 @@
 package com.example.moiz.data.network.service
 
+import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
-import com.example.moiz.data.network.dto.UserResponseDto
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -16,8 +19,11 @@ interface TravelService {
     suspend fun getTravelList(): Response<List<TravelDto>>
 
     // 여행 생성 API
-    @POST("v1/travel")
-    suspend fun postTravel()
+    @POST("v1/travels")
+    suspend fun postTravel(
+        @Body data: TravelCreateDto,
+        @Header("Authorization") token: String?
+    ): Response<ResponseTravelCreateDto>
 
     // 여행 상세 API
     @GET("v1/travel/{id}")

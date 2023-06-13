@@ -9,11 +9,17 @@ import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.moiz.R
+import com.example.moiz.data.UserDataStore
+import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.databinding.CreateJourneyListFragmentBinding
 import com.example.moiz.domain.model.Currency
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class CreateJourneyListFragment : Fragment() {
+@AndroidEntryPoint class CreateJourneyListFragment : Fragment() {
     private lateinit var binding: CreateJourneyListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<CreateJourneyListViewModel>()
@@ -35,16 +41,16 @@ class CreateJourneyListFragment : Fragment() {
         setDatePickerDialog()
         setRadioGroup()
 
+        binding.btnCreate.setOnClickListener { postTravel() }
         viewModel.isEnabled.observe(viewLifecycleOwner) {
             binding.btnCreate.isEnabled = it
             if (it) {
-                binding.btnCreate.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(), R.color.color_f55c5c))
+                binding.btnCreate.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.color_f55c5c)
+
             } else {
-                binding.btnCreate.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(), R.color.color_ebeaea))
+                binding.btnCreate.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.color_ebeaea)
             }
         }
     }
@@ -74,15 +80,15 @@ class CreateJourneyListFragment : Fragment() {
     private fun setDatePickerDialog() {
         binding.dpStartDate.setOnClickListener {
             val datePickerFragment = DatePickerDialog()
-            datePickerFragment.setOnOkClikListener { year, month, day ->
+            datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setStartDate("$year.$month.$day")
             }
             datePickerFragment.show(childFragmentManager, null)
         }
 
         binding.dpEndDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
-            datePickerFragment.setOnOkClikListener { year, month, day ->
+            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
+            datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setEndDate("$year.$month.$day")
             }
             datePickerFragment.show(childFragmentManager, null)
@@ -90,7 +96,7 @@ class CreateJourneyListFragment : Fragment() {
     }
 
     private fun setRadioGroup() {
-        binding.rgColor.setOnCheckedChangeListener { radioGroup, id ->
+        binding.rgColor.setOnCheckedChangeListener { _, id ->
             setAllColorUnselected()
             binding.viewLine.visibility = View.VISIBLE
 
@@ -221,6 +227,29 @@ class CreateJourneyListFragment : Fragment() {
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
                     requireContext(), R.color.color_f4f4f4))
+        }
+    }
+
+    private fun postTravel() {
+        val travelInfo = TravelCreateDto(
+            title = viewModel.title.value,
+            start_date = viewModel.startDate.value?.replace(".", "-"),
+            end_date = viewModel.endDate.value?.replace(".", "-"),
+            color = viewModel.color.value,
+            description = viewModel.memo.value,
+            currency = viewModel.currency.value)
+
+        lifecycleScope.launch {
+            UserDataStore.getUserToken(requireContext()).collect { token ->
+                viewModel.postTravel(travelInfo, "Bearer $token")
+            }
+        }
+
+        viewModel.response.observe(viewLifecycleOwner) {
+            // 성공 시 홈화면으로 이동
+            if (it.results != null) {
+                findNavController().navigateUp()
+            }
         }
     }
 }

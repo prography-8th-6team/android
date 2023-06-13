@@ -2,17 +2,25 @@ package com.example.moiz.presentation.createJourneyList
 
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.TravelCreateDto
+import com.example.moiz.domain.usecase.PostTravelUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import javax.inject.Inject
 
-class CreateJourneyListViewModel : ViewModel() {
+@HiltViewModel class CreateJourneyListViewModel @Inject constructor(
+    private val postTravelUseCase: PostTravelUseCase,
+) : ViewModel() {
     val calendar = Calendar.getInstance()
-    val format = SimpleDateFormat("yyy.MM.dd")
+    val format = SimpleDateFormat("yyyy.MM.dd")
 
     val title = MutableLiveData<String>()
     val startDate = MutableLiveData(format.format(calendar.time))
@@ -24,6 +32,9 @@ class CreateJourneyListViewModel : ViewModel() {
 
     val titleCount = MutableLiveData(0)
     val memoCount = MutableLiveData(0)
+
+    private val _response = MutableLiveData<ResponseTravelCreateDto>()
+    val response: LiveData<ResponseTravelCreateDto> = _response
 
     init {
         viewModelScope.launch { title.asFlow().collect { checkValidate() } }
@@ -70,5 +81,13 @@ class CreateJourneyListViewModel : ViewModel() {
         }
 
         override fun afterTextChanged(p0: Editable?) {}
+    }
+
+    fun postTravel(data: TravelCreateDto, token: String) {
+        viewModelScope.launch {
+            postTravelUseCase.invoke(data, token)?.let {
+                _response.value = it
+            }
+        }
     }
 }

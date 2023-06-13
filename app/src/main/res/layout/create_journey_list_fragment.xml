@@ -12,7 +12,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:padding="0dp">
 
         <ImageView
             android:id="@+id/img_back"
@@ -290,18 +292,18 @@
             app:layout_constraintTop_toBottomOf="@id/rg_color"
             tools:text="0/13" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_ebeaea"
-            android:paddingVertical="27dp"
+            android:layout_marginBottom="0dp"
+            android:background="#ebeaea"
+            android:paddingVertical="25dp"
             android:text="여행 리스트 만들기"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
