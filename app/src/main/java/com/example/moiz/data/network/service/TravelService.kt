@@ -32,9 +32,16 @@ interface TravelService {
     // 여행 상세 API
     @GET("v1/travels/{id}")
     suspend fun getTravelDetail(
-        @Header("Authorization") token : String?,
+        @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Response<ResponseTravelDetailDto>
+
+    // 비용 추가 멤버
+    @GET("v1/travels/{id}/members")
+    suspend fun getBillingMembers(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int
+    ): Response<List<BillingMembersDto>>
 
     // 여행 수정 API
     @PUT("v1/travels/{id}")
@@ -47,4 +54,12 @@ interface TravelService {
     // 여행 삭제 API
     @DELETE("v1/travel/{id}")
     suspend fun deleteTravel(@Path("id") id: Int)
+
+    // 가계부 추가
+    @POST("v1/travels/{id}/billings")
+    suspend fun postBillings(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+        @Body data: PostBillingDto
+    )
 }

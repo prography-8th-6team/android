@@ -114,3 +114,23 @@ data class TravelDetailDto(
     @SerializedName("billings")
     val billings: List<BillingDto>?
 )
+
+data class BillingMembersDto(
+    @SerializedName("id")
+    val id: Int?,
+    @SerializedName("nickname")
+    val name: String?
+)
+
+data class PostBillingDto(
+    var title: String,
+    var paid_by: Int,
+    var paid_date: String,
+    var currency: String,
+    var settlements: List<SettlementsDto>
+)
+
+data class SettlementsDto(
+    var member: Int,
+    var amount: Int
+)
