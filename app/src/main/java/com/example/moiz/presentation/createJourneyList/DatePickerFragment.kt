@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.moiz.databinding.DatePickerDialogBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
-class DatePickerDialog : DialogFragment() {
+class DatePickerDialog(private val startDate: String? = null) : DialogFragment() {
     private lateinit var binding: DatePickerDialogBinding
     private lateinit var listener: DatePickerDialogClickListener
 
@@ -17,8 +19,14 @@ class DatePickerDialog : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = DatePickerDialogBinding.inflate(inflater, container, false)
+        startDate?.let {
+            val cal = Calendar.getInstance()
+            cal.time = SimpleDateFormat("yyyy.MM.dd").parse(it)
+            binding.datePicker.minDate = cal.timeInMillis
+        }
+
         binding.btnOk.setOnClickListener {
-            listener.onOkClik(
+            listener.onOkClick(
                 binding.datePicker.year.toString(),
                 (binding.datePicker.month + 1).toString().padStart(2, '0'),
                 binding.datePicker.dayOfMonth.toString().padStart(2, '0'))
@@ -28,16 +36,16 @@ class DatePickerDialog : DialogFragment() {
         return binding.root
     }
 
-    fun setOnOkClikListener(listener: (String, String, String) -> Unit) {
+    fun setOnOkClickListener(listener: (String, String, String) -> Unit) {
         this.listener = object : DatePickerDialogClickListener {
-            override fun onOkClik(year: String, month: String, day: String) {
+            override fun onOkClick(year: String, month: String, day: String) {
                 listener(year, month, day)
             }
         }
     }
 
     interface DatePickerDialogClickListener {
-        fun onOkClik(year: String, month: String, day: String)
+        fun onOkClick(year: String, month: String, day: String)
     }
 }
 
