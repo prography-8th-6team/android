@@ -1,6 +1,7 @@
 package com.example.moiz.data.network.service
 
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
 import retrofit2.Response
@@ -15,14 +16,16 @@ import retrofit2.http.Path
 interface TravelService {
 
     // 여행 전체 리스트 API
-    @GET("v1/travel")
-    suspend fun getTravelList(): Response<List<TravelDto>>
+    @GET("v1/travels")
+    suspend fun getTravelList(
+        @Header("Authorization") token: String?,
+    ): Response<ResponseTravelListDto>
 
     // 여행 생성 API
     @POST("v1/travels")
     suspend fun postTravel(
         @Body data: TravelCreateDto,
-        @Header("Authorization") token: String?
+        @Header("Authorization") token: String?,
     ): Response<ResponseTravelCreateDto>
 
     // 여행 상세 API

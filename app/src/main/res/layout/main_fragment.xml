@@ -57,10 +57,10 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_journey_list"
+                android:id="@+id/rv_travel_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="40dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -73,7 +73,7 @@
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="40dp"
         android:background="@null"
-        android:src="@drawable/ic_add_journey"
+        android:src="@drawable/ic_add_travel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

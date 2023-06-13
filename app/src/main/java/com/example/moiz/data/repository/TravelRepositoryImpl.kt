@@ -1,6 +1,7 @@
 package com.example.moiz.data.repository
 
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
@@ -10,8 +11,14 @@ import javax.inject.Inject
 class TravelRepositoryImpl @Inject constructor(private val travelService: TravelService) :
     TravelRepository {
 
-    override suspend fun getTravelList(): List<TravelDto> {
-        return travelService.getTravelList().body()!!
+    override suspend fun getTravelList(token: String): ResponseTravelListDto {
+        return if (travelService.getTravelList(token).isSuccessful) {
+            travelService.getTravelList(token).body()!!
+        } else {
+            ResponseTravelListDto(
+                message = travelService.getTravelList(token).message(), results = null)
+        }
+
     }
 
     override suspend fun postTravel(

@@ -1,35 +1,45 @@
 package com.example.moiz.presentation.main
 
 
+import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moiz.databinding.JourneyItemViewBinding
-import com.example.moiz.domain.model.Journey
-import timber.log.Timber
+import com.example.moiz.R
+import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.databinding.TravelItemViewBinding
+import java.text.SimpleDateFormat
 
-class JourneyAdapter : ListAdapter<Journey, JourneyAdapter.JourneyViewHolder>(JourneyDiffCallback) {
-    inner class JourneyViewHolder(private val binding: JourneyItemViewBinding) : RecyclerView.ViewHolder(
+class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.JourneyViewHolder>(TravelDiffCallback) {
+    private lateinit var context: Context
+
+    inner class JourneyViewHolder(private val binding: TravelItemViewBinding) : RecyclerView.ViewHolder(
         binding.root) {
-        fun bind(journey: Journey) {
-            val memberCount = journey.memberList.size
-            binding.tvTitle.text = journey.title
-            binding.tvDate.text = "${journey.startDate} ~ ${journey.endDate}"
-            binding.tvMember1.text = journey.memberList[0]
-            binding.index.text = "${adapterPosition}"
+        fun bind(travel: TravelDto) {
+            val memberCount = travel.members?.size!!
+            val fromFormat = SimpleDateFormat("yyyy-MM-dd")
+            val toFormat = SimpleDateFormat("yy-MM-dd")
+
+            binding.tvTitle.text = travel.title
+            binding.tvDate.text = "${toFormat.format(fromFormat.parse(travel.start_date))} ~ ${
+                toFormat.format(fromFormat.parse(travel.end_date))
+            }"
+            binding.tvMember1.text = travel.members?.get(0)
+
             when {
                 memberCount >= 3 -> {
-                    binding.tvMember2.text = journey.memberList[1]
+                    binding.tvMember2.text = travel.members[1]
                     binding.tvMemberCount.text = "+${memberCount - 2}"
                 }
 
                 memberCount == 2 -> {
-                    binding.tvMember2.text = journey.memberList[1]
+                    binding.tvMember2.text = travel.members[1]
                     binding.tvMemberCount.visibility = View.GONE
                 }
 
@@ -39,15 +49,25 @@ class JourneyAdapter : ListAdapter<Journey, JourneyAdapter.JourneyViewHolder>(Jo
                 }
             }
 
-            binding.root.setOnClickListener {
-                Timber.i("position: ", adapterPosition)
+            binding.root.backgroundTintList = when (travel.color) {
+                "f9b7a4" -> ContextCompat.getColorStateList(itemView.context, R.color.color_f9b7a4)
+                "d8f4f1" -> ContextCompat.getColorStateList(itemView.context, R.color.color_d8f4f1)
+                "f8f2c3" -> ContextCompat.getColorStateList(itemView.context, R.color.color_f8f2c3)
+                "a4e8c0" -> ContextCompat.getColorStateList(itemView.context, R.color.color_a4e8c0)
+                "abe8ff" -> ContextCompat.getColorStateList(itemView.context, R.color.color_abe8ff)
+                else -> ContextCompat.getColorStateList(itemView.context, R.color.color_f4f4f4)
             }
         }
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        context = recyclerView.context
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JourneyViewHolder {
         val binding =
-            JourneyItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            TravelItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JourneyViewHolder(binding)
     }
 
@@ -97,14 +117,14 @@ class JourneyAdapter : ListAdapter<Journey, JourneyAdapter.JourneyViewHolder>(Jo
         holder.bind(getItem(position))
     }
 
-    object JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {
-        override fun areItemsTheSame(oldItem: Journey, newItem: Journey): Boolean {
+    object TravelDiffCallback : DiffUtil.ItemCallback<TravelDto>() {
+        override fun areItemsTheSame(oldItem: TravelDto, newItem: TravelDto): Boolean {
             return oldItem == newItem
         }
 
         // id 로 비교
-        override fun areContentsTheSame(oldItem: Journey, newItem: Journey): Boolean {
-            return oldItem.title == newItem.title
+        override fun areContentsTheSame(oldItem: TravelDto, newItem: TravelDto): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 }
