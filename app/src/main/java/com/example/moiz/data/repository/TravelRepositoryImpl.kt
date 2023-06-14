@@ -37,8 +37,17 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         return travelService.getTravelDetail(travelId).body()!!
     }
 
-    override suspend fun putTravel(travelId: Int) {
-
+    override suspend fun putTravel(
+        token: String,
+        data: TravelCreateDto,
+        id: Int,
+    ): ResponseTravelCreateDto {
+        return if (travelService.putTravel(token, data, id).isSuccessful) {
+            travelService.putTravel(token, data, id).body()!!
+        } else {
+            ResponseTravelCreateDto(
+                message = travelService.putTravel(token, data, id).message(), results = null)
+        }
     }
 
     override suspend fun deleteTravel(travelId: Int) {

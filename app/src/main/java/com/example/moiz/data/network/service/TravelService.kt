@@ -33,8 +33,12 @@ interface TravelService {
     suspend fun getTravelDetail(@Path("id") id: Int): Response<TravelDto>
 
     // 여행 수정 API
-    @PUT("v1/travel/{id}")
-    suspend fun putTravel(@Path("id") id: Int)
+    @PUT("v1/travels/{id}")
+    suspend fun putTravel(
+        @Header("Authorization") token: String?,
+        @Body data: TravelCreateDto,
+        @Path("id") id: Int,
+    ): Response<ResponseTravelCreateDto>
 
     // 여행 삭제 API
     @DELETE("v1/travel/{id}")

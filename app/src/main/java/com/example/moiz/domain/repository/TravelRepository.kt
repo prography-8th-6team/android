@@ -16,7 +16,11 @@ interface TravelRepository {
 
     suspend fun getTravelDetail(travelId: Int): TravelDto
 
-    suspend fun putTravel(travelId: Int)
+    suspend fun putTravel(
+        token: String,
+        data: TravelCreateDto,
+        id: Int,
+    ): ResponseTravelCreateDto
 
     suspend fun deleteTravel(travelId: Int)
 
