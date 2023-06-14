@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.createJourneyList
+package com.example.moiz.presentation.createTravelList
 
 import android.os.Bundle
 import android.view.LayoutInflater

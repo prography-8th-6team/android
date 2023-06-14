@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnCreate.setOnClickListener { goToCreateJourneyList() }
+        binding.btnCreate.setOnClickListener { goToCreateTravelList() }
         adapter = TravelAdapter()
         binding.rvTravelList.adapter = adapter
         binding.rvTravelList.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
@@ -62,7 +62,7 @@ import kotlinx.coroutines.launch
         }
     }
 
-    private fun goToCreateJourneyList() {
-        findNavController().navigate(R.id.action_mainFragment_to_createJourneyListFragment)
+    private fun goToCreateTravelList() {
+        findNavController().navigate(R.id.action_mainFragment_to_createTravelListFragment)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.createJourneyList
+package com.example.moiz.presentation.createTravelList
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
 
-@HiltViewModel class CreateJourneyListViewModel @Inject constructor(
+@HiltViewModel class CreateTravelListViewModel @Inject constructor(
     private val postTravelUseCase: PostTravelUseCase,
 ) : ViewModel() {
     val calendar = Calendar.getInstance()

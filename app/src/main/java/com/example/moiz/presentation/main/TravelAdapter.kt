@@ -16,10 +16,10 @@ import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.databinding.TravelItemViewBinding
 import java.text.SimpleDateFormat
 
-class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.JourneyViewHolder>(TravelDiffCallback) {
+class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.TravelViewHolder>(TravelDiffCallback) {
     private lateinit var context: Context
 
-    inner class JourneyViewHolder(private val binding: TravelItemViewBinding) : RecyclerView.ViewHolder(
+    inner class TravelViewHolder(private val binding: TravelItemViewBinding) : RecyclerView.ViewHolder(
         binding.root) {
         fun bind(travel: TravelDto) {
             val memberCount = travel.members?.size!!
@@ -27,7 +27,7 @@ class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.JourneyViewHolder>(Tr
             val toFormat = SimpleDateFormat("yy-MM-dd")
 
             binding.tvTitle.text = travel.title
-            binding.tvDate.text = "${toFormat.format(fromFormat.parse(travel.start_date))} ~ ${
+            binding.tvDate.text = "${toFormat.format(fromFormat.parse(travel.start_date))} - ${
                 toFormat.format(fromFormat.parse(travel.end_date))
             }"
             binding.tvMember1.text = travel.members?.get(0)
@@ -44,6 +44,12 @@ class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.JourneyViewHolder>(Tr
                 }
 
                 memberCount == 1 -> {
+                    binding.tvMember2.visibility = View.GONE
+                    binding.tvMemberCount.visibility = View.GONE
+                }
+
+                else -> {
+                    binding.tvMember1.visibility = View.GONE
                     binding.tvMember2.visibility = View.GONE
                     binding.tvMemberCount.visibility = View.GONE
                 }
@@ -65,16 +71,16 @@ class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.JourneyViewHolder>(Tr
         context = recyclerView.context
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JourneyViewHolder {
-        val binding =
-            TravelItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return JourneyViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelViewHolder {
+        val binding = TravelItemViewBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false)
+        return TravelViewHolder(binding)
     }
 
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-    override fun onBindViewHolder(holder: JourneyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TravelViewHolder, position: Int) {
         val params = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.setMargins(10.dp, 10.dp, 10.dp, 10.dp)

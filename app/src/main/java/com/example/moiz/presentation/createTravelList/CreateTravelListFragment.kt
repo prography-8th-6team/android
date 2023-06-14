@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.createJourneyList
+package com.example.moiz.presentation.createTravelList
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -14,22 +14,22 @@ import androidx.navigation.fragment.findNavController
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.databinding.CreateJourneyListFragmentBinding
+import com.example.moiz.databinding.CreateTravelListFragmentBinding
 import com.example.moiz.domain.model.Currency
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint class CreateJourneyListFragment : Fragment() {
-    private lateinit var binding: CreateJourneyListFragmentBinding
+@AndroidEntryPoint class CreateTravelListFragment : Fragment() {
+    private lateinit var binding: CreateTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
-    val viewModel by viewModels<CreateJourneyListViewModel>()
+    val viewModel by viewModels<CreateTravelListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = CreateJourneyListFragmentBinding.inflate(inflater, container, false)
+        binding = CreateTravelListFragmentBinding.inflate(inflater, container, false)
         binding.vm = viewModel
         return binding.root
     }
