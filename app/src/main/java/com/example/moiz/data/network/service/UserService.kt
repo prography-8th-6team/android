@@ -12,7 +12,6 @@ import retrofit2.http.POST
 
 interface UserService {
     @FormUrlEncoded
-    @POST("v1/user/auth/kakao")
+    @POST("v1/users/auth/kakao")
     suspend fun sendKakaoToken(@Field("access_token") token: String): Response<UserResponseDto>
-
 }

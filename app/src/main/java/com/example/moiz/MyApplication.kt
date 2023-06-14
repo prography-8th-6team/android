@@ -4,11 +4,9 @@ import android.app.Application
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
-class MyApplication: Application() {
+@HiltAndroidApp class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
-        KakaoSdk.init(this, "6dd5e434c8c6e5ad91ff752d7101a2bb")
+        KakaoSdk.init(this, "8f2106b71a3421be5d58886ddfab1c87")
     }
 }

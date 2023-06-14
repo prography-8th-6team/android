@@ -9,5 +9,19 @@
         android:id="@+id/mainFragment"
         android:name="com.example.moiz.presentation.main.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment">
+        <action
+            android:id="@+id/action_mainFragment_to_createTravelListFragment"
+            app:destination="@id/createTravelListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createTravelListFragment"
+        android:name="com.example.moiz.presentation.createTravelList.CreateTravelListFragment"
+        android:label="CreateTravelListFragment"
+        tools:layout="@layout/create_travel_list_fragment" />
+    <fragment
+        android:id="@+id/editTravelListFragment"
+        android:name="com.example.moiz.presentation.editTravelList.EditTravelListFragment"
+        android:label="EditTravelListFragment"
+        tools:layout="@layout/edit_travel_list_fragment" />
 </navigation>
