@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="billing_category">
+        <item>음식</item>
+        <item>교통</item>
+        <item>호텔</item>
+        <item>시장</item>
+        <item>쇼핑</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="billing_currency">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>KRW</item>
+        <item>JPY</item>
+        <item>GBP</item>
+    </string-array>
+</resources>

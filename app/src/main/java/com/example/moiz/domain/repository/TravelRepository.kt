@@ -14,7 +14,7 @@ interface TravelRepository {
         token: String,
     ): ResponseTravelCreateDto
 
-    suspend fun getTravelDetail(travelId: Int): TravelDto
+    suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto
 
     suspend fun putTravel(
         token: String,
@@ -24,4 +24,7 @@ interface TravelRepository {
 
     suspend fun deleteTravel(travelId: Int)
 
+    suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
+
+    suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto)
 }

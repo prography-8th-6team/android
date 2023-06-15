@@ -4,6 +4,7 @@ import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.data.network.dto.UserResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -29,8 +30,18 @@ interface TravelService {
     ): Response<ResponseTravelCreateDto>
 
     // 여행 상세 API
-    @GET("v1/travel/{id}")
-    suspend fun getTravelDetail(@Path("id") id: Int): Response<TravelDto>
+    @GET("v1/travels/{id}")
+    suspend fun getTravelDetail(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int
+    ): Response<ResponseTravelDetailDto>
+
+    // 비용 추가 멤버
+    @GET("v1/travels/{id}/members")
+    suspend fun getBillingMembers(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int
+    ): Response<List<BillingMembersDto>>
 
     // 여행 수정 API
     @PUT("v1/travels/{id}")
@@ -43,4 +54,12 @@ interface TravelService {
     // 여행 삭제 API
     @DELETE("v1/travel/{id}")
     suspend fun deleteTravel(@Path("id") id: Int)
+
+    // 가계부 추가
+    @POST("v1/travels/{id}/billings")
+    suspend fun postBillings(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+        @Body data: PostBillingDto
+    )
 }

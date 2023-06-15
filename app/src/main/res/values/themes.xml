@@ -12,6 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/color_F55C5C</item>
+        <item name="colorOnPrimary">@color/color_F55C5C</item>
     </style>
 
     <style name="customDatePickerStyle" parent="Theme.AppCompat.Light.Dialog.Alert">

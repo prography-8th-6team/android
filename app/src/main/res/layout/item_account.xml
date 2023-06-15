@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
+
+    <ImageView
+        android:id="@+id/iv_category"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/ic_category_other"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_category"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/color_707070"
+            android:textSize="16sp"
+            tools:text="스콘과 밀크티" />
+
+        <TextView
+            android:id="@+id/tv_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_707070"
+            android:textSize="16sp"
+            tools:text="$" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/color_707070"
+            android:textSize="16sp"
+            tools:text="14.6" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/bg_radius_9"
+        android:backgroundTint="@color/color_F1F1F1"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/color_707070"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/iv_category"
+        app:layout_constraintTop_toBottomOf="@id/ll_title"
+        tools:text="조준호" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,8 +33,15 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun getTravelDetail(travelId: Int): TravelDto {
-        return travelService.getTravelDetail(travelId).body()!!
+    override suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto {
+        return if (travelService.getTravelDetail(token, travelId).isSuccessful) {
+            travelService.getTravelDetail(token, travelId).body()!!
+        } else {
+            ResponseTravelDetailDto(
+                message = travelService.getTravelDetail(token, travelId).message(),
+                results = null
+            )
+        }
     }
 
     override suspend fun putTravel(
@@ -52,5 +59,17 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
 
     override suspend fun deleteTravel(travelId: Int) {
 
+    }
+
+    override suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto> {
+        return if (travelService.getBillingMembers(token, travelId).isSuccessful) {
+            travelService.getBillingMembers(token, travelId).body()!!
+        } else {
+            emptyList()
+        }
+    }
+
+    override suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto) {
+        travelService.postBillings(token, travelId, data)
     }
 }

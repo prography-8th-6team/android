@@ -24,4 +24,20 @@
         android:name="com.example.moiz.presentation.editTravelList.EditTravelListFragment"
         android:label="EditTravelListFragment"
         tools:layout="@layout/edit_travel_list_fragment" />
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.moiz.presentation.detail.TravelDetailFragment"
+        android:label="TravelDetailFragment"
+        tools:layout="@layout/travel_detail_fragment">
+        <action
+            android:id="@+id/goto_add_billing"
+            app:destination="@id/addBillingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addBillingFragment"
+        android:name="com.example.moiz.presentation.billing.AddBillingFragment"
+        android:label="AddBillingFragment"
+        tools:layout="@layout/fragment_add_billing" />
 </navigation>
