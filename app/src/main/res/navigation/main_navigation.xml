@@ -26,7 +26,11 @@
         android:id="@+id/editTravelListFragment"
         android:name="com.example.moiz.presentation.editTravelList.EditTravelListFragment"
         android:label="EditTravelListFragment"
-        tools:layout="@layout/edit_travel_list_fragment" />
+        tools:layout="@layout/edit_travel_list_fragment" >
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
@@ -39,6 +43,9 @@
         <argument
             android:name="travelId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailFragment_to_editTravelListFragment"
+            app:destination="@id/editTravelListFragment" />
     </fragment>
 
     <fragment

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.TravelCreateDto
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
     private lateinit var binding: EditTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<EditTravelListViewModel>()
+    private val args: EditTravelListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
