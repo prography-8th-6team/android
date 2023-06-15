@@ -9,8 +9,8 @@ import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
@@ -18,15 +18,14 @@ import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.util.Currency
 
-@AndroidEntryPoint
-class TravelDetailFragment : Fragment() {
+@AndroidEntryPoint class TravelDetailFragment : Fragment() {
 
     private lateinit var binding: TravelDetailFragmentBinding
     private lateinit var adapter: BillingAdapter
     private val viewModel: DetailViewModel by viewModels()
+    private val args: TravelDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,13 +39,10 @@ class TravelDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        UserDataStore.getUserToken(requireContext()).asLiveData()
-            .observe(viewLifecycleOwner) {
-                viewModel.getTravelDetail(
-                    1,
-                    "Bearer $it"
-                )
-            }
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.getTravelDetail(
+                args.travelId, "Bearer $it")
+        }
 
         initViews()
     }
@@ -57,12 +53,8 @@ class TravelDetailFragment : Fragment() {
                 view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val popupView = inflater.inflate(R.layout.item_travel_detail_popup, null)
 
-            val popupWindow =
-                PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
+            val popupWindow = PopupWindow(
+                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             popupWindow.isOutsideTouchable = true
             popupWindow.isFocusable = true
             popupWindow.showAsDropDown(ivAdditional, -80, 20)

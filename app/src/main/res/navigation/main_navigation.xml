@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainFragment_to_createTravelListFragment"
             app:destination="@id/createTravelListFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/createTravelListFragment"
@@ -33,6 +36,9 @@
         <action
             android:id="@+id/goto_add_billing"
             app:destination="@id/addBillingFragment" />
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnCreate.setOnClickListener { goToCreateTravelList() }
-        adapter = TravelAdapter()
+        adapter = TravelAdapter { goToDetail(it) }
         binding.rvTravelList.adapter = adapter
         binding.rvTravelList.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
         getTravelList()
@@ -64,5 +65,10 @@ import kotlinx.coroutines.launch
 
     private fun goToCreateTravelList() {
         findNavController().navigate(R.id.action_mainFragment_to_createTravelListFragment)
+    }
+
+    private fun goToDetail(travelId: Int) {
+        findNavController().navigate(
+            R.id.action_mainFragment_to_detailFragment, bundleOf("travelId" to travelId))
     }
 }

@@ -16,7 +16,8 @@ import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.databinding.TravelItemViewBinding
 import java.text.SimpleDateFormat
 
-class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.TravelViewHolder>(TravelDiffCallback) {
+class TravelAdapter(private val onClickListener: (Int) -> Unit) : ListAdapter<TravelDto, TravelAdapter.TravelViewHolder>(
+    TravelDiffCallback) {
     private lateinit var context: Context
 
     inner class TravelViewHolder(private val binding: TravelItemViewBinding) : RecyclerView.ViewHolder(
@@ -63,6 +64,7 @@ class TravelAdapter : ListAdapter<TravelDto, TravelAdapter.TravelViewHolder>(Tra
                 "abe8ff" -> ContextCompat.getColorStateList(itemView.context, R.color.color_abe8ff)
                 else -> ContextCompat.getColorStateList(itemView.context, R.color.color_f4f4f4)
             }
+            binding.root.setOnClickListener { travel.id?.let { onClickListener.invoke(it) } }
         }
     }
 
