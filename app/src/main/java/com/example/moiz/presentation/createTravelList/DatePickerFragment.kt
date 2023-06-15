@@ -21,7 +21,7 @@ class DatePickerDialog(private val startDate: String? = null) : DialogFragment()
         binding = DatePickerDialogBinding.inflate(inflater, container, false)
         startDate?.let {
             val cal = Calendar.getInstance()
-            cal.time = SimpleDateFormat("yyyy.MM.dd").parse(it)
+            cal.time = SimpleDateFormat("yyyy-MM-dd").parse(it)
             binding.datePicker.minDate = cal.timeInMillis
         }
 
