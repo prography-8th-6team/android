@@ -5,6 +5,7 @@ import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
+import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.dto.UserResponseDto
@@ -65,4 +66,10 @@ interface TravelService {
         @Path("id") id: Int,
         @Body data: PostBillingDto
     )
+
+    @POST("v1/travels/{id}/generate-invite-token")
+    suspend fun postGenerateInviteToken(
+        @Header("Authorization") token: String?,
+        @Path("id") id: String
+    ): Response<ShareTokenDto>
 }

@@ -5,10 +5,12 @@ import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
+import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class TravelRepositoryImpl @Inject constructor(private val travelService: TravelService) :
@@ -19,7 +21,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.getTravelList(token).body()!!
         } else {
             ResponseTravelListDto(
-                message = travelService.getTravelList(token).message(), results = null)
+                message = travelService.getTravelList(token).message(), results = null
+            )
         }
 
     }
@@ -32,7 +35,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.postTravel(data, token).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.postTravel(data, token).message(), results = null)
+                message = travelService.postTravel(data, token).message(), results = null
+            )
         }
     }
 
@@ -56,7 +60,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.putTravel(token, data, id).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.putTravel(token, data, id).message(), results = null)
+                message = travelService.putTravel(token, data, id).message(), results = null
+            )
         }
     }
 
@@ -74,5 +79,15 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
 
     override suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto) {
         travelService.postBillings(token, travelId, data)
+    }
+
+    override suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto {
+        val result = travelService.postGenerateInviteToken(token, travelId.toString())
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            Timber.d(result.message())
+            ShareTokenDto(message = result.message(), toekn = null)
+        }
     }
 }
