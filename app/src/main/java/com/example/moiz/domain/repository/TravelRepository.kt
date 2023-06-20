@@ -3,10 +3,10 @@ package com.example.moiz.domain.repository
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.data.network.dto.TravelDto
 
 interface TravelRepository {
 
@@ -25,7 +25,7 @@ interface TravelRepository {
         id: Int,
     ): ResponseTravelCreateDto
 
-    suspend fun deleteTravel(travelId: Int)
+    suspend fun deleteTravel(token: String, travelId: Int): ResponseTravelDeleteDto
 
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 

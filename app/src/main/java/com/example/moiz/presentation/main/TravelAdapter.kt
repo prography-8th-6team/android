@@ -31,20 +31,22 @@ class TravelAdapter(private val onClickListener: (Int) -> Unit) : ListAdapter<Tr
             binding.tvDate.text = "${toFormat.format(fromFormat.parse(travel.start_date))} - ${
                 toFormat.format(fromFormat.parse(travel.end_date))
             }"
-            binding.tvMember1.text = travel.members?.get(0)
 
             when {
                 memberCount >= 3 -> {
+                    binding.tvMember1.text = travel.members?.get(0)
                     binding.tvMember2.text = travel.members[1]
                     binding.tvMemberCount.text = "+${memberCount - 2}"
                 }
 
                 memberCount == 2 -> {
+                    binding.tvMember1.text = travel.members?.get(0)
                     binding.tvMember2.text = travel.members[1]
                     binding.tvMemberCount.visibility = View.GONE
                 }
 
                 memberCount == 1 -> {
+                    binding.tvMember1.text = travel.members?.get(0)
                     binding.tvMember2.visibility = View.GONE
                     binding.tvMemberCount.visibility = View.GONE
                 }

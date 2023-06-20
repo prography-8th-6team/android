@@ -3,11 +3,10 @@ package com.example.moiz.data.network.service
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.data.network.dto.TravelDto
-import com.example.moiz.data.network.dto.UserResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -55,8 +54,11 @@ interface TravelService {
     ): Response<ResponseTravelCreateDto>
 
     // 여행 삭제 API
-    @DELETE("v1/travel/{id}")
-    suspend fun deleteTravel(@Path("id") id: Int)
+    @DELETE("v1/travels/{id}")
+    suspend fun deleteTravel(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+    ): Response<ResponseTravelDeleteDto>
 
     // 가계부 추가
     @POST("v1/travels/{id}/billings")

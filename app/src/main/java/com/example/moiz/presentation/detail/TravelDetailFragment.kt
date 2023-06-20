@@ -68,7 +68,13 @@ import java.util.Currency
                 popupWindow.dismiss()
             }
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
-                // 여행 삭제
+                UserDataStore.getUserToken(requireContext())
+                    .asLiveData()
+                    .observe(viewLifecycleOwner) {
+                        viewModel.deleteTravel("Bearer $it", args.travelId)
+                    }
+                popupWindow.dismiss()
+                findNavController().navigateUp()
             }
         }
 
