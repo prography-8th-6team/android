@@ -6,6 +6,7 @@ import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
+import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 
 interface TravelRepository {
@@ -30,4 +31,6 @@ interface TravelRepository {
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 
     suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto)
+
+    suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto
 }
