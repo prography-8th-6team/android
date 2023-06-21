@@ -63,6 +63,9 @@ import java.util.Currency
 
             popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
                 // 여행 공유
+                val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {}
+                dialog.isCancelable = false
+                dialog.show(requireActivity().supportFragmentManager, "share")
             }
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
                 viewModel.list.value?.id?.let { goToEditTravel(it) }
