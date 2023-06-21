@@ -9,7 +9,7 @@ import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
@@ -17,7 +17,6 @@ import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.databinding.CreateTravelListFragmentBinding
 import com.example.moiz.domain.model.Currency
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint class CreateTravelListFragment : Fragment() {
     private lateinit var binding: CreateTravelListFragmentBinding
@@ -87,7 +86,7 @@ import kotlinx.coroutines.launch
         }
 
         binding.dpEndDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
+            val datePickerFragment = DatePickerDialog(viewModel.startDate.value?.replace(".", "-"))
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setEndDate("$year.$month.$day")
             }
@@ -239,11 +238,11 @@ import kotlinx.coroutines.launch
             description = viewModel.memo.value,
             currency = viewModel.currency.value)
 
-        lifecycleScope.launch {
-            UserDataStore.getUserToken(requireContext()).collect { token ->
+        UserDataStore.getUserToken(requireContext())
+            .asLiveData()
+            .observe(viewLifecycleOwner) { token ->
                 viewModel.postTravel(travelInfo, "Bearer $token")
             }
-        }
 
         viewModel.response.observe(viewLifecycleOwner) {
             // 성공 시 홈화면으로 이동
