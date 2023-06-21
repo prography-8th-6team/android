@@ -18,6 +18,7 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
+import com.example.moiz.presentation.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -68,13 +69,17 @@ import java.util.Currency
                 popupWindow.dismiss()
             }
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
-                UserDataStore.getUserToken(requireContext())
-                    .asLiveData()
-                    .observe(viewLifecycleOwner) {
-                        viewModel.deleteTravel("Bearer $it", args.travelId)
-                    }
-                popupWindow.dismiss()
-                findNavController().navigateUp()
+                val dialog = CustomDialog("리스트를 삭제하시겠습니까?", "취소", "네") {
+                    UserDataStore.getUserToken(requireContext())
+                        .asLiveData()
+                        .observe(viewLifecycleOwner) {
+                            viewModel.deleteTravel("Bearer $it", args.travelId)
+                        }
+                    popupWindow.dismiss()
+                    findNavController().navigateUp()
+                }
+                dialog.isCancelable = false
+                dialog.show(requireActivity().supportFragmentManager, "delete")
             }
         }
 
