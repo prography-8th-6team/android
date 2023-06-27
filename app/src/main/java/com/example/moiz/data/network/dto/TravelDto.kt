@@ -131,6 +131,6 @@ data class PostBillingDto(
 )
 
 data class SettlementsDto(
-    var member: Int,
+    var user: Int,
     var amount: Int
 )
