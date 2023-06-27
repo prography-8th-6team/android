@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -18,9 +19,10 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import com.example.moiz.presentation.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Currency
+import timber.log.Timber
 
 @AndroidEntryPoint class TravelDetailFragment : Fragment() {
 
@@ -28,6 +30,7 @@ import java.util.Currency
     private lateinit var adapter: BillingAdapter
     private val viewModel: DetailViewModel by viewModels()
     private val args: TravelDetailFragmentArgs by navArgs()
+    private var token: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,11 +45,56 @@ import java.util.Currency
         super.onViewCreated(view, savedInstanceState)
 
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            token = "Bearer $it"
             viewModel.getTravelDetail(
                 args.travelId, "Bearer $it")
         }
 
         initViews()
+        initViewPager()
+    }
+
+    private fun initViewPager() {
+        var viewPagerAdapter = ViewPagerAdapter(requireActivity())
+        viewPagerAdapter.addFragment(BillingFragment())
+        viewPagerAdapter.addFragment(BillingFragment())
+        viewPagerAdapter.addFragment(BillingFragment())
+
+        binding.vpViewpagerMain.apply {
+            adapter = viewPagerAdapter
+
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // viewPager
+                    val view =
+                        (binding.vpViewpagerMain[0] as RecyclerView).layoutManager?.findViewByPosition(
+                            position
+                        )
+                    view?.post {
+                        val wMeasureSpec =
+                            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+                        val hMeasureSpec =
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                        view.measure(wMeasureSpec, hMeasureSpec)
+                        if (binding.vpViewpagerMain.layoutParams.height != view.measuredHeight) {
+                            binding.vpViewpagerMain.layoutParams =
+                                (binding.vpViewpagerMain.layoutParams).also { lp ->
+                                    lp.height = view.measuredHeight
+                                }
+                        }
+                    }
+                }
+            })
+        }
+
+        TabLayoutMediator(binding.tlNavigationView, binding.vpViewpagerMain) { tab, position ->
+            when (position) {
+                0 -> tab.text = "가계부"
+                1 -> tab.text = "계산도우미"
+                2 -> tab.text = "일정"
+            }
+        }.attach()
     }
 
     private fun initViews() = with(binding) {
@@ -66,6 +114,10 @@ import java.util.Currency
                 val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {}
                 dialog.isCancelable = false
                 dialog.show(requireActivity().supportFragmentManager, "share")
+                viewModel.postGenerateInviteToken(args.travelId, token)
+                    .observe(viewLifecycleOwner) {
+                        Timber.d("share token: $it")
+                    }
             }
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
                 viewModel.list.value?.id?.let { goToEditTravel(it) }
@@ -87,12 +139,10 @@ import java.util.Currency
         }
 
         nsvTravelDetail.run {
-            header = llDetailTab
-            temp = llToolbar
-        }
-
-        ivAddAccount.setOnClickListener {
-            findNavController().navigate(R.id.goto_add_billing)
+            nsvTravelDetail.run {
+                header = tlNavigationView
+                temp = llToolbar
+            }
         }
 
         viewModel.list.observe(viewLifecycleOwner) { data ->
