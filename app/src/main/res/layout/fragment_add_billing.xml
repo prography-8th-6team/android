@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
+            android:imeOptions="actionDone"
             android:fontFamily="@font/pretendard_semi_bold"
             android:hint="내용을 입력하세요"
             android:textColorHint="@color/color_BCBCBC"
@@ -98,6 +100,7 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:background="@null"
+            android:imeOptions="actionDone"
             android:backgroundTint="@color/color_BEBEBE"
             android:hint="금액을 입력하세요"
             android:inputType="number"
@@ -108,12 +111,22 @@
             android:id="@+id/tv_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
             android:dropDownWidth="match_parent"
             android:fontFamily="@font/pretendard_medium"
+            android:padding="4dp"
             android:text="USD"
             android:textColor="@color/color_555555"
             android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_drop_down"
+            app:layout_constraintStart_toEndOf="@id/spn_currency"
+            app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
 
     </LinearLayout>
 
@@ -142,10 +155,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
             android:fontFamily="@font/pretendard_medium"
-            android:text="선택"
+            android:padding="4dp"
             android:textColor="@color/color_555555"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="선택" />
 
     </LinearLayout>
 
@@ -154,6 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -174,11 +191,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
             android:dropDownWidth="match_parent"
-            android:fontFamily="@font/pretendard_medium"
+            android:dropDownVerticalOffset="8dp"
             android:overlapAnchor="false"
+            android:popupBackground="@drawable/bg_radius_9"
             android:textColor="@color/color_555555"
             android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img_drop_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:src="@drawable/ic_drop_down"
+            app:layout_constraintStart_toEndOf="@id/spn_currency"
+            app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
 
     </LinearLayout>
 
@@ -247,8 +276,8 @@
                 android:layout_marginTop="-2dp"
                 android:background="@color/color_EBEAEA" />
 
-            <LinearLayout
-                android:id="@+id/ll_paid_for_members"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_paid_for_members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
