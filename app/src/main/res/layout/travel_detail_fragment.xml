@@ -34,19 +34,19 @@
 
     </LinearLayout>
 
-    <com.example.moiz.presentation.detail.CustomNestedScrollView
+    <com.example.moiz.presentation.util.CustomNestedScrollView
         android:id="@+id/nsv_travel_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_title"
@@ -54,12 +54,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:paddingHorizontal="16dp"
-                android:text="뉴욕 리스트"
                 android:textColor="@color/color_555555"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:text="뉴욕 리스트" />
 
             <TextView
                 android:id="@+id/tv_data"
@@ -67,12 +64,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="16dp"
-                android:text="2023.05.11 ~ 2023.05.17"
                 android:textColor="@color/color_707070"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title" />
+                tools:text="2023.05.11 ~ 2023.05.17" />
 
             <TextView
                 android:id="@+id/tv_memo"
@@ -80,12 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="16dp"
-                android:text="오마카세 뿌시러 일본간다"
                 android:textColor="@color/color_707070"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_data" />
+                tools:text="오마카세 뿌시러 일본간다" />
 
             <HorizontalScrollView
                 android:id="@+id/hsc_travel_member"
@@ -93,10 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="12dp"
-                android:scrollbars="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_memo">
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/ll_travel_member"
@@ -106,140 +94,16 @@
 
             </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/ll_detail_tab"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_navigation_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="17dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hsc_travel_member">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="16dp"
-                    android:text="가계부"
-                    android:textColor="@color/color_555555"
-                    android:textSize="16sp"
-                    android:translationZ="100dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="16dp"
-                    android:text="계산도우미"
-                    android:textColor="@color/color_EBEAEA"
-                    android:textSize="16sp"
-                    android:translationZ="100dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="16dp"
-                    android:text="계획"
-                    android:textColor="@color/color_EBEAEA"
-                    android:textSize="16sp"
-                    android:translationZ="100dp" />
-            </LinearLayout>
-
-            <View
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_viewpager_main"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/color_BEBEBE"
-                android:translationZ="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_detail_tab" />
+                android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_accounts"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:paddingTop="18dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_detail_tab" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.example.moiz.presentation.detail.CustomNestedScrollView>
-
-    <ImageView
-        android:id="@+id/iv_add_account"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="-25dp"
-        android:background="@drawable/btn_add_billing"
-        android:translationZ="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nsv_travel_detail" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@color/color_F1F1F1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="4dp"
-        android:text="내가 낸 비용"
-        android:textColor="@color/color_707070"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/tv_my_cost"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_my_cost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="$ 1,520"
-        android:textColor="@color/color_555555"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
-        android:text="전체 비용"
-        android:textColor="@color/color_707070"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/tv_total_cost"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_total_cost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="$ 3,520"
-        android:textColor="@color/color_555555"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        </LinearLayout>
+    </com.example.moiz.presentation.util.CustomNestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
