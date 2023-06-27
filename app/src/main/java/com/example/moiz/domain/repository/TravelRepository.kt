@@ -26,7 +26,7 @@ interface TravelRepository {
         id: Int,
     ): ResponseTravelCreateDto
 
-    suspend fun deleteTravel(travelId: Int)
+    suspend fun deleteTravel(token: String, travelId: Int)
 
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 

@@ -57,7 +57,7 @@ interface TravelService {
 
     // 여행 삭제 API
     @DELETE("v1/travel/{id}")
-    suspend fun deleteTravel(@Path("id") id: Int)
+    suspend fun deleteTravel(@Header("Authorization") token: String?, @Path("id") id: Int)
 
     // 가계부 추가
     @POST("v1/travels/{id}/billings")

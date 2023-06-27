@@ -117,7 +117,7 @@ class TravelDetailFragment : Fragment() {
                 // 여행 수정
             }
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
-                // 여행 삭제
+                viewModel.deleteTravel(args.travelId, token)
             }
         }
 

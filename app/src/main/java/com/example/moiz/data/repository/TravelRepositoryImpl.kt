@@ -65,8 +65,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun deleteTravel(travelId: Int) {
-
+    override suspend fun deleteTravel(token: String, travelId: Int) {
+        travelService.deleteTravel(token, travelId)
     }
 
     override suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto> {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelDetailDto
 import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.domain.usecase.DeleteTravelUseCase
 import com.example.moiz.domain.usecase.GetTravelDetailUseCase
 import com.example.moiz.domain.usecase.PostGenerateInviteTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getTravelDetailUseCase: GetTravelDetailUseCase,
-    private val postGenerateInviteTokenUseCase: PostGenerateInviteTokenUseCase
+    private val postGenerateInviteTokenUseCase: PostGenerateInviteTokenUseCase,
+    private val deleteTravelUseCase: DeleteTravelUseCase
 ) :
     ViewModel() {
 
@@ -28,6 +30,13 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             getTravelDetailUseCase.invoke(id, token).let {
                 _list.value = it
+            }
+        }
+    }
+
+    fun deleteTravel(id: Int, token: String) {
+        viewModelScope.launch {
+            deleteTravelUseCase.invoke(id, token).let {
             }
         }
     }
