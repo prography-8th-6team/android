@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -20,6 +22,7 @@ import com.example.moiz.databinding.TravelDetailFragmentBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.util.Currency
 
 @AndroidEntryPoint
 class TravelDetailFragment : Fragment() {
@@ -164,6 +167,18 @@ class TravelDetailFragment : Fragment() {
                     addView(binding.root)
                 }
             }
+        }
+
+        viewModel.list.observe(viewLifecycleOwner) { data ->
+            val currencySymbol = Currency.getInstance(data.currency).symbol
+            tvMyCost.text = currencySymbol + " " + data.my_total_billing.toString()
+            tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
+        }
+
+        ivAddAccount.setOnClickListener {
+            findNavController().navigate(
+                R.id.goto_add_billing, bundleOf("travelId" to args.travelId)
+            )
         }
     }
 

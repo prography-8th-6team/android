@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moiz.R
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.FragmentBillingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,10 +40,6 @@ class BillingFragment : Fragment() {
     private fun initViews() = with(binding) {
         adapter = BillingAdapter(::itemOnClick)
         viewModel.list.observe(viewLifecycleOwner) { data ->
-            val currencySymbol = Currency.getInstance(data.currency).symbol
-            tvMyCost.text = currencySymbol + " " + data.my_total_billing.toString()
-            tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
-
             //data.billings.let { adapter.submitList(data.billings) }
         }
 
@@ -65,13 +64,6 @@ class BillingFragment : Fragment() {
         adapter.submitList(list)
         rvAccounts.layoutManager = LinearLayoutManager(context)
         rvAccounts.adapter = adapter
-        /*
-        ivAddAccount.setOnClickListener {
-            findNavController().navigate(
-                R.id.goto_add_billing, bundleOf("travelId" to args.travelId)
-            )
-        }
-         */
     }
 
     private fun itemOnClick(data: BillingDto) {
