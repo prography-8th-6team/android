@@ -6,28 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
-import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import com.example.moiz.presentation.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-@AndroidEntryPoint class TravelDetailFragment : Fragment() {
+@AndroidEntryPoint
+class TravelDetailFragment : Fragment() {
 
     private lateinit var binding: TravelDetailFragmentBinding
-    private lateinit var adapter: BillingAdapter
     private val viewModel: DetailViewModel by viewModels()
     private val args: TravelDetailFragmentArgs by navArgs()
     private var token: String = ""
@@ -47,9 +44,9 @@ import timber.log.Timber
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it")
+                args.travelId, "Bearer $it"
+            )
         }
-
         initViews()
         initViewPager()
     }
@@ -100,11 +97,12 @@ import timber.log.Timber
     private fun initViews() = with(binding) {
         ivAdditional.setOnClickListener {
             val inflater =
-                view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val popupView = inflater.inflate(R.layout.item_travel_detail_popup, null)
 
             val popupWindow = PopupWindow(
-                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             popupWindow.isOutsideTouchable = true
             popupWindow.isFocusable = true
             popupWindow.showAsDropDown(ivAdditional, -80, 20)

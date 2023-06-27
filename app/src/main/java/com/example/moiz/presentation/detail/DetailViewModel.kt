@@ -18,12 +18,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val getTravelDetailUseCase: GetTravelDetailUseCase,
     private val postGenerateInviteTokenUseCase: PostGenerateInviteTokenUseCase
+    private val deleteTravelUseCase: DeleteTravelUseCase,
 ) :
     ViewModel() {
-@HiltViewModel class DetailViewModel @Inject constructor(
-    private val getTravelDetailUseCase: GetTravelDetailUseCase,
-    private val deleteTravelUseCase: DeleteTravelUseCase,
-) : ViewModel() {
 
     private val _list = MutableLiveData<TravelDetailDto>()
     val list: LiveData<TravelDetailDto> = _list
