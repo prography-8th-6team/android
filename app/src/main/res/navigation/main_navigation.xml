@@ -45,5 +45,9 @@
         android:id="@+id/addBillingFragment"
         android:name="com.example.moiz.presentation.billing.AddBillingFragment"
         android:label="AddBillingFragment"
-        tools:layout="@layout/fragment_add_billing" />
+        tools:layout="@layout/fragment_add_billing">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
