@@ -1,47 +1,57 @@
 package com.example.moiz.presentation.billing
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.service.autofill.UserData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.databinding.FragmentAddBillingBinding
-import com.example.moiz.domain.usecase.PostBillingsUseCase
-import com.example.moiz.presentation.detail.DetailViewModel
+import com.example.moiz.presentation.util.PermissionUtil
+import com.example.moiz.presentation.util.getFileInfo
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 @AndroidEntryPoint
 class AddBillingFragment : Fragment() {
 
     private lateinit var binding: FragmentAddBillingBinding
     private val viewModel: BillingViewModel by viewModels()
+    private lateinit var adapter: BillingInputAdapter
+    var camUri: Uri? = null
+    private val args: AddBillingFragmentArgs by navArgs()
+
     val temp = PostBillingDto(
         "",
         0,
         "",
         "USD",
-        listOf(SettlementsDto(2, 12000))
+        listOf(SettlementsDto(7, 12000))
     )
 
     override fun onCreateView(
@@ -55,16 +65,42 @@ class AddBillingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getBillingMembers(
-            1,
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHBpcmVkIjoiMjAyMy0wNi0xOSAyMzoxNToxOSIsImlhdCI6MTY4NTk3NDUxOS4zMTM2MX0.XpoyqvlBN9WBpUjBoP5mtLdK3p5GPF16OdkTL8bTEik"
-        )
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.getBillingMembers(
+                args.travelId, "Bearer $it"
+            )
+        }
 
         initViews()
     }
 
     private fun initViews() = with(binding) {
+        val calendar = Calendar.getInstance()
+        val format = SimpleDateFormat("yyyy.MM.dd")
+        tvPickerDate.text = format.format(calendar.time)
+
+        etPrice.setOnEditorActionListener { _, _, _ ->
+            adapter.inputPrice = etPrice.text.toString().toDouble()
+            val mInputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mInputMethodManager.hideSoftInputFromWindow(
+                etPrice.windowToken,
+                0
+            )
+            adapter.notifyDataSetChanged()
+            true
+        }
+
+        etName.setOnEditorActionListener { _, _, _ ->
+            val mInputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mInputMethodManager.hideSoftInputFromWindow(
+                etName.windowToken,
+                0
+            )
+            true
+        }
+
         tvAuto.setOnClickListener {
             tvAuto.setTextColor(resources.getColor(R.color.color_555555))
             tvInput.setTextColor(resources.getColor(R.color.color_EBEAEA))
@@ -185,15 +221,31 @@ class AddBillingFragment : Fragment() {
 
             popupView.findViewById<TextView>(R.id.tv_camera).setOnClickListener {
                 popupWindow.dismiss()
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, 1)
+                if (PermissionUtil.hasCameraPermission(requireContext())) {
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+                    val values = ContentValues(1)
+                    values.put(MediaStore.Images.Media.TITLE, "New Picture")
+                    camUri = requireContext().contentResolver.insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        values
+                    )
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, camUri)
+
+                    cameraLauncher.launch(intent)
+                } else {
+                    PermissionUtil.requestCameraPermission(requireActivity())
+                }
             }
 
             popupView.findViewById<TextView>(R.id.tv_gallery).setOnClickListener {
                 popupWindow.dismiss()
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = MediaStore.Images.Media.CONTENT_TYPE
-                startActivityForResult(intent, 2)
+                var intent = Intent(Intent.ACTION_PICK)
+                intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                intent.type = "image/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+
+                launcher.launch(Intent.createChooser(intent, "파일을 선택해주세요."))
             }
         }
 
@@ -220,6 +272,7 @@ class AddBillingFragment : Fragment() {
                     android.R.layout.simple_spinner_dropdown_item,
                     it.map { it.name }
                 )
+                val temp = Triple(0, "", 0)
                 spMembers.adapter = membersAdapter
                 spMembers.onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
@@ -233,17 +286,14 @@ class AddBillingFragment : Fragment() {
                             position: Int,
                             id: Long
                         ) {
-                            temp.paid_by = it[position].id!!
+                            //temp.paid_by = it[position].id!!
                         }
                     }
 
-                it.forEach { data ->
-                    val view = LayoutInflater.from(context).inflate(R.layout.item_paid_member, null)
-                    val tvName = view.findViewById<TextView>(R.id.tv_member)
-                    tvName.text = data.name
-
-                    llPaidForMembers.addView(view)
-                }
+                adapter = BillingInputAdapter()
+                adapter.submitListEx(it)
+                rvPaidForMembers.layoutManager = LinearLayoutManager(context)
+                rvPaidForMembers.adapter = adapter
             }
         }
 
@@ -253,7 +303,7 @@ class AddBillingFragment : Fragment() {
                 UserDataStore.getUserToken(requireContext()).asLiveData()
                     .observe(viewLifecycleOwner) {
                         viewModel.postBillings(
-                            1,
+                            args.travelId,
                             "Bearer $it",
                             temp
                         )
@@ -265,4 +315,39 @@ class AddBillingFragment : Fragment() {
 
     }
 
+    private var cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                val imageUri = camUri
+                val fileInfo = getFileInfo(imageUri!!, requireContext())
+                Timber.d(fileInfo.toString())
+            }
+        }
+    }
+
+    private var launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                val data: Intent? = result.data
+
+                if (data?.clipData != null) {
+                    val count = data.clipData!!.itemCount
+                    for (i in 0 until count) {
+                        val imageUri = data.clipData!!.getItemAt(i).uri
+                        val fileInfo = getFileInfo(imageUri!!, requireContext())
+
+                        Timber.d(fileInfo?.name)
+                    }
+                } else if (data?.data != null) {
+                    val imageUri = data.data
+                    val fileInfo = getFileInfo(imageUri!!, requireContext())
+                    Timber.d(fileInfo.toString())
+                }
+            }
+        }
+    }
 }
