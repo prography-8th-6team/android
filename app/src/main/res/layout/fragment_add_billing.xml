@@ -34,6 +34,23 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_imgCnt"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="-6dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/color_F55C5C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="6sp"
+        android:translationZ="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/ll_content"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
@@ -52,9 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
-            android:imeOptions="actionDone"
             android:fontFamily="@font/pretendard_semi_bold"
             android:hint="내용을 입력하세요"
+            android:imeOptions="actionDone"
             android:textColorHint="@color/color_BCBCBC"
             android:textSize="20sp" />
 
@@ -69,7 +86,7 @@
             android:id="@+id/iv_img"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_select_img" />
+            android:src="@drawable/ic_unselect_img" />
 
     </LinearLayout>
 
@@ -100,9 +117,9 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:background="@null"
-            android:imeOptions="actionDone"
             android:backgroundTint="@color/color_BEBEBE"
             android:hint="금액을 입력하세요"
+            android:imeOptions="actionDone"
             android:inputType="number"
             android:textColorHint="@color/color_BEBEBE"
             android:textSize="15sp" />

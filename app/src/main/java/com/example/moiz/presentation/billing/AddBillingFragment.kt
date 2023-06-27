@@ -30,6 +30,7 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.databinding.FragmentAddBillingBinding
+import com.example.moiz.presentation.util.FileResult
 import com.example.moiz.presentation.util.PermissionUtil
 import com.example.moiz.presentation.util.getFileInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +43,9 @@ class AddBillingFragment : Fragment() {
 
     private lateinit var binding: FragmentAddBillingBinding
     private val viewModel: BillingViewModel by viewModels()
-    private lateinit var adapter: BillingInputAdapter
+
+    //private lateinit var adapter: BillingInputAdapter
+    var tempImgFile = arrayListOf<FileResult>()
     var camUri: Uri? = null
     private val args: AddBillingFragmentArgs by navArgs()
 
@@ -80,14 +83,14 @@ class AddBillingFragment : Fragment() {
         tvPickerDate.text = format.format(calendar.time)
 
         etPrice.setOnEditorActionListener { _, _, _ ->
-            adapter.inputPrice = etPrice.text.toString().toDouble()
+            //adapter.inputPrice = etPrice.text.toString().toDouble()
             val mInputMethodManager =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             mInputMethodManager.hideSoftInputFromWindow(
                 etPrice.windowToken,
                 0
             )
-            adapter.notifyDataSetChanged()
+            //adapter.notifyDataSetChanged()
             true
         }
 
@@ -272,7 +275,7 @@ class AddBillingFragment : Fragment() {
                     android.R.layout.simple_spinner_dropdown_item,
                     it.map { it.name }
                 )
-                val temp = Triple(0, "", 0)
+
                 spMembers.adapter = membersAdapter
                 spMembers.onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
@@ -290,10 +293,10 @@ class AddBillingFragment : Fragment() {
                         }
                     }
 
-                adapter = BillingInputAdapter()
-                adapter.submitListEx(it)
+                //adapter = BillingInputAdapter()
+                //adapter.submitListEx(it)
                 rvPaidForMembers.layoutManager = LinearLayoutManager(context)
-                rvPaidForMembers.adapter = adapter
+                //rvPaidForMembers.adapter = adapter
             }
         }
 
@@ -322,7 +325,12 @@ class AddBillingFragment : Fragment() {
             Activity.RESULT_OK -> {
                 val imageUri = camUri
                 val fileInfo = getFileInfo(imageUri!!, requireContext())
-                Timber.d(fileInfo.toString())
+
+                if (tempImgFile.size < 2) {
+                    tempImgFile.add(fileInfo!!)
+                } else {
+                    Toast.makeText(context, "사진은 최대 2장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -340,14 +348,37 @@ class AddBillingFragment : Fragment() {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         val fileInfo = getFileInfo(imageUri!!, requireContext())
 
-                        Timber.d(fileInfo?.name)
+                        if (tempImgFile.size < 2) {
+                            tempImgFile.add(fileInfo!!)
+                            setImgCnt()
+                        } else {
+                            Toast.makeText(context, "사진은 최대 2장까지 선택 가능합니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 } else if (data?.data != null) {
                     val imageUri = data.data
                     val fileInfo = getFileInfo(imageUri!!, requireContext())
-                    Timber.d(fileInfo.toString())
+                    if (tempImgFile.size < 2) {
+                        tempImgFile.add(fileInfo!!)
+                        setImgCnt()
+                    } else {
+                        Toast.makeText(context, "사진은 최대 2장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
+
+    private fun setImgCnt() {
+        if (tempImgFile.size == 0) {
+            binding.ivImg.setImageResource(R.drawable.ic_unselect_img)
+            binding.tvImgCnt.visibility = View.GONE
+        } else {
+            binding.ivImg.setImageResource(R.drawable.ic_select_img)
+            binding.tvImgCnt.visibility = View.VISIBLE
+            binding.tvImgCnt.text = tempImgFile.size.toString()
+        }
+    }
+
 }
