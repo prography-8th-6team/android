@@ -89,6 +89,7 @@ import kotlinx.coroutines.launch
             travelDetail.end_date?.let { viewModel.setEndDate(it) }
             travelDetail.color?.let { viewModel.setColor(it) }
             travelDetail.currency?.let { viewModel.setCurrency(it) }
+            travelDetail.description?.let { viewModel.setMemo(it) }
         }
     }
 

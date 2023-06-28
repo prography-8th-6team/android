@@ -69,6 +69,10 @@ import javax.inject.Inject
         currency.value = value
     }
 
+    fun setMemo(value: String) {
+        memo.value = value
+    }
+
     val titleTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
