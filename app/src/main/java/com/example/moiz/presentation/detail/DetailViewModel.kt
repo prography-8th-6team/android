@@ -17,8 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getTravelDetailUseCase: GetTravelDetailUseCase,
-    private val postGenerateInviteTokenUseCase: PostGenerateInviteTokenUseCase
-    private val deleteTravelUseCase: DeleteTravelUseCase,
+    private val postGenerateInviteTokenUseCase: PostGenerateInviteTokenUseCase,
+    private val deleteTravelUseCase: DeleteTravelUseCase
 ) :
     ViewModel() {
 

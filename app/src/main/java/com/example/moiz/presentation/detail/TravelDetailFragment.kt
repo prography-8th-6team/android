@@ -19,6 +19,7 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
+import com.example.moiz.presentation.CustomDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -115,15 +116,18 @@ class TravelDetailFragment : Fragment() {
                 val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {}
                 dialog.isCancelable = false
                 dialog.show(requireActivity().supportFragmentManager, "share")
+
                 viewModel.postGenerateInviteToken(args.travelId, token)
                     .observe(viewLifecycleOwner) {
                         Timber.d("share token: $it")
                     }
             }
+
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
                 viewModel.list.value?.id?.let { goToEditTravel(it) }
                 popupWindow.dismiss()
             }
+
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
                 val dialog = CustomDialog("리스트를 삭제하시겠습니까?", "취소", "네") {
                     UserDataStore.getUserToken(requireContext())
@@ -150,14 +154,10 @@ class TravelDetailFragment : Fragment() {
             tvTitle.text = data.title
             tvData.text = data.start_date + "~" + data.end_date
             tvMemo.text = data.description
+
             val currencySymbol = Currency.getInstance(data.currency).symbol
             tvMyCost.text = currencySymbol + " " + data.my_total_billing.toString()
             tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
-
-            adapter = BillingAdapter(::itemOnClick)
-            data.billings.let { adapter.submitList(data.billings) }
-            rvAccounts.layoutManager = LinearLayoutManager(context)
-            rvAccounts.adapter = adapter
 
             llTravelMember.apply {
                 data.members?.forEach {
@@ -169,12 +169,6 @@ class TravelDetailFragment : Fragment() {
             }
         }
 
-        viewModel.list.observe(viewLifecycleOwner) { data ->
-            val currencySymbol = Currency.getInstance(data.currency).symbol
-            tvMyCost.text = currencySymbol + " " + data.my_total_billing.toString()
-            tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
-        }
-
         ivAddAccount.setOnClickListener {
             findNavController().navigate(
                 R.id.goto_add_billing, bundleOf("travelId" to args.travelId)
@@ -182,13 +176,9 @@ class TravelDetailFragment : Fragment() {
         }
     }
 
-    private fun itemOnClick(data: BillingDto) {
-        // 가계부 상세 이동
-    }
-
     private fun goToEditTravel(travelId: Int) {
         findNavController().navigate(
-            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId))
+            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId)
+        )
     }
-
 }
