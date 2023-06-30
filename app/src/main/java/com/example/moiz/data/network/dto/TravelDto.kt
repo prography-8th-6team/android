@@ -191,3 +191,32 @@ data class ResponseTravelDeleteDto(
     @SerializedName("message")
     val message: String,
 )
+
+data class BalancesDto(
+    @SerializedName("user")
+    val user:String?,
+    @SerializedName("amount")
+    val amount:Int?,
+    @SerializedName("paid_by")
+    val paid_by:Int?,
+)
+
+data class UserAmountsDto(
+    @SerializedName("user")
+    val user:String?,
+    @SerializedName("amount")
+    val amount:Int?,
+)
+
+data class BillingHelperDto(
+    @SerializedName("balances")
+    val balances: List<BalancesDto>,
+    @SerializedName("user_amounts")
+    val user_amounts: List<UserAmountsDto>,
+)
+data class ResponseBillingHelper(
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("results")
+    val results: BillingHelperDto?,
+)

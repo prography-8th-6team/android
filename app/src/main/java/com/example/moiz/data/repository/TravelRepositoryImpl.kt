@@ -4,14 +4,13 @@ import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
+import com.example.moiz.data.network.dto.ResponseBillingHelper
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.data.network.dto.TravelDetailDto
-import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
 import com.example.moiz.presentation.util.FileResult
@@ -21,9 +20,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.http.Multipart
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class TravelRepositoryImpl @Inject constructor(private val travelService: TravelService) :
@@ -34,8 +31,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.getTravelList(token).body()!!
         } else {
             ResponseTravelListDto(
-                message = travelService.getTravelList(token).message(), results = null
-            )
+                message = travelService.getTravelList(token).message(), results = null)
         }
 
     }
@@ -48,8 +44,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.postTravel(data, token).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.postTravel(data, token).message(), results = null
-            )
+                message = travelService.postTravel(data, token).message(), results = null)
         }
     }
 
@@ -62,9 +57,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.getTravelDetail(token, travelId).body()!!
         } else {
             ResponseTravelDetailDto(
-                message = travelService.getTravelDetail(token, travelId).message(),
-                results = null
-            )
+                message = travelService.getTravelDetail(token, travelId).message(), results = null)
         }
     }
 
@@ -85,8 +78,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
                 total_amount_currency = null,
                 captured_amount = null,
                 images = null,
-                participants = null
-            )
+                participants = null)
         }
     }
 
@@ -99,8 +91,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.putTravel(token, data, id).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.putTravel(token, data, id).message(), results = null
-            )
+                message = travelService.putTravel(token, data, id).message(), results = null)
         }
     }
 
@@ -120,7 +111,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         travelId: Int,
         token: String,
         data: PostBillingDto,
-        imgList: List<FileResult>?
+        imgList: List<FileResult>?,
     ) {
         val temp = hashMapOf<String, RequestBody>()
         temp["title"] = data.title!!.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -128,25 +119,34 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         temp["paid_date"] = data.paid_date!!.toRequestBody("text/plain".toMediaTypeOrNull())
         temp["currency"] = data.currency!!.toRequestBody("text/plain".toMediaTypeOrNull())
         temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["settlements"] = data.settlements.map { Gson().toJson(it).toString() }
-            .toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["settlements"] =
+            data.settlements.map { Gson().toJson(it).toString() }
+                .toString()
+                .toRequestBody("text/plain".toMediaTypeOrNull())
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images",
-                it.file.name,
-                it.file.asRequestBody("image/*".toMediaTypeOrNull())
-            )
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
         }
 
         travelService.postBillings(token, travelId, temp, imgFile)
+    }
+
+    override suspend fun getBillingsHelper(travelId: Int, token: String): ResponseBillingHelper {
+        return if (travelService.getBillingsHelper(token, travelId).isSuccessful) {
+            travelService.getBillingsHelper(token, travelId).body()!!
+        } else {
+            ResponseBillingHelper(
+                message = travelService.getBillingsHelper(token, travelId).message(),
+                results = null)
+        }
     }
 
     override suspend fun putBillings(
         billingId: Int,
         token: String,
         data: PostBillingDto,
-        imgList: List<FileResult>?
+        imgList: List<FileResult>?,
     ) {
         val temp = hashMapOf<String, RequestBody>()
         temp["title"] = data.title!!.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -154,15 +154,14 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         temp["paid_date"] = data.paid_date!!.toRequestBody("text/plain".toMediaTypeOrNull())
         temp["currency"] = data.currency!!.toRequestBody("text/plain".toMediaTypeOrNull())
         temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["settlements"] = data.settlements.map { Gson().toJson(it).toString() }
-            .toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["settlements"] =
+            data.settlements.map { Gson().toJson(it).toString() }
+                .toString()
+                .toRequestBody("text/plain".toMediaTypeOrNull())
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images",
-                it.file.name,
-                it.file.asRequestBody("image/*".toMediaTypeOrNull())
-            )
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
         }
 
         travelService.putBillings(token, billingId, temp, imgFile)
