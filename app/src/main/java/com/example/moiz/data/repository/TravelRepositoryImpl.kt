@@ -2,6 +2,7 @@ package com.example.moiz.data.repository
 
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.ResponseBillingHelper
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
@@ -74,5 +75,15 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
 
     override suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto) {
         travelService.postBillings(token, travelId, data)
+    }
+
+    override suspend fun getBillingsHelper(travelId: Int, token: String): ResponseBillingHelper {
+        return if (travelService.getBillingsHelper(token, travelId).isSuccessful) {
+            travelService.getBillingsHelper(token, travelId).body()!!
+        } else {
+            ResponseBillingHelper(
+                message = travelService.getBillingsHelper(token, travelId)
+                    .message(), results = null)
+        }
     }
 }

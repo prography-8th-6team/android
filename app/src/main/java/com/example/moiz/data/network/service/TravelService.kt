@@ -2,6 +2,7 @@ package com.example.moiz.data.network.service
 
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.ResponseBillingHelper
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
@@ -65,4 +66,11 @@ interface TravelService {
         @Path("id") id: Int,
         @Body data: PostBillingDto
     )
+
+    // 계산도우미 조회
+    @GET("v1/travels/{id}/billings")
+    suspend fun getBillingsHelper(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+    ): Response<ResponseBillingHelper>
 }

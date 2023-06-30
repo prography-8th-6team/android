@@ -2,6 +2,7 @@ package com.example.moiz.domain.repository
 
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.ResponseBillingHelper
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
@@ -30,4 +31,6 @@ interface TravelRepository {
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 
     suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto)
+
+    suspend fun getBillingsHelper(travelId: Int, token: String): ResponseBillingHelper
 }
