@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -17,6 +18,7 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
+import com.example.moiz.presentation.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -61,12 +63,26 @@ import java.util.Currency
 
             popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
                 // 여행 공유
+                val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {}
+                dialog.isCancelable = false
+                dialog.show(requireActivity().supportFragmentManager, "share")
             }
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
-                // 여행 수정
+                viewModel.list.value?.id?.let { goToEditTravel(it) }
+                popupWindow.dismiss()
             }
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
-                // 여행 삭제
+                val dialog = CustomDialog("리스트를 삭제하시겠습니까?", "취소", "네") {
+                    UserDataStore.getUserToken(requireContext())
+                        .asLiveData()
+                        .observe(viewLifecycleOwner) {
+                            viewModel.deleteTravel("Bearer $it", args.travelId)
+                        }
+                    popupWindow.dismiss()
+                    findNavController().navigateUp()
+                }
+                dialog.isCancelable = false
+                dialog.show(requireActivity().supportFragmentManager, "delete")
             }
         }
 
@@ -105,6 +121,11 @@ import java.util.Currency
 
     private fun itemOnClick(data: BillingDto) {
         // 가계부 상세 이동
+    }
+
+    private fun goToEditTravel(travelId: Int) {
+        findNavController().navigate(
+            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId))
     }
 
 }

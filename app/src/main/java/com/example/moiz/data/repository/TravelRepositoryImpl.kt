@@ -3,10 +3,10 @@ package com.example.moiz.data.repository
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
+import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
 import javax.inject.Inject
@@ -60,8 +60,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun deleteTravel(travelId: Int) {
-
+    override suspend fun deleteTravel(token: String, travelId: Int): ResponseTravelDeleteDto {
+        return travelService.deleteTravel(token, travelId).body()!!
     }
 
     override suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto> {

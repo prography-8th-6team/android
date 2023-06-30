@@ -9,8 +9,10 @@ import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.TravelCreateDto
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
     private lateinit var binding: EditTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<EditTravelListViewModel>()
+    private val args: EditTravelListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,24 +42,55 @@ import kotlinx.coroutines.launch
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
+        getTravelDetail()
         initSpinner()
-        setDatePickerDialog()
-        setRadioGroup()
-        //todo
-        // id 값 불러와서 값 초기화 & api id 로 전달
-        binding.btnEdit.setOnClickListener { putTravel(9) }
+        initDatePickerDialog()
+        initRadioGroup()
+        initEditButton()
+        setDate()
+        binding.btnEdit.setOnClickListener { putTravel(args.travelId) }
+    }
 
-//        viewModel.isEnabled.observe(viewLifecycleOwner) {
-//            binding.btnCreate.isEnabled = it
-//            if (it) {
-//                binding.btnCreate.backgroundTintList =
-//                    ContextCompat.getColorStateList(requireContext(), R.color.color_f55c5c)
-//
-//            } else {
-//                binding.btnCreate.backgroundTintList =
-//                    ContextCompat.getColorStateList(requireContext(), R.color.color_ebeaea)
-//            }
-//        }
+    private fun setDate() {
+        viewModel.startDate.observe(viewLifecycleOwner) {
+            binding.dpStartDate.text = it.replace("-", ".")
+        }
+
+        viewModel.endDate.observe(viewLifecycleOwner) {
+            binding.dpEndDate.text = it.replace("-", ".")
+        }
+    }
+
+    private fun initEditButton() {
+        viewModel.isEnabled.observe(viewLifecycleOwner) {
+            binding.btnEdit.isEnabled = it
+            if (it) {
+                binding.btnEdit.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.color_f55c5c)
+
+            } else {
+                binding.btnEdit.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.color_ebeaea)
+            }
+        }
+    }
+
+    private fun getTravelDetail() {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.getTravelDetail(args.travelId, "Bearer $it")
+            initValue()
+        }
+    }
+
+    private fun initValue() {
+        viewModel.travelDetail.observe(viewLifecycleOwner) { travelDetail ->
+            travelDetail.title?.let { viewModel.setTitle(it) }
+            travelDetail.start_date?.let { viewModel.setStartDate(it) }
+            travelDetail.end_date?.let { viewModel.setEndDate(it) }
+            travelDetail.color?.let { viewModel.setColor(it) }
+            travelDetail.currency?.let { viewModel.setCurrency(it) }
+            travelDetail.description?.let { viewModel.setMemo(it) }
+        }
     }
 
     private fun initSpinner() {
@@ -70,6 +104,17 @@ import kotlinx.coroutines.launch
 
         binding.spnCurrency.adapter =
             SpinnerAdapter(requireContext(), R.layout.spinner_currency_item_view, currencyList)
+        viewModel.currency.observe(viewLifecycleOwner) {
+            val position = when (it) {
+                "USD" -> 0
+                "EUR" -> 1
+                "KRW" -> 2
+                "JPY" -> 3
+                else -> 4
+            }
+            binding.spnCurrency.setSelection(position)
+        }
+
         binding.spnCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val currency = binding.spnCurrency.getItemAtPosition(p2) as Currency
@@ -81,11 +126,11 @@ import kotlinx.coroutines.launch
         }
     }
 
-    private fun setDatePickerDialog() {
+    private fun initDatePickerDialog() {
         binding.dpStartDate.setOnClickListener {
             val datePickerFragment = DatePickerDialog()
             datePickerFragment.setOnOkClickListener { year, month, day ->
-                viewModel.setStartDate("$year.$month.$day")
+                viewModel.setStartDate("$year-$month-$day")
             }
             datePickerFragment.show(childFragmentManager, null)
         }
@@ -93,17 +138,61 @@ import kotlinx.coroutines.launch
         binding.dpEndDate.setOnClickListener {
             val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
-                viewModel.setEndDate("$year.$month.$day")
+                viewModel.setEndDate("$year-$month-$day")
             }
             datePickerFragment.show(childFragmentManager, null)
         }
     }
 
-    private fun setRadioGroup() {
+    private fun initRadioGroup() {
+        viewModel.color.observe(viewLifecycleOwner) {
+            when (it) {
+                "f9b7a4" -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_f9b7a4))
+                    binding.rgColor.check(R.id.btn_f9b7a4)
+                }
+
+                "d8f4f1" -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_d8f4f1))
+                    binding.rgColor.check(R.id.btn_d8f4f1)
+                }
+
+                "f8f2c3" -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_f8f2c3))
+                    binding.rgColor.check(R.id.btn_f8f2c3)
+                }
+
+                "a4e8c0" -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_a4e8c0))
+                    binding.rgColor.check(R.id.btn_a4e8c0)
+                }
+
+                "abe8ff" -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_abe8ff))
+                    binding.rgColor.check(R.id.btn_abe8ff)
+                }
+
+                else -> {
+                    binding.viewLine.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.color_f4f4f4))
+                    binding.rgColor.check(R.id.btn_f4f4f4)
+                }
+            }
+        }
+
         binding.rgColor.setOnCheckedChangeListener { _, id ->
             setAllColorUnselected()
-            binding.viewLine.visibility = View.VISIBLE
-
             when (id) {
                 R.id.btn_f9b7a4 -> {
                     binding.btnF9b7a4.apply {
@@ -237,8 +326,8 @@ import kotlinx.coroutines.launch
     private fun putTravel(id: Int) {
         val travelInfo = TravelCreateDto(
             title = viewModel.title.value,
-            start_date = viewModel.startDate.value?.replace(".", "-"),
-            end_date = viewModel.endDate.value?.replace(".", "-"),
+            start_date = viewModel.startDate.value,
+            end_date = viewModel.endDate.value,
             color = viewModel.color.value,
             description = viewModel.memo.value,
             currency = viewModel.currency.value)

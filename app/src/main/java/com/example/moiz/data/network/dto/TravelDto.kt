@@ -71,14 +71,14 @@ data class TravelCreateDto(
     @SerializedName("description")
     val description: String?,
     @SerializedName("currency")
-    val currency: String?,
+    val currency: String?
 )
 
 data class ResponseTravelCreateDto(
     @SerializedName("message")
-    val message:String,
+    val message: String,
     @SerializedName("results")
-    val results:TravelCreateDto?
+    val results: TravelCreateDto?
 )
 
 data class ResponseTravelDetailDto(
@@ -133,4 +133,9 @@ data class PostBillingDto(
 data class SettlementsDto(
     var member: Int,
     var amount: Int
+)
+
+data class ResponseTravelDeleteDto(
+    @SerializedName("message")
+    val message: String,
 )
