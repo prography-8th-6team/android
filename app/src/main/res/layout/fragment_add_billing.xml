@@ -120,7 +120,7 @@
             android:backgroundTint="@color/color_BEBEBE"
             android:hint="금액을 입력하세요"
             android:imeOptions="actionDone"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textColorHint="@color/color_BEBEBE"
             android:textSize="15sp" />
 
