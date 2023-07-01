@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_toolbar_back" />
@@ -124,18 +125,15 @@
             android:textColorHint="@color/color_BEBEBE"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/tv_currency"
+        <Spinner
+            android:id="@+id/spn_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_radius_3"
             android:backgroundTint="@color/color_f4f4f5"
-            android:dropDownWidth="match_parent"
-            android:fontFamily="@font/pretendard_medium"
-            android:padding="4dp"
-            android:text="USD"
-            android:textColor="@color/color_555555"
-            android:textSize="16sp" />
+            android:dropDownVerticalOffset="8dp"
+            android:overlapAnchor="false" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -267,7 +265,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingBottom="4dp"
+                    android:paddingBottom="7dp"
                     android:text="1/N"
                     android:textColor="@color/color_555555"
                     android:textSize="16sp"
@@ -279,7 +277,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingBottom="4dp"
+                    android:paddingBottom="7dp"
                     android:text="직접 입력"
                     android:textColor="@color/color_EBEAEA"
                     android:textSize="16sp"

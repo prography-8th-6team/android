@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.billing
+package com.example.moiz.presentation.billing.add
 
 import android.content.Context
 import android.view.KeyEvent
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.databinding.ItemPaidMemberBinding
 import com.example.moiz.domain.model.InputCostEntity
-import timber.log.Timber
 
 class AddBillingAdapter(
     private val onClick: (InputCostEntity) -> Unit,

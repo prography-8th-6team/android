@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.billing
+package com.example.moiz.presentation.billing.add
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -23,15 +23,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
-import com.example.moiz.data.network.dto.BillingDto
-import com.example.moiz.data.network.dto.PostBillingDto
-import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.databinding.FragmentAddBillingBinding
+import com.example.moiz.domain.model.Currency
 import com.example.moiz.domain.model.InputCostEntity
+import com.example.moiz.presentation.billing.BillingViewModel
+import com.example.moiz.presentation.createTravelList.SpinnerAdapter
 import com.example.moiz.presentation.util.FileResult
 import com.example.moiz.presentation.util.PermissionUtil
 import com.example.moiz.presentation.util.getFileInfo
@@ -45,6 +46,7 @@ class AddBillingFragment : Fragment() {
 
     private lateinit var binding: FragmentAddBillingBinding
     private val viewModel: BillingViewModel by viewModels()
+    private var currencyList = ArrayList<Currency>()
 
     var tempImgFile = arrayListOf<FileResult>()
     var camUri: Uri? = null
@@ -142,49 +144,23 @@ class AddBillingFragment : Fragment() {
             tvInput.setTextColor(resources.getColor(R.color.color_555555))
         }
 
-        tvCurrency.setOnClickListener {
-            val inflater =
-                view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_currency, null)
+        currencyList = arrayListOf(
+            Currency("$", "USD"),
+            Currency("€", "EUR"),
+            Currency("₩", "KRW"),
+            Currency("¥", "JPY"),
+            Currency("£", "GBP"),
+        )
 
-            val popupWindow =
-                PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            popupWindow.isOutsideTouchable = true
-            popupWindow.isFocusable = true
-            popupWindow.showAsDropDown(binding.tvCurrency, -50, 20)
-
-            popupView.findViewById<LinearLayout>(R.id.ll_usd).setOnClickListener {
-                tvCurrency.text = "USD"
-                viewModel.updateParam(3, "USD")
-                popupWindow.dismiss()
+        binding.spnCurrency.adapter =
+            SpinnerAdapter(requireContext(), R.layout.spinner_currency_item_view, currencyList)
+        binding.spnCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val currency = binding.spnCurrency.getItemAtPosition(p2) as Currency
+                viewModel.updateParam(3, currency.currencyText)
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_eur).setOnClickListener {
-                tvCurrency.text = "EUR"
-                viewModel.updateParam(3, "EUR")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_krw).setOnClickListener {
-                tvCurrency.text = "KRW"
-                viewModel.updateParam(3, "KRW")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_jpy).setOnClickListener {
-                tvCurrency.text = "JPY"
-                viewModel.updateParam(3, "JPY")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_gbp).setOnClickListener {
-                tvCurrency.text = "GBP"
-                viewModel.updateParam(3, "GBP")
-                popupWindow.dismiss()
+            override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
 
@@ -295,6 +271,8 @@ class AddBillingFragment : Fragment() {
             }?.show()
         }
 
+        ivBack.setOnClickListener { findNavController().popBackStack() }
+
         viewModel.members.observe(viewLifecycleOwner) {
             Timber.d("members : $it")
             it?.let {
@@ -323,6 +301,7 @@ class AddBillingFragment : Fragment() {
             }
         }
 
+        /*
         tvAddBilling.setOnClickListener {
             if (viewModel.isValidate()) {
                 UserDataStore.getUserToken(requireContext()).asLiveData()
@@ -336,6 +315,7 @@ class AddBillingFragment : Fragment() {
                 Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+         */
 
     }
 
