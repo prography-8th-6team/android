@@ -1,11 +1,15 @@
 package com.example.moiz.presentation.detail
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -112,15 +116,23 @@ class TravelDetailFragment : Fragment() {
             popupWindow.showAsDropDown(ivAdditional, -80, 20)
 
             popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
-                // 여행 공유
-                val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {}
+                val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {
+                    viewModel.postGenerateInviteToken(args.travelId, token)
+                        .observe(viewLifecycleOwner) {
+                            val clipboard =
+                                requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                            val temp = "moiz://deeplink?code=${it.toekn}"
+                            val clip = ClipData.newPlainText(
+                                "label",
+                                temp
+                            )
+                            clipboard.setPrimaryClip(clip)
+                            Toast.makeText(requireContext(), "공유 코드가 복사되었습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                }
                 dialog.isCancelable = false
                 dialog.show(requireActivity().supportFragmentManager, "share")
-
-                viewModel.postGenerateInviteToken(args.travelId, token)
-                    .observe(viewLifecycleOwner) {
-                        Timber.d("share token: $it")
-                    }
             }
 
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {

@@ -40,7 +40,9 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         UserDataStore.getJoinCode(this@MainActivity).asLiveData().observe(this) { code ->
             UserDataStore.getUserToken(this@MainActivity).asLiveData().observe(this) { token ->
-                viewModel.postJoinCode(token, code)
+                if(code != "" && token != "") {
+                    viewModel.postJoinCode(token, code)
+                }
             }
         }
     }
