@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
+import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.FragmentBillingBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.Currency
 
 @AndroidEntryPoint
@@ -39,31 +42,12 @@ class BillingFragment : Fragment() {
 
     private fun initViews() = with(binding) {
         adapter = BillingAdapter(::itemOnClick)
-        viewModel.list.observe(viewLifecycleOwner) { data ->
-            //data.billings.let { adapter.submitList(data.billings) }
-        }
-
-        val list = mutableListOf<BillingDto>()
-        repeat(10) {
-            list.add(
-                BillingDto(
-                    id = it,
-                    travel = 20,
-                    title = "10000",
-                    category = "KRW",
-                    paid_by = "2021-09-01",
-                    paid_date = "가계부 메모",
-                    total_amount = "12012",
-                    total_amount_currency = "KRW",
-                    captured_amount = "10000",
-                    participants = listOf("참여자1", "참여자2")
-                )
-            )
-        }
-
-        adapter.submitList(list)
         rvAccounts.layoutManager = LinearLayoutManager(context)
         rvAccounts.adapter = adapter
+
+        viewModel.list.observe(viewLifecycleOwner) { data ->
+            data.billings.let { adapter.submitList(data.billings) }
+        }
     }
 
     private fun itemOnClick(data: BillingDto) {

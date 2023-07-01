@@ -14,8 +14,8 @@ data class TokenEntity(
 )
 
 data class InputCostEntity(
-    val isChecked: Boolean,
-    val name: String,
     val userId: Int,
-    val cost: Double
+    var isChecked: Boolean,
+    val name: String,
+    var cost: Double
 )

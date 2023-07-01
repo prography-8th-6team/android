@@ -27,9 +27,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
+import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.databinding.FragmentAddBillingBinding
+import com.example.moiz.domain.model.InputCostEntity
 import com.example.moiz.presentation.util.FileResult
 import com.example.moiz.presentation.util.PermissionUtil
 import com.example.moiz.presentation.util.getFileInfo
@@ -44,18 +46,10 @@ class AddBillingFragment : Fragment() {
     private lateinit var binding: FragmentAddBillingBinding
     private val viewModel: BillingViewModel by viewModels()
 
-    //private lateinit var adapter: BillingInputAdapter
     var tempImgFile = arrayListOf<FileResult>()
     var camUri: Uri? = null
     private val args: AddBillingFragmentArgs by navArgs()
-
-    val temp = PostBillingDto(
-        "",
-        0,
-        "",
-        "USD",
-        listOf(SettlementsDto(7, 12000))
-    )
+    private lateinit var adapter: AddBillingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,20 +71,44 @@ class AddBillingFragment : Fragment() {
         initViews()
     }
 
+    private fun itemOnClick(data: InputCostEntity) {
+        viewModel.updateCost(data)
+        binding.etPrice.setText(viewModel.totalAmount.toString())
+    }
+
+    private fun itemOnChange(data: InputCostEntity) {
+        viewModel.changeCost(data)
+        binding.etPrice.setText(viewModel.totalAmount.toString())
+    }
+
     private fun initViews() = with(binding) {
+        adapter = AddBillingAdapter(::itemOnClick, ::itemOnChange)
+        rvPaidForMembers.layoutManager = LinearLayoutManager(context)
+        rvPaidForMembers.adapter = adapter
+
+        viewModel.temp.observe(viewLifecycleOwner) {
+            it?.let { adapter.submitList(it) }
+        }
+
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
+        viewModel.updateParam(2, format.format(calendar.time))
 
         etPrice.setOnEditorActionListener { _, _, _ ->
-            //adapter.inputPrice = etPrice.text.toString().toDouble()
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                etPrice.windowToken,
-                0
-            )
-            //adapter.notifyDataSetChanged()
+            if (etPrice.text.isEmpty() || etPrice.text.toString().startsWith("0")) {
+                Toast.makeText(context, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val mInputMethodManager =
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                mInputMethodManager.hideSoftInputFromWindow(
+                    etPrice.windowToken,
+                    0
+                )
+                viewModel.totalAmount = etPrice.text.toString().toDouble()
+                viewModel.updateTotalAmount()
+                etPrice.clearFocus()
+            }
             true
         }
 
@@ -101,15 +119,25 @@ class AddBillingFragment : Fragment() {
                 etName.windowToken,
                 0
             )
+            viewModel.updateParam(0, etName.text.toString())
+            etName.clearFocus()
             true
         }
 
         tvAuto.setOnClickListener {
+            adapter.billingType = false
+            etPrice.setText("")
+            etPrice.isEnabled = true
+            viewModel.clearCost()
             tvAuto.setTextColor(resources.getColor(R.color.color_555555))
             tvInput.setTextColor(resources.getColor(R.color.color_EBEAEA))
         }
 
         tvInput.setOnClickListener {
+            adapter.billingType = true
+            etPrice.setText("")
+            etPrice.isEnabled = false
+            viewModel.clearCost()
             tvAuto.setTextColor(resources.getColor(R.color.color_EBEAEA))
             tvInput.setTextColor(resources.getColor(R.color.color_555555))
         }
@@ -131,31 +159,31 @@ class AddBillingFragment : Fragment() {
 
             popupView.findViewById<LinearLayout>(R.id.ll_usd).setOnClickListener {
                 tvCurrency.text = "USD"
-                temp.currency = "USD"
+                viewModel.updateParam(3, "USD")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_eur).setOnClickListener {
                 tvCurrency.text = "EUR"
-                temp.currency = "EUR"
+                viewModel.updateParam(3, "EUR")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_krw).setOnClickListener {
                 tvCurrency.text = "KRW"
-                temp.currency = "KRW"
+                viewModel.updateParam(3, "KRW")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_jpy).setOnClickListener {
                 tvCurrency.text = "JPY"
-                temp.currency = "JPY"
+                viewModel.updateParam(3, "JPY")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_gbp).setOnClickListener {
                 tvCurrency.text = "GBP"
-                temp.currency = "GBP"
+                viewModel.updateParam(3, "GBP")
                 popupWindow.dismiss()
             }
         }
@@ -262,13 +290,13 @@ class AddBillingFragment : Fragment() {
                     run {
                         tvPickerDate.text =
                             year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
-                        temp.paid_date = tvPickerDate.text.toString()
                     }
                 }, year, month, day)
             }?.show()
         }
 
         viewModel.members.observe(viewLifecycleOwner) {
+            Timber.d("members : $it")
             it?.let {
                 val membersAdapter = ArrayAdapter(
                     requireContext(),
@@ -289,26 +317,19 @@ class AddBillingFragment : Fragment() {
                             position: Int,
                             id: Long
                         ) {
-                            //temp.paid_by = it[position].id!!
+                            viewModel.updateParam(1, it[position].id!!)
                         }
                     }
-
-                //adapter = BillingInputAdapter()
-                //adapter.submitListEx(it)
-                rvPaidForMembers.layoutManager = LinearLayoutManager(context)
-                //rvPaidForMembers.adapter = adapter
             }
         }
 
         tvAddBilling.setOnClickListener {
-            temp.title = etName.text.toString()
-            if (temp.title.isNotEmpty() && temp.paid_by != 0 && temp.paid_date.isNotEmpty() && temp.currency.isNotEmpty() && temp.settlements.isNotEmpty()) {
+            if (viewModel.isValidate()) {
                 UserDataStore.getUserToken(requireContext()).asLiveData()
                     .observe(viewLifecycleOwner) {
                         viewModel.postBillings(
                             args.travelId,
-                            "Bearer $it",
-                            temp
+                            "Bearer $it"
                         )
                     }
             } else {
