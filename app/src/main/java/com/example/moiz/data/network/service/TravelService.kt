@@ -1,5 +1,6 @@
 package com.example.moiz.data.network.service
 
+import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
@@ -62,6 +63,12 @@ interface TravelService {
         @Header("Authorization") token: String?,
         @Body data: PostJoinCodeDto
     )
+
+    @GET("v1/billings/{id}")
+    suspend fun getBillingDetail(
+        @Header("Authorization") token: String?,
+        @Path("id") id: String
+    ): Response<BillingDetailDto>
 
     // 여행 삭제 API
     @DELETE("v1/travels/{id}")

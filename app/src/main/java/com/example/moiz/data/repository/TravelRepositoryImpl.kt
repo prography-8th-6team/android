@@ -1,5 +1,6 @@
 package com.example.moiz.data.repository
 
+import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
@@ -9,6 +10,7 @@ import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
+import com.example.moiz.data.network.dto.TravelDetailDto
 import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
@@ -53,6 +55,28 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             ResponseTravelDetailDto(
                 message = travelService.getTravelDetail(token, travelId).message(),
                 results = null
+            )
+        }
+    }
+
+    override suspend fun getBillingDetail(billingId: String, token: String): BillingDetailDto {
+        val result = travelService.getBillingDetail(token, billingId)
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            Timber.d(result.message())
+            BillingDetailDto(
+                id = null,
+                travel = null,
+                title = null,
+                category = null,
+                paid_by = null,
+                paid_date = null,
+                total_amount = null,
+                total_amount_currency = null,
+                captured_amount = null,
+                images = null,
+                participants = null
             )
         }
     }

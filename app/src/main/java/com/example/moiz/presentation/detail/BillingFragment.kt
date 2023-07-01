@@ -51,7 +51,9 @@ class BillingFragment : Fragment() {
     }
 
     private fun itemOnClick(data: BillingDto) {
-        // 가계부 상세 이동
+        findNavController().navigate(
+            R.id.goto_detail_billing, bundleOf("travelId" to data.id)
+        )
     }
 
 }
