@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.domain.usecase.GetTravelListUseCase
+import com.example.moiz.domain.usecase.PostJoinCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel class MainViewModel @Inject constructor(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val getTravelListUseCase: GetTravelListUseCase,
+    private val postJoinCodeUseCase: PostJoinCodeUseCase
 ) : ViewModel() {
     private val _response = MutableLiveData<ResponseTravelListDto>()
     val response: LiveData<ResponseTravelListDto> = _response
@@ -31,4 +34,13 @@ import javax.inject.Inject
             }
         }
     }
+
+    fun postJoinCode(token: String, joinCode: String) {
+        viewModelScope.launch {
+            postJoinCodeUseCase.invoke(token, joinCode).let {
+
+            }
+        }
+    }
+
 }

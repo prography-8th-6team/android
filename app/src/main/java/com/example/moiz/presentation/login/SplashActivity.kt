@@ -10,6 +10,7 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 
@@ -20,6 +21,16 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
         setContentView(R.layout.activity_splash)
+
+        val temp = intent.data
+        if (temp != null) {
+            val token = temp.getQueryParameter("code")
+            if (token != null) {
+                runBlocking {
+                    UserDataStore.setJoinCode(this@SplashActivity, token)
+                }
+            }
+        }
 
         UserDataStore.getUserToken(this@SplashActivity).asLiveData().observe(this) {
             Handler().postDelayed(Runnable {

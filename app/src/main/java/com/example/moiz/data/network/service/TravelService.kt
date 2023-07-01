@@ -2,6 +2,7 @@ package com.example.moiz.data.network.service
 
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.PostJoinCodeDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
@@ -55,6 +56,12 @@ interface TravelService {
         @Body data: TravelCreateDto,
         @Path("id") id: Int,
     ): Response<ResponseTravelCreateDto>
+
+    @POST("v1/travels/join")
+    suspend fun postJoinCode(
+        @Header("Authorization") token: String?,
+        @Body data: PostJoinCodeDto
+    )
 
     // 여행 삭제 API
     @DELETE("v1/travels/{id}")

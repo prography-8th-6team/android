@@ -123,16 +123,20 @@ data class BillingMembersDto(
 )
 
 data class PostBillingDto(
-    var title: String,
-    var paid_by: Int,
-    var paid_date: String,
-    var currency: String,
-    var settlements: List<SettlementsDto>
+    var title: String?,
+    var paid_by: Int?,
+    var paid_date: String?,
+    var currency: String?,
+    var settlements: List<SettlementsDto?>
 )
 
 data class SettlementsDto(
-    var user: Int,
-    var amount: Int
+    var user: Int?,
+    var amount: Double?
+)
+
+data class PostJoinCodeDto(
+    var token: String?
 )
 
 data class ResponseTravelDeleteDto(

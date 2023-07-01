@@ -2,6 +2,7 @@ package com.example.moiz.data.repository
 
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.PostJoinCodeDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
@@ -39,6 +40,10 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
                 message = travelService.postTravel(data, token).message(), results = null
             )
         }
+    }
+
+    override suspend fun postJoinCode(token: String, data: PostJoinCodeDto) {
+        travelService.postJoinCode(token, data)
     }
 
     override suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto {
