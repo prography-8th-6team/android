@@ -78,25 +78,54 @@
         app:layout_constraintTop_toBottomOf="@id/ll_billing_title"
         tools:text="12,000" />
 
-    <View
-        android:id="@+id/view"
+    <FrameLayout
+        android:id="@+id/fl_billing_img"
         android:layout_width="match_parent"
         android:layout_height="104dp"
         android:layout_marginTop="30dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_billing_price" />
+        app:layout_constraintTop_toBottomOf="@id/tv_billing_price">
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="66dp"
-        android:src="@drawable/ic_unselect_img"
-        android:translationZ="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_billing_price" />
+        <ImageView
+            android:id="@+id/iv_empty_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_unselect_img"
+            android:translationZ="100dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_billing_price" />
+
+        <ImageView
+            android:id="@+id/iv_billing_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_billing_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_billing_img_1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/iv_billing_img_2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_billing_date"
@@ -109,7 +138,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view"
+        app:layout_constraintTop_toBottomOf="@id/fl_billing_img"
         tools:text="23.06.10" />
 
     <LinearLayout
