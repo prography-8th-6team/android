@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -51,9 +52,17 @@ class BillingDetailFragment : Fragment() {
             viewModel.getBillingDetail(27/*args.billingId*/, "Bearer $it")
         }
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            ivBack.setOnClickListener { findNavController().popBackStack() }
-            when (it.category) {
+        ivBack.setOnClickListener { findNavController().popBackStack() }
+
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            tvEdit.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_detailBillingFragment_to_editBillingFragment,
+                    bundleOf("billingId" to 27/*data.id*/)
+                )
+            }
+
+            when (data.category) {
                 "food" -> ivCategory.setImageResource(R.drawable.ic_category_food)
                 "transportation" -> ivCategory.setImageResource(R.drawable.ic_category_transportation)
                 "hotel" -> ivCategory.setImageResource(R.drawable.ic_category_hotel)
@@ -61,42 +70,42 @@ class BillingDetailFragment : Fragment() {
                 "shopping" -> ivCategory.setImageResource(R.drawable.ic_category_shopping)
                 else -> ivCategory.setImageResource(R.drawable.ic_category_other)
             }
-            tvBillingTitle.text = it.title
-            val currencySymbol = Currency.getInstance(it.total_amount_currency).symbol
-            tvBillingPrice.text = "$currencySymbol ${it.total_amount}"
-            tvBillingDate.text = it.paid_date
+            tvBillingTitle.text = data.title
+            val currencySymbol = Currency.getInstance(data.total_amount_currency).symbol
+            tvBillingPrice.text = "$currencySymbol ${data.total_amount}"
+            tvBillingDate.text = data.paid_date
 
-            when (it.images?.size) {
+            when (data.images?.size) {
                 0 -> {
                     ivEmptyImg.visibility = View.VISIBLE
                 }
 
                 1 -> {
                     ivBillingImg.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(it.images[0])
+                    Glide.with(requireContext()).load(data.images[0])
                         .into(ivBillingImg)
                     ivBillingImg.setOnClickListener { _ ->
-                        clickImage(it.images[0])
+                        clickImage(data.images[0])
                     }
                 }
 
                 2 -> {
                     llBillingImg.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(it.images[0])
+                    Glide.with(requireContext()).load(data.images[0])
                         .into(ivBillingImg1)
-                    Glide.with(requireContext()).load(it.images[1])
+                    Glide.with(requireContext()).load(data.images[1])
                         .into(ivBillingImg2)
                     ivBillingImg1.setOnClickListener { _ ->
-                        clickImage(it.images[0])
+                        clickImage(data.images[0])
                     }
                     ivBillingImg2.setOnClickListener { _ ->
-                        clickImage(it.images[1])
+                        clickImage(data.images[1])
                     }
                 }
             }
 
             llBillingMembers.apply {
-                it.participants?.forEach { participant ->
+                data.participants?.forEach { participant ->
                     val binding =
                         ItemBillingDetailMemberBinding.inflate(
                             LayoutInflater.from(context),
@@ -105,7 +114,7 @@ class BillingDetailFragment : Fragment() {
                         )
                     binding.tvName.text = participant.user?.nickname
                     binding.tvAmount.text = "$currencySymbol ${participant.total_amount}"
-                    if (participant.user?.nickname == it.paid_by) {
+                    if (participant.user?.nickname == data.paid_by) {
                         binding.tvPaidBy.visibility = View.VISIBLE
                     } else {
                         binding.tvPaidBy.visibility = View.GONE

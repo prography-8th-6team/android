@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="비용 수정"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_imgCnt"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="-6dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/color_F55C5C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="6sp"
+        android:translationZ="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/ll_content"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_toolbar">
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:hint="내용을 입력하세요"
+            android:imeOptions="actionDone"
+            android:textColorHint="@color/color_BCBCBC"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_category"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_select_category" />
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_unselect_img" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_content">
+
+        <TextView
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="비용"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:backgroundTint="@color/color_BEBEBE"
+            android:hint="금액을 입력하세요"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:textColorHint="@color/color_BEBEBE"
+            android:textSize="15sp" />
+
+        <Spinner
+            android:id="@+id/spn_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
+            android:dropDownVerticalOffset="8dp"
+            android:overlapAnchor="false" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_drop_down"
+            app:layout_constraintStart_toEndOf="@id/spn_currency"
+            app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_price">
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="날짜"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_picker_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
+            android:fontFamily="@font/pretendard_medium"
+            android:padding="4dp"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp"
+            tools:text="선택" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_paid_by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_date">
+
+        <TextView
+            android:id="@+id/tv_paid_by"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="지불자"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/sp_members"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_radius_3"
+            android:backgroundTint="@color/color_f4f4f5"
+            android:dropDownWidth="match_parent"
+            android:dropDownVerticalOffset="8dp"
+            android:overlapAnchor="false"
+            android:popupBackground="@drawable/bg_radius_9"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img_drop_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:src="@drawable/ic_drop_down"
+            app:layout_constraintStart_toEndOf="@id/spn_currency"
+            app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_paid_by">
+
+        <TextView
+            android:id="@+id/tv_paid_for"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="참여자"
+            android:textColor="@color/color_555555"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_paid_by" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_auto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="7dp"
+                    android:text="1/N"
+                    android:textColor="@color/color_555555"
+                    android:textSize="16sp"
+                    android:translationZ="100dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_input"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="7dp">
+
+                    <TextView
+                        android:id="@+id/tv_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="직접 입력"
+                        android:textColor="@color/color_EBEAEA"
+                        android:textSize="16sp"
+                        android:translationZ="100dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_tooltip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_billing_tooltip" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="-2dp"
+                android:background="@color/color_EBEAEA" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_paid_for_members"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_add_billing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_F55C5C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:paddingVertical="27dp"
+        android:text="비용 수정하기"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
