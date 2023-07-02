@@ -36,10 +36,20 @@ import com.example.moiz.presentation.createTravelList.SpinnerAdapter
 import com.example.moiz.presentation.util.FileResult
 import com.example.moiz.presentation.util.PermissionUtil
 import com.example.moiz.presentation.util.getFileInfo
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import timber.log.Timber
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
+
 
 @AndroidEntryPoint
 class AddBillingFragment : Fragment() {
@@ -142,6 +152,25 @@ class AddBillingFragment : Fragment() {
             viewModel.clearCost()
             tvAuto.setTextColor(resources.getColor(R.color.color_EBEAEA))
             tvInput.setTextColor(resources.getColor(R.color.color_555555))
+        }
+
+        ivTooltip.setOnClickListener {
+            val balloon = Balloon.Builder(requireContext())
+                .setWidthRatio(0.6f)
+                .setHeight(BalloonSizeSpec.WRAP)
+                .setText("직접 입력 시, 오차는 1%입니다.")
+                .setTextColorResource(R.color.color_555555)
+                .setBackgroundColorResource(R.color.white)
+                .setTextSize(14f)
+                .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+                .setArrowSize(10)
+                .setArrowPosition(0.5f)
+                .setPadding(12)
+                .setCornerRadius(8f)
+                .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                .build()
+            balloon.showAsDropDown(ivTooltip)
+            balloon.dismissWithDelay(1500L)
         }
 
         currencyList = arrayListOf(
@@ -301,22 +330,21 @@ class AddBillingFragment : Fragment() {
             }
         }
 
-        /*
         tvAddBilling.setOnClickListener {
-            if (viewModel.isValidate()) {
-                UserDataStore.getUserToken(requireContext()).asLiveData()
-                    .observe(viewLifecycleOwner) {
-                        viewModel.postBillings(
-                            args.travelId,
-                            "Bearer $it"
-                        )
-                    }
-            } else {
-                Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            }
-        }
-         */
+            //if (viewModel.isValidate()) {
+            UserDataStore.getUserToken(requireContext()).asLiveData()
+                .observe(viewLifecycleOwner) {
+                    viewModel.postBillings(
+                        args.travelId,
+                        "Bearer $it",
+                        tempImgFile
+                    )
+                }
+            //} else {
+            //    Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            //}
 
+        }
     }
 
     private var cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(

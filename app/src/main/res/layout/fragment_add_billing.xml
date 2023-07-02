@@ -271,17 +271,32 @@
                     android:textSize="16sp"
                     android:translationZ="100dp" />
 
-                <TextView
-                    android:id="@+id/tv_input"
+                <LinearLayout
+                    android:id="@+id/ll_input"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingBottom="7dp"
-                    android:text="직접 입력"
-                    android:textColor="@color/color_EBEAEA"
-                    android:textSize="16sp"
-                    android:translationZ="100dp" />
+                    android:orientation="horizontal"
+                    android:paddingBottom="7dp">
+
+                    <TextView
+                        android:id="@+id/tv_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="직접 입력"
+                        android:textColor="@color/color_EBEAEA"
+                        android:textSize="16sp"
+                        android:translationZ="100dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_tooltip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_billing_tooltip" />
+                </LinearLayout>
 
             </LinearLayout>
 

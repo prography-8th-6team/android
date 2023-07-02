@@ -1,9 +1,13 @@
 package com.example.moiz.presentation.billing.detail
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -15,6 +19,7 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.FragmentDetailBillingBinding
 import com.example.moiz.databinding.ItemBillingDetailMemberBinding
 import com.example.moiz.databinding.ItemTravelMemberBinding
+import com.example.moiz.presentation.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Currency
@@ -70,6 +75,9 @@ class BillingDetailFragment : Fragment() {
                     ivBillingImg.visibility = View.VISIBLE
                     Glide.with(requireContext()).load(it.images[0])
                         .into(ivBillingImg)
+                    ivBillingImg.setOnClickListener { _ ->
+                        clickImage(it.images[0])
+                    }
                 }
 
                 2 -> {
@@ -78,6 +86,12 @@ class BillingDetailFragment : Fragment() {
                         .into(ivBillingImg1)
                     Glide.with(requireContext()).load(it.images[1])
                         .into(ivBillingImg2)
+                    ivBillingImg1.setOnClickListener { _ ->
+                        clickImage(it.images[0])
+                    }
+                    ivBillingImg2.setOnClickListener { _ ->
+                        clickImage(it.images[1])
+                    }
                 }
             }
 
@@ -90,6 +104,7 @@ class BillingDetailFragment : Fragment() {
                             false
                         )
                     binding.tvName.text = participant.user?.nickname
+                    binding.tvAmount.text = "$currencySymbol ${participant.total_amount}"
                     if (participant.user?.nickname == it.paid_by) {
                         binding.tvPaidBy.visibility = View.VISIBLE
                     } else {
@@ -99,5 +114,11 @@ class BillingDetailFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun clickImage(imgUrl: String) {
+        val dialog = ImageCustomDialog(imgUrl)
+        dialog.isCancelable = true
+        dialog.show(requireActivity().supportFragmentManager, "img_detail")
     }
 }
