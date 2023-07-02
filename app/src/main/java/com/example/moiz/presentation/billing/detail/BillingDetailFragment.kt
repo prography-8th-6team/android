@@ -67,8 +67,8 @@ class BillingDetailFragment : Fragment() {
                             this,
                             false
                         )
-                    binding.tvName.text = participant
-                    if (participant == it.paid_by) {
+                    binding.tvName.text = participant.user?.nickname
+                    if (participant.user?.nickname == it.paid_by) {
                         binding.tvPaidBy.visibility = View.VISIBLE
                     } else {
                         binding.tvPaidBy.visibility = View.GONE

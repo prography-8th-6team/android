@@ -49,7 +49,7 @@ data class BillingDto(
     @SerializedName("captured_amount")
     val captured_amount: String?,
     @SerializedName("participants")
-    val participants: List<String>?,
+    val participants: List<ParticipantsDto>?,
 )
 
 data class ResponseTravelListDto(
@@ -144,8 +144,25 @@ data class BillingDetailDto(
     @SerializedName("images")
     val images: List<String>?,
     @SerializedName("participants")
-    val participants: List<String>?
+    val participants: List<ParticipantsDto>?
 )
+
+data class ParticipantsDto(
+    @SerializedName("user")
+    val user: UserDto?,
+    @SerializedName("total_amount")
+    val total_amount: String?,
+    @SerializedName("captured_amount")
+    val captured_amount: String?
+)
+
+data class UserDto(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("nickname")
+    val nickname: String,
+
+    )
 
 data class PostBillingDto(
     var title: String?,
