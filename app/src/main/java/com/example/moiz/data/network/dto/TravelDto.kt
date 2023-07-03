@@ -7,6 +7,8 @@ data class TravelDto(
     val id: Int?,
     @SerializedName("description")
     val description: String?,
+    @SerializedName("created_by")
+    val created_by: Int?,
     @SerializedName("members")
     val members: List<String>?,
     @SerializedName("title")
@@ -49,7 +51,7 @@ data class BillingDto(
     @SerializedName("captured_amount")
     val captured_amount: String?,
     @SerializedName("participants")
-    val participants: List<String>?,
+    val participants: List<ParticipantsDto>?,
 )
 
 data class ResponseTravelListDto(
@@ -162,4 +164,20 @@ data class ResponseBillingHelper(
     val message: String?,
     @SerializedName("results")
     val results: BillingHelperDto?,
+)
+
+data class ParticipantsDto(
+    @SerializedName("user")
+    val user:UserDto?,
+    @SerializedName("total_amount")
+    val total_amount:String?,
+    @SerializedName("captured_amount")
+    val captured_amount:String?,
+)
+
+data class UserDto(
+    @SerializedName("id")
+    val id:Int?,
+    @SerializedName("nickname")
+    val nickname:String?,
 )
