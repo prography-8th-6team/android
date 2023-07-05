@@ -196,16 +196,18 @@ data class ResponseTravelDeleteDto(
 
 data class BalancesDto(
     @SerializedName("user")
-    val user:String?,
+    val user:UserDto?,
     @SerializedName("amount")
     val amount:Int?,
     @SerializedName("paid_by")
-    val paid_by:Int?,
+    val paid_by:UserDto?,
 )
 
-data class UserAmountsDto(
-    @SerializedName("user")
-    val user:String?,
+data class BalancePercentDto(
+    @SerializedName("id")
+    val id:Int?,
+    @SerializedName("nickname")
+    val nickname:String?,
     @SerializedName("amount")
     val amount:Int?,
 )
@@ -213,8 +215,8 @@ data class UserAmountsDto(
 data class BillingHelperDto(
     @SerializedName("balances")
     val balances: List<BalancesDto>,
-    @SerializedName("user_amounts")
-    val user_amounts: List<UserAmountsDto>,
+    @SerializedName("balance_percent")
+    val balance_percent: List<BalancePercentDto>,
 )
 data class ResponseBillingHelper(
     @SerializedName("message")
