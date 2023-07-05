@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint class BillingHelperFragment : Fragment() {
     private lateinit var binding: BillingHelperFragmentBinding
     private val viewModel: BillingHelperViewModel by viewModels()
-    private lateinit var adapter: UserAmountAdapter
+    private lateinit var adapter: BalancePercentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +36,15 @@ import dagger.hilt.android.AndroidEntryPoint
     private fun getBillingsHelper() {
         // travel Id 수정
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getBillingsHelper(21, "Bearer $it")
+            viewModel.getBillingsHelper(30, "Bearer $it")
         }
     }
 
     private fun initView() {
-        adapter = UserAmountAdapter()
-        binding.rvAmountList.adapter = adapter
-        binding.rvAmountList.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.userAmounts.observe(viewLifecycleOwner) {
+        adapter = BalancePercentAdapter()
+        binding.rvBalancePercent.adapter = adapter
+        binding.rvBalancePercent.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.balancePercent.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(it)
             }
@@ -55,9 +55,9 @@ import dagger.hilt.android.AndroidEntryPoint
                 it?.forEach { balance ->
                     val binding =
                         ItemBillingBalanceBinding.inflate(LayoutInflater.from(context), this, false)
-                    binding.tvUser.text = balance.user
+                    binding.tvUser.text = balance.user?.nickname
                     binding.tvAmount.text = "${balance.amount}"
-                    binding.tvPaidBy.text = "${balance.paid_by}"
+                    binding.tvPaidBy.text = "${balance.paid_by?.nickname}"
                     addView(binding.root)
                 }
             }

@@ -9,21 +9,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.R
-import com.example.moiz.data.network.dto.UserAmountsDto
+import com.example.moiz.data.network.dto.BalancePercentDto
 import com.example.moiz.databinding.ItemBillingUserAmountBinding
 import kotlin.math.abs
 
-class UserAmountAdapter : ListAdapter<UserAmountsDto, UserAmountAdapter.ViewHolder>(
-    UserAmountDiffCallback) {
+class BalancePercentAdapter : ListAdapter<BalancePercentDto, BalancePercentAdapter.ViewHolder>(
+    DiffCallback) {
 
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
     inner class ViewHolder(private val binding: ItemBillingUserAmountBinding) : RecyclerView.ViewHolder(
         binding.root) {
-        fun bind(userAmount: UserAmountsDto) {
-            binding.tvName.text = userAmount.user
-            userAmount.amount?.let {
+        fun bind(balancePercent: BalancePercentDto) {
+            binding.tvName.text = balancePercent.nickname
+            balancePercent.amount?.let {
                 val height = abs(it) * 1.16
                 binding.viewAmount.layoutParams =
                     LinearLayout.LayoutParams(38.dp, height.toInt().dp)
@@ -53,13 +53,19 @@ class UserAmountAdapter : ListAdapter<UserAmountsDto, UserAmountAdapter.ViewHold
         holder.bind(getItem(position))
     }
 
-    object UserAmountDiffCallback : DiffUtil.ItemCallback<UserAmountsDto>() {
-        override fun areItemsTheSame(oldItem: UserAmountsDto, newItem: UserAmountsDto): Boolean {
+    object DiffCallback : DiffUtil.ItemCallback<BalancePercentDto>() {
+        override fun areItemsTheSame(
+            oldItem: BalancePercentDto,
+            newItem: BalancePercentDto,
+        ): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: UserAmountsDto, newItem: UserAmountsDto): Boolean {
-            return oldItem.user == newItem.user
+        override fun areContentsTheSame(
+            oldItem: BalancePercentDto,
+            newItem: BalancePercentDto,
+        ): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 }

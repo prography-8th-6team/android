@@ -27,7 +27,7 @@
                     android:src="@drawable/ic_plus" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_amount_list"
+                    android:id="@+id/rv_balance_percent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp" />
