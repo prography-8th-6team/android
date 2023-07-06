@@ -19,7 +19,7 @@ import timber.log.Timber
 import java.util.Currency
 
 @AndroidEntryPoint
-class BillingFragment : Fragment() {
+class BillingFragment(private val travelId: Int) : Fragment() {
 
     private lateinit var binding: FragmentBillingBinding
     private lateinit var adapter: BillingAdapter
@@ -41,6 +41,12 @@ class BillingFragment : Fragment() {
     }
 
     private fun initViews() = with(binding) {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.getTravelDetail(
+                travelId, "Bearer $it"
+            )
+        }
+
         adapter = BillingAdapter(::itemOnClick)
         rvAccounts.layoutManager = LinearLayoutManager(context)
         rvAccounts.adapter = adapter

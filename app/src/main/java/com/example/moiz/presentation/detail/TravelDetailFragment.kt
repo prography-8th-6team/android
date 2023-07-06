@@ -61,9 +61,9 @@ class TravelDetailFragment : Fragment() {
 
     private fun initViewPager() {
         var viewPagerAdapter = ViewPagerAdapter(requireActivity())
-        viewPagerAdapter.addFragment(BillingFragment())
-        viewPagerAdapter.addFragment(BillingFragment())
-        viewPagerAdapter.addFragment(BillingFragment())
+        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
+        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
+        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
 
         binding.vpViewpagerMain.apply {
             adapter = viewPagerAdapter
