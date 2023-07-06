@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.BillingHelperFragmentBinding
 import com.example.moiz.databinding.ItemBillingBalanceBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DecimalFormat
 
 @AndroidEntryPoint class BillingHelperFragment : Fragment() {
     private lateinit var binding: BillingHelperFragmentBinding
@@ -43,7 +45,8 @@ import dagger.hilt.android.AndroidEntryPoint
     private fun initView() {
         adapter = BalancePercentAdapter()
         binding.rvBalancePercent.adapter = adapter
-        binding.rvBalancePercent.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBalancePercent.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         viewModel.balancePercent.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(it)
@@ -56,7 +59,11 @@ import dagger.hilt.android.AndroidEntryPoint
                     val binding =
                         ItemBillingBalanceBinding.inflate(LayoutInflater.from(context), this, false)
                     binding.tvUser.text = balance.user?.nickname
-                    binding.tvAmount.text = "${balance.amount}"
+
+                    // TODO
+                    // 화폐 단위 표기
+                    val decimalformat = DecimalFormat("#,###")
+                    binding.tvAmount.text = "${decimalformat.format(balance.amount)}"
                     binding.tvPaidBy.text = "${balance.paid_by?.nickname}"
                     addView(binding.root)
                 }
