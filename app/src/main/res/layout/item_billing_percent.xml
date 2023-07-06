@@ -3,11 +3,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp">
+    android:paddingHorizontal="6dp">
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <View
             android:id="@+id/view_amount"
@@ -25,8 +26,9 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="13dp"
         android:text="준호"
         android:textAlignment="center"
