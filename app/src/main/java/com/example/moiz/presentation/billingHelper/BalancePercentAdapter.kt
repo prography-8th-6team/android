@@ -3,14 +3,14 @@ package com.example.moiz.presentation.billingHelper
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.R
 import com.example.moiz.data.network.dto.BalancePercentDto
-import com.example.moiz.databinding.ItemBillingUserAmountBinding
+import com.example.moiz.databinding.ItemBillingPercentBinding
 import kotlin.math.abs
 
 class BalancePercentAdapter : ListAdapter<BalancePercentDto, BalancePercentAdapter.ViewHolder>(
@@ -19,14 +19,13 @@ class BalancePercentAdapter : ListAdapter<BalancePercentDto, BalancePercentAdapt
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-    inner class ViewHolder(private val binding: ItemBillingUserAmountBinding) : RecyclerView.ViewHolder(
+    inner class ViewHolder(private val binding: ItemBillingPercentBinding) : RecyclerView.ViewHolder(
         binding.root) {
         fun bind(balancePercent: BalancePercentDto) {
             binding.tvName.text = balancePercent.nickname
             balancePercent.amount?.let {
                 val height = abs(it) * 1.16
-                binding.viewAmount.layoutParams =
-                    LinearLayout.LayoutParams(38.dp, height.toInt().dp)
+                binding.viewAmount.layoutParams = FrameLayout.LayoutParams(38.dp, height.toInt().dp)
 
                 // +
                 if (it >= 0) {
@@ -45,7 +44,7 @@ class BalancePercentAdapter : ListAdapter<BalancePercentDto, BalancePercentAdapt
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ItemBillingUserAmountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemBillingPercentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
