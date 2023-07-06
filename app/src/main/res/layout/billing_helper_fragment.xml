@@ -35,6 +35,14 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginHorizontal="24dp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_balance_percent_empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginHorizontal="24dp"
+                    android:visibility="gone" />
+
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
@@ -50,6 +58,7 @@
                 android:background="@color/color_ebeaea" />
 
             <LinearLayout
+                android:id="@+id/ll_icons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="65dp"
@@ -81,10 +90,22 @@
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/tv_balance_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="45dp"
+                android:text="계산도우미가 할 일이 없네요"
+                android:textAlignment="center"
+                android:textColor="@color/color_707070"
+                android:textSize="14sp"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <Button
+        android:id="@+id/btn_pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/color_f55c5c"
