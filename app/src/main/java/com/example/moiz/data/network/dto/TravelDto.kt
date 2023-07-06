@@ -221,7 +221,7 @@ data class BillingHelperDto(
 data class ResponseBillingHelper(
     @SerializedName("message")
     val message: String?,
-    @SerializedName("results")
+    @SerializedName("result")
     val results: BillingHelperDto?,
 )
 
