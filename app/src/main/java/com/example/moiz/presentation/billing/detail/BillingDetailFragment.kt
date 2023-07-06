@@ -49,7 +49,7 @@ class BillingDetailFragment : Fragment() {
 
     private fun initViews() = with(binding) {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getBillingDetail(27/*args.billingId*/, "Bearer $it")
+            viewModel.getBillingDetail(args.billingId, "Bearer $it")
         }
 
         ivBack.setOnClickListener { findNavController().popBackStack() }
@@ -58,7 +58,7 @@ class BillingDetailFragment : Fragment() {
             tvEdit.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_detailBillingFragment_to_editBillingFragment,
-                    bundleOf("billingId" to 27/*data.id*/)
+                    bundleOf("billingId" to data.id)
                 )
             }
 
@@ -82,24 +82,24 @@ class BillingDetailFragment : Fragment() {
 
                 1 -> {
                     ivBillingImg.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(data.images[0])
+                    Glide.with(requireContext()).load(data.images[0].image)
                         .into(ivBillingImg)
                     ivBillingImg.setOnClickListener { _ ->
-                        clickImage(data.images[0])
+                        clickImage(data.images[0].image!!)
                     }
                 }
 
                 2 -> {
                     llBillingImg.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(data.images[0])
+                    Glide.with(requireContext()).load(data.images[0].image!!)
                         .into(ivBillingImg1)
-                    Glide.with(requireContext()).load(data.images[1])
+                    Glide.with(requireContext()).load(data.images[1].image!!)
                         .into(ivBillingImg2)
                     ivBillingImg1.setOnClickListener { _ ->
-                        clickImage(data.images[0])
+                        clickImage(data.images[0].image!!)
                     }
                     ivBillingImg2.setOnClickListener { _ ->
-                        clickImage(data.images[1])
+                        clickImage(data.images[1].image!!)
                     }
                 }
             }

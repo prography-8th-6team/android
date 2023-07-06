@@ -21,13 +21,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_weight="1"
         android:drawableLeft="@drawable/ic_paid_by"
         android:drawablePadding="8dp"
         android:fontFamily="@font/pretendard_regular"
         android:text="결제한 사람"
         android:textColor="@color/color_999797"
         android:textSize="12sp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/tv_amount"

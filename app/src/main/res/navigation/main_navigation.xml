@@ -71,6 +71,9 @@
         <action
             android:id="@+id/action_detailFragment_to_editTravelListFragment"
             app:destination="@id/editTravelListFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_detailBillingFragment"
+            app:destination="@id/detailBillingFragment" />
     </fragment>
 
     <fragment
@@ -78,9 +81,6 @@
         android:name="com.example.moiz.presentation.detail.BillingFragment"
         android:label="BillingFragment"
         tools:layout="@layout/fragment_billing">
-        <action
-            android:id="@+id/goto_detail_billing"
-            app:destination="@id/detailBillingFragment" />
     </fragment>
 
     <fragment

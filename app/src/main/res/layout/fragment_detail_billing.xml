@@ -105,6 +105,7 @@
             android:id="@+id/iv_billing_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:visibility="gone" />
 
         <LinearLayout
@@ -118,13 +119,15 @@
                 android:id="@+id/iv_billing_img_1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/iv_billing_img_2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:scaleType="fitXY" />
         </LinearLayout>
     </FrameLayout>
 
@@ -147,7 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

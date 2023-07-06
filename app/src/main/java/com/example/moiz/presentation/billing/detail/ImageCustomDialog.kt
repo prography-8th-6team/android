@@ -29,6 +29,9 @@ class ImageCustomDialog(
         binding = DialogImgCustomBinding.inflate(inflater, container, false)
         Glide.with(requireContext()).load(imgUrl).into(binding.ivImg)
 
+        binding.root.setOnClickListener {
+            dismiss()
+        }
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root

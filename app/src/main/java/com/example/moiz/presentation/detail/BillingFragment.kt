@@ -58,7 +58,7 @@ class BillingFragment(private val travelId: Int) : Fragment() {
 
     private fun itemOnClick(data: BillingDto) {
         findNavController().navigate(
-            R.id.goto_detail_billing, bundleOf("travelId" to data.id)
+            R.id.action_billingFragment_to_detailBillingFragment, bundleOf("billingId" to data.id)
         )
     }
 
