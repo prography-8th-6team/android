@@ -142,9 +142,14 @@ data class BillingDetailDto(
     @SerializedName("captured_amount")
     val captured_amount: String?,
     @SerializedName("images")
-    val images: List<String>?,
+    val images: List<ImageDto>?,
     @SerializedName("participants")
     val participants: List<ParticipantsDto>?
+)
+
+data class ImageDto(
+    @SerializedName("image")
+    val image: String?
 )
 
 data class ParticipantsDto(

@@ -12,6 +12,7 @@ import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.data.network.dto.TravelDetailDto
 import com.example.moiz.data.network.dto.TravelDto
+import com.example.moiz.presentation.util.FileResult
 
 interface TravelRepository {
 
@@ -41,7 +42,7 @@ interface TravelRepository {
 
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 
-    suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto)
+    suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto, imgList: List<FileResult>?)
 
     suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto
 }

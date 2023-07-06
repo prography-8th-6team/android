@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -340,6 +341,8 @@ class AddBillingFragment : Fragment() {
                         tempImgFile
                     )
                 }
+
+            findNavController().popBackStack()
             //} else {
             //    Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
             //}

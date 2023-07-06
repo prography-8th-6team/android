@@ -11,6 +11,7 @@ import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.domain.model.InputCostEntity
 import com.example.moiz.domain.usecase.GetBillingMembersUseCase
 import com.example.moiz.domain.usecase.PostBillingsUseCase
+import com.example.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,11 +32,12 @@ class BillingViewModel @Inject constructor(
     val temp: LiveData<List<InputCostEntity>?> = _temp
 
     private val paramList: MutableLiveData<PostBillingDto> = PostBillingDto(
-        title = null,
-        paid_by = null,
-        paid_date = null,
+        title = "테스트1",
+        paid_by = 7,
+        paid_date = "2023-07-06",
         currency = "USD",
-        settlements = listOf()
+        category = "hotel",
+        settlements = listOf(SettlementsDto(7, 13000.0))
     ).let { MutableLiveData(it) }
 
     var totalAmount: Double = 0.0
@@ -96,9 +98,10 @@ class BillingViewModel @Inject constructor(
         }
     }
 
-    fun postBillings(id: Int, token: String) {
+    fun postBillings(id: Int, token: String, imgList: List<FileResult>) {
+        Timber.d(paramList.value.toString())
         viewModelScope.launch {
-            //postBillingsUseCase.invoke(id, token, paramList.value!!)
+            postBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
         }
     }
 
