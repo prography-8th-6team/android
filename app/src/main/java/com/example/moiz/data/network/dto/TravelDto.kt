@@ -168,6 +168,7 @@ data class PostBillingDto(
     var title: String?,
     var paid_by: Int?,
     var paid_date: String?,
+    var category: String?,
     var currency: String?,
     var settlements: List<SettlementsDto?>
 )
