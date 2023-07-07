@@ -25,9 +25,10 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
 import com.example.moiz.presentation.CustomDialog
+import com.example.moiz.presentation.detail.billing.BillingFragment
+import com.example.moiz.presentation.detail.journey.JourneyFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.util.Currency
 
 @AndroidEntryPoint
@@ -63,8 +64,8 @@ class TravelDetailFragment : Fragment() {
     private fun initViewPager() {
         var viewPagerAdapter = ViewPagerAdapter(requireActivity())
         viewPagerAdapter.addFragment(BillingFragment(args.travelId))
-        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
-        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
+        viewPagerAdapter.addFragment(JourneyFragment())
+        viewPagerAdapter.addFragment(JourneyFragment())
 
         binding.vpViewpagerMain.apply {
             adapter = viewPagerAdapter
@@ -103,6 +104,10 @@ class TravelDetailFragment : Fragment() {
     }
 
     private fun initViews() = with(binding) {
+        ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         ivAdditional.setOnClickListener {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

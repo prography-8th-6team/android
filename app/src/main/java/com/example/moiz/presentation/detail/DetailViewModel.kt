@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelDetailDto
 import com.example.moiz.domain.usecase.DeleteTravelUseCase
@@ -25,13 +24,6 @@ class DetailViewModel @Inject constructor(
 
     private val _list = MutableLiveData<TravelDetailDto>()
     val list: LiveData<TravelDetailDto> = _list
-
-    private val _temp = MutableLiveData<List<BillingDto>>()
-    val temp: LiveData<List<BillingDto>> = _temp
-
-    init {
-
-    }
 
     fun getTravelDetail(id: Int, token: String) {
         viewModelScope.launch {

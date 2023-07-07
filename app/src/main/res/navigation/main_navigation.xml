@@ -78,7 +78,7 @@
 
     <fragment
         android:id="@+id/billingFragment"
-        android:name="com.example.moiz.presentation.detail.BillingFragment"
+        android:name="com.example.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
         tools:layout="@layout/fragment_billing">
     </fragment>

@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.detail
+package com.example.moiz.presentation.detail.billing
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +15,13 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.FragmentBillingBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import java.util.Currency
 
 @AndroidEntryPoint
 class BillingFragment(private val travelId: Int) : Fragment() {
 
     private lateinit var binding: FragmentBillingBinding
     private lateinit var adapter: BillingAdapter
-    private val viewModel: DetailViewModel by activityViewModels()
+    private val viewModel: BillingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
