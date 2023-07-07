@@ -42,7 +42,19 @@ interface TravelRepository {
 
     suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto>
 
-    suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto, imgList: List<FileResult>?)
+    suspend fun postBillings(
+        travelId: Int,
+        token: String,
+        data: PostBillingDto,
+        imgList: List<FileResult>?
+    )
+
+    suspend fun putBillings(
+        billingId: Int,
+        token: String,
+        data: PostBillingDto,
+        imgList: List<FileResult>?
+    )
 
     suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto
 }

@@ -142,6 +142,32 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         travelService.postBillings(token, travelId, temp, imgFile)
     }
 
+    override suspend fun putBillings(
+        billingId: Int,
+        token: String,
+        data: PostBillingDto,
+        imgList: List<FileResult>?
+    ) {
+        val temp = hashMapOf<String, RequestBody>()
+        temp["title"] = data.title!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_by"] = data.paid_by.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_date"] = data.paid_date!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["currency"] = data.currency!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["settlements"] = data.settlements.map { Gson().toJson(it).toString() }
+            .toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val imgFile = imgList?.map {
+            MultipartBody.Part.createFormData(
+                "images",
+                it.file.name,
+                it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        travelService.putBillings(token, billingId, temp, imgFile)
+    }
+
     override suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto {
         val result = travelService.postGenerateInviteToken(token, travelId.toString())
         return if (result.isSuccessful) {

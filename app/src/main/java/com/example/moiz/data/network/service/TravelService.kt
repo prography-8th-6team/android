@@ -83,6 +83,15 @@ interface TravelService {
         @Path("id") id: Int,
     ): Response<ResponseTravelDeleteDto>
 
+    @Multipart
+    @PUT("billings/{id}")
+    suspend fun putBillings(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+        @PartMap data: HashMap<String, RequestBody>,
+        @Part img: List<MultipartBody.Part>? = null
+    )
+
     // 가계부 추가
     @Multipart
     @POST("travels/{id}/billings")
