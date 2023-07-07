@@ -98,7 +98,10 @@
                 android:id="@+id/tl_navigation_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                app:tabIndicatorColor="@color/color_555555"
+                app:tabSelectedTextColor="@color/color_555555"
+                app:tabTextColor="@color/color_EBEAEA" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_viewpager_main"

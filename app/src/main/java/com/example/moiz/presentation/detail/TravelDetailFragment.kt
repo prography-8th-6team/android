@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +72,6 @@ class TravelDetailFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    // viewPager
                     val view =
                         (binding.vpViewpagerMain[0] as RecyclerView).layoutManager?.findViewByPosition(
                             position
@@ -168,9 +168,11 @@ class TravelDetailFragment : Fragment() {
             tvData.text = data.start_date + "~" + data.end_date
             tvMemo.text = data.description
 
+            val dec = DecimalFormat("#,###")
             val currencySymbol = Currency.getInstance(data.currency).symbol
-            tvMyCost.text = currencySymbol + " " + data.my_total_billing.toString()
-            tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
+            tvMyCost.text =
+                currencySymbol + " " + dec.format(data.my_total_billing)
+            tvTotalCost.text = currencySymbol + " " + dec.format(data.total_amount)
 
             llTravelMember.apply {
                 llTravelMember.removeAllViews()
