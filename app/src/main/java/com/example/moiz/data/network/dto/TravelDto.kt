@@ -152,7 +152,7 @@ data class BalancePercentDto(
     @SerializedName("nickname")
     val nickname:String?,
     @SerializedName("amount")
-    val amount:Int?,
+    val amount:Double?,
 )
 
 data class BillingHelperDto(

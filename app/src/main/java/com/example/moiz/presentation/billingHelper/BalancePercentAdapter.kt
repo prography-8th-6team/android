@@ -1,6 +1,7 @@
 package com.example.moiz.presentation.billingHelper
 
 import android.content.res.Resources
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -24,19 +25,26 @@ class BalancePercentAdapter : ListAdapter<BalancePercentDto, BalancePercentAdapt
         fun bind(balancePercent: BalancePercentDto) {
             binding.tvName.text = balancePercent.nickname
             balancePercent.amount?.let {
-                val height = abs(it) * 1.16
-                binding.viewAmount.layoutParams = FrameLayout.LayoutParams(38.dp, height.toInt().dp)
+                val height = (abs(it) / 2) * 1.16
+                val params = FrameLayout.LayoutParams(38.dp, height.toInt().dp)
 
                 // +
                 if (it >= 0) {
-                    binding.viewAmount.setBackgroundResource(R.drawable.bg_radius_4_top)
-                    binding.viewAmount.backgroundTintList =
-                        ContextCompat.getColorStateList(itemView.context, R.color.color_d8f4f1)
+                    binding.viewAmount.apply {
+                        setBackgroundResource(R.drawable.bg_radius_4_top)
+                        backgroundTintList =
+                            ContextCompat.getColorStateList(itemView.context, R.color.color_d8f4f1)
+                        layoutParams = params
+                    }
                 } else {
                     // -
-                    binding.viewAmount.setBackgroundResource(R.drawable.bg_radius_4_bottom)
-                    binding.viewAmount.backgroundTintList =
-                        ContextCompat.getColorStateList(itemView.context, R.color.color_f8f2c3)
+                    params.gravity = Gravity.BOTTOM
+                    binding.viewAmount.apply {
+                        setBackgroundResource(R.drawable.bg_radius_4_bottom)
+                        backgroundTintList =
+                            ContextCompat.getColorStateList(itemView.context, R.color.color_f8f2c3)
+                        layoutParams = params
+                    }
                 }
             }
         }

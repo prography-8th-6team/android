@@ -41,7 +41,7 @@ import java.text.DecimalFormat
     private fun getBillingsHelper() {
         // travel Id 수정
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getBillingsHelper(29, "Bearer $it")
+            viewModel.getBillingsHelper(30, "Bearer $it")
         }
     }
 
@@ -63,7 +63,7 @@ import java.text.DecimalFormat
             binding.rvBalancePercent.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-            if (it.isEmpty()) {
+            if (it?.isEmpty() == true) {
                 setBillingPercentGone()
                 setBillingPercentEmptyVisible()
                 setBtnPayDisabled()
