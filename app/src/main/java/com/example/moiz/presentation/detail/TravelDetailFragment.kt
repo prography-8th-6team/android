@@ -127,6 +127,7 @@ class TravelDetailFragment : Fragment() {
                                 temp
                             )
                             clipboard.setPrimaryClip(clip)
+                            popupWindow.dismiss()
                             Toast.makeText(requireContext(), "공유 코드가 복사되었습니다.", Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -172,6 +173,7 @@ class TravelDetailFragment : Fragment() {
             tvTotalCost.text = currencySymbol + " " + data.total_amount.toString()
 
             llTravelMember.apply {
+                llTravelMember.removeAllViews()
                 data.members?.forEach {
                     val binding =
                         ItemTravelMemberBinding.inflate(LayoutInflater.from(context), this, false)

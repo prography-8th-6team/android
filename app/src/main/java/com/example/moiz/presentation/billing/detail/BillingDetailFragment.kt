@@ -105,6 +105,7 @@ class BillingDetailFragment : Fragment() {
             }
 
             llBillingMembers.apply {
+                llBillingMembers.removeAllViews()
                 data.participants?.forEach { participant ->
                     val binding =
                         ItemBillingDetailMemberBinding.inflate(
