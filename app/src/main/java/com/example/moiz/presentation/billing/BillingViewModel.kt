@@ -25,59 +25,71 @@ class BillingViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    private val _isValidated = MutableLiveData<Boolean>()
+    val isValidated: LiveData<Boolean> = _isValidated
+
     private val _members = MutableLiveData<List<BillingMembersDto>>()
     val members: LiveData<List<BillingMembersDto>> = _members
 
     private val _temp = MutableLiveData<List<InputCostEntity>?>()
     val temp: LiveData<List<InputCostEntity>?> = _temp
 
-    private val paramList: MutableLiveData<PostBillingDto> = PostBillingDto(
-        title = "테스트1",
-        paid_by = 7,
-        paid_date = "2023-07-06",
+    var paramList: MutableLiveData<PostBillingDto> = PostBillingDto(
+        title = "",
+        category = "",
         currency = "USD",
-        category = "hotel",
-        settlements = listOf(SettlementsDto(7, 13000.0))
+        paid_date = "",
+        paid_by = 0,
+        settlements = emptyList<SettlementsDto>()
     ).let { MutableLiveData(it) }
 
     var totalAmount: Double = 0.0
     private var checkCnt: Int = 0
 
-    fun isValidate(): Boolean {
-        return if (paramList.value?.title == "") false
-        else if (paramList.value?.paid_by == 0) false
-        else !paramList.value?.settlements?.isEmpty()!!
+    private fun isValidate() = with(paramList.value!!) {
+        _isValidated.value = title != "" &&
+                category != "" &&
+                currency != "" &&
+                paid_date != "" &&
+                paid_by != 0 &&
+                settlements.isNotEmpty()
     }
 
     fun updateParam(type: Int, value: Any?) {
         when (type) {
             0 -> {
-                if (paramList.value?.title == value as String?)
-                    paramList.value?.title = value
+                paramList.value?.title = value as String?
+                isValidate()
             }
 
             1 -> {
-                if (paramList.value?.paid_by == value as Int?)
-                    paramList.value?.paid_by = value
+                paramList.value?.category = value as String?
+                isValidate()
             }
 
             2 -> {
-                if (paramList.value?.paid_date == value as String?)
-                    paramList.value?.paid_date = value
+                paramList.value?.currency = value as String?
+                isValidate()
             }
 
             3 -> {
-                if (paramList.value?.currency == value as String?)
-                    paramList.value?.currency = value
+                paramList.value?.paid_date = value as String?
+                isValidate()
             }
 
             4 -> {
+                paramList.value?.paid_by = value as Int?
+                isValidate()
+            }
+
+            5 -> {
                 paramList.value?.settlements = _temp.value?.map {
                     SettlementsDto(
                         it.userId,
                         it.cost
                     )
                 }!!
+                isValidate()
             }
         }
     }
@@ -99,7 +111,6 @@ class BillingViewModel @Inject constructor(
     }
 
     fun postBillings(id: Int, token: String, imgList: List<FileResult>) {
-        Timber.d(paramList.value.toString())
         viewModelScope.launch {
             postBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
         }
@@ -116,7 +127,7 @@ class BillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
-        updateParam(4, null)
+        updateParam(5, null)
     }
 
     fun updateCost(data: InputCostEntity) {
@@ -145,7 +156,7 @@ class BillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
-        updateParam(4, null)
+        updateParam(5, null)
     }
 
     fun clearCost() {
@@ -158,7 +169,7 @@ class BillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
-        updateParam(4, null)
+        updateParam(5, null)
     }
 
 }

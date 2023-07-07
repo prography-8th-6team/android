@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -103,10 +104,20 @@ class AddBillingFragment : Fragment() {
             it?.let { adapter.submitList(it) }
         }
 
+        viewModel.isValidated.observe(viewLifecycleOwner) {
+            tvAddBilling.isEnabled = it
+            tvAddBilling.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (it) R.color.color_F55C5C else R.color.color_F1F0F0
+                )
+            )
+        }
+
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
-        viewModel.updateParam(2, format.format(calendar.time))
+        viewModel.updateParam(3, format.format(calendar.time))
 
         etPrice.setOnEditorActionListener { _, _, _ ->
             if (etPrice.text.isEmpty() || etPrice.text.toString().startsWith("0")) {
@@ -187,7 +198,7 @@ class AddBillingFragment : Fragment() {
         binding.spnCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val currency = binding.spnCurrency.getItemAtPosition(p2) as Currency
-                viewModel.updateParam(3, currency.currencyText)
+                viewModel.updateParam(2, currency.currencyText)
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -211,31 +222,37 @@ class AddBillingFragment : Fragment() {
 
             popupView.findViewById<LinearLayout>(R.id.ll_shopping).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_shopping)
+                viewModel.updateParam(1, "shopping")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_market).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_market)
+                viewModel.updateParam(1, "market")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_food).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_food)
+                viewModel.updateParam(1, "food")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_hotel).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_hotel)
+                viewModel.updateParam(1, "hotel")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_transportation)
+                viewModel.updateParam(1, "transportation")
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<LinearLayout>(R.id.ll_other).setOnClickListener {
                 ivCategory.setImageResource(R.drawable.ic_category_other)
+                viewModel.updateParam(1, "other")
                 popupWindow.dismiss()
             }
 
@@ -294,8 +311,10 @@ class AddBillingFragment : Fragment() {
             context?.let { it1 ->
                 DatePickerDialog(it1, { _, year, month, day ->
                     run {
-                        tvPickerDate.text =
+                        val tempDate =
                             year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                        tvPickerDate.text = tempDate
+                        viewModel.updateParam(3, tempDate)
                     }
                 }, year, month, day)
             }?.show()
@@ -304,7 +323,6 @@ class AddBillingFragment : Fragment() {
         ivBack.setOnClickListener { findNavController().popBackStack() }
 
         viewModel.members.observe(viewLifecycleOwner) {
-            Timber.d("members : $it")
             it?.let {
                 val membersAdapter = ArrayAdapter(
                     requireContext(),
@@ -325,28 +343,31 @@ class AddBillingFragment : Fragment() {
                             position: Int,
                             id: Long
                         ) {
-                            viewModel.updateParam(1, it[position].id!!)
+                            viewModel.updateParam(4, it[position].id!!)
                         }
                     }
             }
         }
 
         tvAddBilling.setOnClickListener {
-            //if (viewModel.isValidate()) {
-            UserDataStore.getUserToken(requireContext()).asLiveData()
-                .observe(viewLifecycleOwner) {
-                    viewModel.postBillings(
-                        args.travelId,
-                        "Bearer $it",
-                        tempImgFile
-                    )
-                }
+            var tempAmount = 0.0
+            viewModel.paramList.value?.settlements?.forEach {
+                tempAmount += it?.amount!!
+            }
 
-            findNavController().popBackStack()
-            //} else {
-            //    Toast.makeText(context, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            //}
-
+            if (viewModel.totalAmount * 0.99 <= tempAmount && tempAmount <= viewModel.totalAmount * 1.01) {
+                UserDataStore.getUserToken(requireContext()).asLiveData()
+                    .observe(viewLifecycleOwner) {
+                        viewModel.postBillings(
+                            args.travelId,
+                            "Bearer $it",
+                            tempImgFile
+                        )
+                    }
+                // findNavController().popBackStack()
+            } else {
+                Toast.makeText(context, "비용과 체크된 금액의 합이 다릅니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

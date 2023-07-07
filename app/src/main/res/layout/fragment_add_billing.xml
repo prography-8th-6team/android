@@ -73,6 +73,7 @@
             android:fontFamily="@font/pretendard_semi_bold"
             android:hint="내용을 입력하세요"
             android:imeOptions="actionDone"
+            android:inputType="text"
             android:textColorHint="@color/color_BCBCBC"
             android:textSize="20sp" />
 
@@ -321,7 +322,7 @@
         android:id="@+id/tv_add_billing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_F55C5C"
+        android:background="@color/color_F1F0F0"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:paddingVertical="27dp"
