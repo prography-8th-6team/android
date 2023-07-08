@@ -16,7 +16,7 @@ import com.example.moiz.databinding.ItemBillingBalanceBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
-@AndroidEntryPoint class BillingHelperFragment : Fragment() {
+@AndroidEntryPoint class BillingHelperFragment(private val travelId: Int) : Fragment() {
     private lateinit var binding: BillingHelperFragmentBinding
     private val viewModel: BillingHelperViewModel by viewModels()
     private lateinit var adapter: BalancePercentAdapter
@@ -41,13 +41,13 @@ import java.text.DecimalFormat
     private fun getBillingsHelper() {
         // travel Id 수정
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getBillingsHelper(30, "Bearer $it")
+            viewModel.getBillingsHelper(travelId, "Bearer $it")
         }
     }
 
     private fun getBillingMembers() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getBillingMembers(29, "Bearer $it")
+            viewModel.getBillingMembers(travelId, "Bearer $it")
         }
     }
 
