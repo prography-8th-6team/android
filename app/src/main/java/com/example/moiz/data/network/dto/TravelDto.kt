@@ -7,6 +7,8 @@ data class TravelDto(
     val id: Int?,
     @SerializedName("description")
     val description: String?,
+    @SerializedName("created_by")
+    val created_by: Int?,
     @SerializedName("members")
     val members: List<String>?,
     @SerializedName("title")
@@ -166,8 +168,7 @@ data class UserDto(
     val id: Int,
     @SerializedName("nickname")
     val nickname: String,
-
-    )
+)
 
 data class PostBillingDto(
     var title: String?,
@@ -190,4 +191,35 @@ data class PostJoinCodeDto(
 data class ResponseTravelDeleteDto(
     @SerializedName("message")
     val message: String,
+)
+
+data class BalancesDto(
+    @SerializedName("user")
+    val user:UserDto?,
+    @SerializedName("amount")
+    val amount:Int?,
+    @SerializedName("paid_by")
+    val paid_by:UserDto?,
+)
+
+data class BalancePercentDto(
+    @SerializedName("id")
+    val id:Int?,
+    @SerializedName("nickname")
+    val nickname:String?,
+    @SerializedName("amount")
+    val amount:Double?,
+)
+
+data class BillingHelperDto(
+    @SerializedName("balances")
+    val balances: List<BalancesDto>,
+    @SerializedName("balance_percent")
+    val balance_percent: List<BalancePercentDto>,
+)
+data class ResponseBillingHelper(
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("result")
+    val results: BillingHelperDto?,
 )

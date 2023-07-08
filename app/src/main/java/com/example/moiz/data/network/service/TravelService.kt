@@ -2,22 +2,19 @@ package com.example.moiz.data.network.service
 
 import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
-import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
+import com.example.moiz.data.network.dto.ResponseBillingHelper
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
-import com.example.moiz.data.network.dto.TravelDto
-import com.example.moiz.data.network.dto.UserResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -46,14 +43,14 @@ interface TravelService {
     @GET("travels/{id}")
     suspend fun getTravelDetail(
         @Header("Authorization") token: String?,
-        @Path("id") id: Int
+        @Path("id") id: Int,
     ): Response<ResponseTravelDetailDto>
 
     // 비용 추가 멤버
     @GET("travels/{id}/members")
     suspend fun getBillingMembers(
         @Header("Authorization") token: String?,
-        @Path("id") id: Int
+        @Path("id") id: Int,
     ): Response<List<BillingMembersDto>>
 
     // 여행 수정 API
@@ -67,13 +64,13 @@ interface TravelService {
     @POST("travels/join")
     suspend fun postJoinCode(
         @Header("Authorization") token: String?,
-        @Body data: PostJoinCodeDto
+        @Body data: PostJoinCodeDto,
     )
 
     @GET("billings/{id}")
     suspend fun getBillingDetail(
         @Header("Authorization") token: String?,
-        @Path("id") id: String
+        @Path("id") id: String,
     ): Response<BillingDetailDto>
 
     // 여행 삭제 API
@@ -89,7 +86,7 @@ interface TravelService {
         @Header("Authorization") token: String?,
         @Path("id") id: Int,
         @PartMap data: HashMap<String, RequestBody>,
-        @Part img: List<MultipartBody.Part>? = null
+        @Part img: List<MultipartBody.Part>? = null,
     )
 
     // 가계부 추가
@@ -99,12 +96,19 @@ interface TravelService {
         @Header("Authorization") token: String?,
         @Path("id") id: Int,
         @PartMap data: HashMap<String, RequestBody>,
-        @Part img: List<MultipartBody.Part>? = null
+        @Part img: List<MultipartBody.Part>? = null,
     )
 
     @POST("travels/{id}/generate-invite-token")
     suspend fun postGenerateInviteToken(
         @Header("Authorization") token: String?,
-        @Path("id") id: String
+        @Path("id") id: String,
     ): Response<ShareTokenDto>
+
+    // 계산도우미 조회
+    @GET("v1/travels/{id}/billings")
+    suspend fun getBillingsHelper(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+    ): Response<ResponseBillingHelper>
 }
