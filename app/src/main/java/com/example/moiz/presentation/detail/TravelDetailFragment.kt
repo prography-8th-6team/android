@@ -62,12 +62,12 @@ class TravelDetailFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        var viewPagerAdapter = ViewPagerAdapter(requireActivity())
-        viewPagerAdapter.addFragment(BillingFragment(args.travelId))
-        viewPagerAdapter.addFragment(ScheduleFragment())
-        viewPagerAdapter.addFragment(ScheduleFragment())
+        val fragmentList =
+            arrayListOf(BillingFragment(args.travelId), ScheduleFragment(), ScheduleFragment())
+        val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
+            isUserInputEnabled = false
             adapter = viewPagerAdapter
 
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

@@ -115,7 +115,7 @@ class AddBillingFragment : Fragment() {
         }
 
         val calendar = Calendar.getInstance()
-        val format = SimpleDateFormat("yyyy.MM.dd")
+        val format = SimpleDateFormat("yyyy-MM-dd")
         tvPickerDate.text = format.format(calendar.time)
         viewModel.updateParam(3, format.format(calendar.time))
 
@@ -364,7 +364,7 @@ class AddBillingFragment : Fragment() {
                             tempImgFile
                         )
                     }
-                // findNavController().popBackStack()
+                findNavController().popBackStack()
             } else {
                 Toast.makeText(context, "비용과 체크된 금액의 합이 다릅니다.", Toast.LENGTH_SHORT).show()
             }
