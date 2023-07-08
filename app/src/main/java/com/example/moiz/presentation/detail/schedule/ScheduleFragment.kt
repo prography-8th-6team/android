@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.detail.journey
+package com.example.moiz.presentation.detail.schedule
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import com.example.moiz.databinding.FragmentJourneyBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class JourneyFragment : Fragment() {
+class ScheduleFragment : Fragment() {
 
     private lateinit var binding: FragmentJourneyBinding
 

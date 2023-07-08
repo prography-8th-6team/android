@@ -24,9 +24,9 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
-import com.example.moiz.presentation.CustomDialog
+import com.example.moiz.presentation.util.CustomDialog
 import com.example.moiz.presentation.detail.billing.BillingFragment
-import com.example.moiz.presentation.detail.journey.JourneyFragment
+import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
@@ -64,8 +64,8 @@ class TravelDetailFragment : Fragment() {
     private fun initViewPager() {
         var viewPagerAdapter = ViewPagerAdapter(requireActivity())
         viewPagerAdapter.addFragment(BillingFragment(args.travelId))
-        viewPagerAdapter.addFragment(JourneyFragment())
-        viewPagerAdapter.addFragment(JourneyFragment())
+        viewPagerAdapter.addFragment(ScheduleFragment())
+        viewPagerAdapter.addFragment(ScheduleFragment())
 
         binding.vpViewpagerMain.apply {
             adapter = viewPagerAdapter

@@ -1,4 +1,4 @@
-package com.example.moiz.presentation
+package com.example.moiz.presentation.util
 
 import android.content.Context
 import android.graphics.Color
