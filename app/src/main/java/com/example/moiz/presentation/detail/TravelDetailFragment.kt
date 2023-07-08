@@ -28,6 +28,7 @@ import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.example.moiz.presentation.util.CustomDialog
+import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
@@ -66,7 +67,8 @@ class TravelDetailFragment : Fragment() {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment())
+            ScheduleFragment()
+        )
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
@@ -176,11 +178,10 @@ class TravelDetailFragment : Fragment() {
             tvData.text = data.start_date + "~" + data.end_date
             tvMemo.text = data.description
 
-            val dec = DecimalFormat("#,###")
             val currencySymbol = Currency.getInstance(data.currency).symbol
             tvMyCost.text =
-                currencySymbol + " " + dec.format(data.my_total_billing)
-            tvTotalCost.text = currencySymbol + " " + dec.format(data.total_amount)
+                currencySymbol + " " + data.my_total_billing?.toInt().toCostFormat()
+            tvTotalCost.text = currencySymbol + " " + data.total_amount?.toInt().toCostFormat()
 
             llTravelMember.apply {
                 llTravelMember.removeAllViews()
