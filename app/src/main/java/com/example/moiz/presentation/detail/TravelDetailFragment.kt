@@ -24,9 +24,10 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ItemTravelMemberBinding
 import com.example.moiz.databinding.TravelDetailFragmentBinding
-import com.example.moiz.presentation.util.CustomDialog
+import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
+import com.example.moiz.presentation.util.CustomDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
@@ -62,8 +63,10 @@ class TravelDetailFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        val fragmentList =
-            arrayListOf(BillingFragment(args.travelId), ScheduleFragment(), ScheduleFragment())
+        val fragmentList = arrayListOf(
+            BillingFragment(args.travelId),
+            BillingHelperFragment(args.travelId),
+            ScheduleFragment())
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {

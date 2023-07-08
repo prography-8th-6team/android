@@ -92,5 +92,9 @@
             android:name="travelId"
             app:argType="integer" />
     </fragment>
-
+    <fragment
+        android:id="@+id/billingHelperFragment"
+        android:name="com.example.moiz.presentation.billingHelper.BillingHelperFragment"
+        android:label="BillingHelperFragment"
+        tools:layout="@layout/billing_helper_fragment" />
 </navigation>

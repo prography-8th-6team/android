@@ -106,7 +106,7 @@ interface TravelService {
     ): Response<ShareTokenDto>
 
     // 계산도우미 조회
-    @GET("v1/travels/{id}/billings")
+    @GET("travels/{id}/billings")
     suspend fun getBillingsHelper(
         @Header("Authorization") token: String?,
         @Path("id") id: Int,
