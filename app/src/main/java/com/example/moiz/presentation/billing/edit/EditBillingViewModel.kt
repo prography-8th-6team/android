@@ -1,29 +1,34 @@
-package com.example.moiz.presentation.billing
+package com.example.moiz.presentation.billing.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moiz.data.network.dto.BillingDto
+import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
 import com.example.moiz.domain.model.InputCostEntity
+import com.example.moiz.domain.usecase.GetBillingDetailUseCase
 import com.example.moiz.domain.usecase.GetBillingMembersUseCase
-import com.example.moiz.domain.usecase.PostBillingsUseCase
+import com.example.moiz.domain.usecase.PutBillingsUseCase
 import com.example.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.ArrayList
 import javax.inject.Inject
 
 @HiltViewModel
-class BillingViewModel @Inject constructor(
+class EditBillingViewModel @Inject constructor(
+    private val getBillingDetailUseCase: GetBillingDetailUseCase,
     private val getBillingMembersUseCase: GetBillingMembersUseCase,
-    private val postBillingsUseCase: PostBillingsUseCase
+    private val putBillingsUseCase: PutBillingsUseCase
 ) :
     ViewModel() {
+
+    var totalAmount: Double = 0.0
+    var checkCnt: Int = 0
+    var imageCnt: Int = 0
 
     private val _isValidated = MutableLiveData<Boolean>()
     val isValidated: LiveData<Boolean> = _isValidated
@@ -34,17 +39,56 @@ class BillingViewModel @Inject constructor(
     private val _temp = MutableLiveData<List<InputCostEntity>?>()
     val temp: LiveData<List<InputCostEntity>?> = _temp
 
-    var paramList: MutableLiveData<PostBillingDto> = PostBillingDto(
-        title = "",
-        category = "",
-        currency = "USD",
-        paid_date = "",
-        paid_by = 0,
-        settlements = emptyList<SettlementsDto>()
-    ).let { MutableLiveData(it) }
+    private val _paramList = MutableLiveData<PostBillingDto>()
+    val paramList: LiveData<PostBillingDto> = _paramList
 
-    var totalAmount: Double = 0.0
-    private var checkCnt: Int = 0
+    fun getBillingDetail(id: Int, token: String) {
+        viewModelScope.launch {
+            getBillingDetailUseCase.invoke(id, token).let {
+                Timber.d("BillingDetailDto: $it")
+                totalAmount = it.total_amount?.toDouble()!!
+                imageCnt = it.images?.size!!
+                checkCnt = it.participants!!.size
+                _paramList.value = PostBillingDto(
+                    it.title,
+                    it.participants.find { participant ->
+                        participant.user?.nickname == it.paid_by
+                    }?.user?.id,
+                    it.paid_date,
+                    it.category,
+                    it.total_amount_currency,
+                    it.participants.map { participants ->
+                        SettlementsDto(
+                            participants.user?.id,
+                            participants.captured_amount?.toDouble()
+                        )
+                    }
+                )
+            }
+        }
+    }
+
+    fun putBilling(id: Int, token: String, imgList: List<FileResult>) {
+        viewModelScope.launch {
+            putBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
+        }
+    }
+
+    fun getBillingMembers(id: Int, token: String) {
+        viewModelScope.launch {
+            getBillingMembersUseCase.invoke(id, token).let {
+                _members.value = it
+                _temp.value = it.map { member ->
+                    InputCostEntity(
+                        member.id!!,
+                        false,
+                        member.name!!,
+                        0.0
+                    )
+                }
+            }
+        }
+    }
 
     private fun isValidate() = with(paramList.value!!) {
         _isValidated.value = title != "" &&
@@ -91,28 +135,6 @@ class BillingViewModel @Inject constructor(
                 }!!
                 isValidate()
             }
-        }
-    }
-
-    fun getBillingMembers(id: Int, token: String) {
-        viewModelScope.launch {
-            getBillingMembersUseCase.invoke(id, token).let {
-                _members.value = it
-                _temp.value = it.map { member ->
-                    InputCostEntity(
-                        member.id!!,
-                        false,
-                        member.name!!,
-                        0.0
-                    )
-                }
-            }
-        }
-    }
-
-    fun postBillings(id: Int, token: String, imgList: List<FileResult>) {
-        viewModelScope.launch {
-            postBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
         }
     }
 
@@ -171,6 +193,4 @@ class BillingViewModel @Inject constructor(
 
         updateParam(5, null)
     }
-
 }
-

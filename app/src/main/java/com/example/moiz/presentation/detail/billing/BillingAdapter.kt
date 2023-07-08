@@ -1,4 +1,4 @@
-package com.example.moiz.presentation.detail
+package com.example.moiz.presentation.detail.billing
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

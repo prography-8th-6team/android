@@ -12,3 +12,10 @@ data class TokenEntity(
     @SerializedName("access_token")
     val access_token: String
 )
+
+data class InputCostEntity(
+    val userId: Int,
+    var isChecked: Boolean,
+    val name: String,
+    var cost: Double
+)

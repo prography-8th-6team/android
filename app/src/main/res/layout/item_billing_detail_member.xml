@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="10dp">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/color_555555"
+        android:textSize="14sp"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/tv_paid_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:drawableLeft="@drawable/ic_paid_by"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="결제한 사람"
+        android:textColor="@color/color_999797"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/color_555555"
+        android:textSize="14sp"
+        tools:text="4,000" />
+
+</LinearLayout>

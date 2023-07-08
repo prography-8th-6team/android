@@ -1,14 +1,29 @@
 package com.example.moiz.data.repository
 
+import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
+import com.example.moiz.data.network.dto.PostJoinCodeDto
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
 import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
+import com.example.moiz.data.network.dto.ShareTokenDto
 import com.example.moiz.data.network.dto.TravelCreateDto
+import com.example.moiz.data.network.dto.TravelDetailDto
+import com.example.moiz.data.network.dto.TravelDto
 import com.example.moiz.data.network.service.TravelService
 import com.example.moiz.domain.repository.TravelRepository
+import com.example.moiz.presentation.util.FileResult
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.http.Multipart
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class TravelRepositoryImpl @Inject constructor(private val travelService: TravelService) :
@@ -19,7 +34,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.getTravelList(token).body()!!
         } else {
             ResponseTravelListDto(
-                message = travelService.getTravelList(token).message(), results = null)
+                message = travelService.getTravelList(token).message(), results = null
+            )
         }
 
     }
@@ -32,8 +48,13 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.postTravel(data, token).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.postTravel(data, token).message(), results = null)
+                message = travelService.postTravel(data, token).message(), results = null
+            )
         }
+    }
+
+    override suspend fun postJoinCode(token: String, data: PostJoinCodeDto) {
+        travelService.postJoinCode(token, data)
     }
 
     override suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto {
@@ -47,6 +68,28 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
+    override suspend fun getBillingDetail(billingId: String, token: String): BillingDetailDto {
+        val result = travelService.getBillingDetail(token, billingId)
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            Timber.d(result.message())
+            BillingDetailDto(
+                id = null,
+                travel = null,
+                title = null,
+                category = null,
+                paid_by = null,
+                paid_date = null,
+                total_amount = null,
+                total_amount_currency = null,
+                captured_amount = null,
+                images = null,
+                participants = null
+            )
+        }
+    }
+
     override suspend fun putTravel(
         token: String,
         data: TravelCreateDto,
@@ -56,7 +99,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             travelService.putTravel(token, data, id).body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.putTravel(token, data, id).message(), results = null)
+                message = travelService.putTravel(token, data, id).message(), results = null
+            )
         }
     }
 
@@ -72,7 +116,66 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun postBillings(travelId: Int, token: String, data: PostBillingDto) {
-        travelService.postBillings(token, travelId, data)
+    override suspend fun postBillings(
+        travelId: Int,
+        token: String,
+        data: PostBillingDto,
+        imgList: List<FileResult>?
+    ) {
+        val temp = hashMapOf<String, RequestBody>()
+        temp["title"] = data.title!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_by"] = data.paid_by.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_date"] = data.paid_date!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["currency"] = data.currency!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["settlements"] = data.settlements.map { Gson().toJson(it).toString() }
+            .toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val imgFile = imgList?.map {
+            MultipartBody.Part.createFormData(
+                "images",
+                it.file.name,
+                it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        travelService.postBillings(token, travelId, temp, imgFile)
     }
+
+    override suspend fun putBillings(
+        billingId: Int,
+        token: String,
+        data: PostBillingDto,
+        imgList: List<FileResult>?
+    ) {
+        val temp = hashMapOf<String, RequestBody>()
+        temp["title"] = data.title!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_by"] = data.paid_by.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["paid_date"] = data.paid_date!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["currency"] = data.currency!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["settlements"] = data.settlements.map { Gson().toJson(it).toString() }
+            .toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val imgFile = imgList?.map {
+            MultipartBody.Part.createFormData(
+                "images",
+                it.file.name,
+                it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        travelService.putBillings(token, billingId, temp, imgFile)
+    }
+
+    override suspend fun postGenerateInviteToken(travelId: Int, token: String): ShareTokenDto {
+        val result = travelService.postGenerateInviteToken(token, travelId.toString())
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            Timber.d(result.message())
+            ShareTokenDto(message = result.message(), toekn = null)
+        }
+    }
+
 }

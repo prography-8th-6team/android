@@ -1,4 +1,4 @@
-package com.example.moiz.presentation
+package com.example.moiz.presentation.billing.detail
 
 import android.content.Context
 import android.graphics.Color
@@ -12,33 +12,26 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.example.moiz.databinding.CustomDialogBinding
+import com.example.moiz.databinding.DialogImgCustomBinding
 
-class CustomDialog(
-    val content: String,
-    val cancelText: String? = "취소",
-    val okText: String,
-    val okClickListener: () -> Unit,
+class ImageCustomDialog(
+    private val imgUrl: String
 ) : DialogFragment() {
-    lateinit var binding: CustomDialogBinding
+    lateinit var binding: DialogImgCustomBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = CustomDialogBinding.inflate(inflater, container, false)
-        binding.tvContent.text = content
-        binding.tvCancel.text = cancelText
-        binding.tvOk.text = okText
+        binding = DialogImgCustomBinding.inflate(inflater, container, false)
+        Glide.with(requireContext()).load(imgUrl).into(binding.ivImg)
 
-        binding.tvOk.setOnClickListener {
-            okClickListener.invoke()
+        binding.root.setOnClickListener {
             dismiss()
         }
-
-        binding.tvCancel.setOnClickListener { dismiss() }
-
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root
@@ -53,6 +46,7 @@ class CustomDialog(
         display.getSize(size)
         val width = size.x
         dialog?.window?.setLayout((width * 0.9).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
-        dialog?.window?.setGravity(Gravity.BOTTOM)
+        dialog?.window?.decorView?.setPadding(32, 0, 32, 0)
+        dialog?.window?.setGravity(Gravity.CENTER)
     }
 }

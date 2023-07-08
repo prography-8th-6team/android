@@ -28,6 +28,12 @@ object UserDataStore {
         }
     }
 
+    suspend fun setJoinCode(context: Context, code: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.JOIN_CODE] = code
+        }
+    }
+
     fun getUserId(context: Context): Flow<String> =
         context.dataStore.data.map { it -> it[PreferencesKeys.USER_ID] ?: "" }
 
@@ -36,10 +42,14 @@ object UserDataStore {
 
     fun getUserName(context: Context): Flow<String> =
         context.dataStore.data.map { it -> it[PreferencesKeys.USER_NICKNAME] ?: "" }
+
+    fun getJoinCode(context: Context): Flow<String> =
+        context.dataStore.data.map { it -> it[PreferencesKeys.JOIN_CODE] ?: "" }
 }
 
 object PreferencesKeys {
     val USER_ID = stringPreferencesKey("userId")
     val USER_TOKEN = stringPreferencesKey("token")
     val USER_NICKNAME = stringPreferencesKey("nickName")
+    val JOIN_CODE = stringPreferencesKey("code")
 }

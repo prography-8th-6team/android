@@ -17,16 +17,41 @@
             android:id="@+id/action_mainFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/createTravelListFragment"
         android:name="com.example.moiz.presentation.createTravelList.CreateTravelListFragment"
         android:label="CreateTravelListFragment"
         tools:layout="@layout/create_travel_list_fragment" />
+
+    <fragment
+        android:id="@+id/detailBillingFragment"
+        android:name="com.example.moiz.presentation.billing.detail.BillingDetailFragment"
+        android:label="BillingDetailFragment"
+        tools:layout="@layout/fragment_detail_billing">
+        <argument
+            android:name="billingId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_detailBillingFragment_to_editBillingFragment"
+            app:destination="@id/editBillingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editBillingFragment"
+        android:name="com.example.moiz.presentation.billing.edit.EditBillingFragment"
+        android:label="EditBillingFragment"
+        tools:layout="@layout/fragment_edit_billing">
+        <argument
+            android:name="billingId"
+            app:argType="integer" />
+    </fragment>
+
     <fragment
         android:id="@+id/editTravelListFragment"
         android:name="com.example.moiz.presentation.editTravelList.EditTravelListFragment"
         android:label="EditTravelListFragment"
-        tools:layout="@layout/edit_travel_list_fragment" >
+        tools:layout="@layout/edit_travel_list_fragment">
         <argument
             android:name="travelId"
             app:argType="integer" />
@@ -46,11 +71,26 @@
         <action
             android:id="@+id/action_detailFragment_to_editTravelListFragment"
             app:destination="@id/editTravelListFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_detailBillingFragment"
+            app:destination="@id/detailBillingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/billingFragment"
+        android:name="com.example.moiz.presentation.detail.billing.BillingFragment"
+        android:label="BillingFragment"
+        tools:layout="@layout/fragment_billing">
     </fragment>
 
     <fragment
         android:id="@+id/addBillingFragment"
-        android:name="com.example.moiz.presentation.billing.AddBillingFragment"
+        android:name="com.example.moiz.presentation.billing.add.AddBillingFragment"
         android:label="AddBillingFragment"
-        tools:layout="@layout/fragment_add_billing" />
+        tools:layout="@layout/fragment_add_billing">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
+
 </navigation>

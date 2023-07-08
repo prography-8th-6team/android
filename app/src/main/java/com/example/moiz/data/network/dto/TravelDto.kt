@@ -49,7 +49,7 @@ data class BillingDto(
     @SerializedName("captured_amount")
     val captured_amount: String?,
     @SerializedName("participants")
-    val participants: List<String>?,
+    val participants: List<ParticipantsDto>?,
 )
 
 data class ResponseTravelListDto(
@@ -122,17 +122,69 @@ data class BillingMembersDto(
     val name: String?
 )
 
+data class BillingDetailDto(
+    @SerializedName("id")
+    val id: Int?,
+    @SerializedName("travel")
+    val travel: Int?,
+    @SerializedName("title")
+    val title: String?,
+    @SerializedName("category")
+    val category: String?,
+    @SerializedName("paid_by")
+    val paid_by: String?,
+    @SerializedName("paid_date")
+    val paid_date: String?,
+    @SerializedName("total_amount")
+    val total_amount: String?,
+    @SerializedName("total_amount_currency")
+    val total_amount_currency: String?,
+    @SerializedName("captured_amount")
+    val captured_amount: String?,
+    @SerializedName("images")
+    val images: List<ImageDto>?,
+    @SerializedName("participants")
+    val participants: List<ParticipantsDto>?
+)
+
+data class ImageDto(
+    @SerializedName("image")
+    val image: String?
+)
+
+data class ParticipantsDto(
+    @SerializedName("user")
+    val user: UserDto?,
+    @SerializedName("total_amount")
+    val total_amount: String?,
+    @SerializedName("captured_amount")
+    val captured_amount: String?
+)
+
+data class UserDto(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("nickname")
+    val nickname: String,
+
+    )
+
 data class PostBillingDto(
-    var title: String,
-    var paid_by: Int,
-    var paid_date: String,
-    var currency: String,
-    var settlements: List<SettlementsDto>
+    var title: String?,
+    var paid_by: Int?,
+    var paid_date: String?,
+    var category: String?,
+    var currency: String?,
+    var settlements: List<SettlementsDto?>
 )
 
 data class SettlementsDto(
-    var member: Int,
-    var amount: Int
+    var user: Int?,
+    var amount: Double?
+)
+
+data class PostJoinCodeDto(
+    var token: String?
 )
 
 data class ResponseTravelDeleteDto(

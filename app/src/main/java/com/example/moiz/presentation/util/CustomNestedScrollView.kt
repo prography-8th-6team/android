@@ -1,13 +1,10 @@
-package com.example.moiz.presentation.detail
+package com.example.moiz.presentation.util
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ScrollView
-import androidx.core.content.ContextCompat
-import com.example.moiz.R
 
 class CustomNestedScrollView : ScrollView, ViewTreeObserver.OnGlobalLayoutListener {
 
@@ -56,18 +53,8 @@ class CustomNestedScrollView : ScrollView, ViewTreeObserver.OnGlobalLayoutListen
     override fun onScrollChanged(l: Int, scrolly: Int, oldl: Int, oldt: Int) {
         super.onScrollChanged(l, scrolly, oldl, oldt)
 
-        temp!!.setBackgroundColor(
-            ContextCompat.getColor(
-                this.context,
-                if (scrolly > 0)
-                    R.color.white
-                else
-                    R.color.white
-            )
-        )
-
-        if (scrolly > mHeaderInitPosition) {
-            stickHeader(scrolly - mHeaderInitPosition)
+        if (scrolly > mHeaderInitPosition + temp!!.height) {
+            stickHeader(scrolly - mHeaderInitPosition - temp!!.height)
         } else {
             freeHeader()
         }

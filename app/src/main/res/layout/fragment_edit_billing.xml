@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
-            android:text="비용 추가"
+            android:text="비용 수정"
             android:textColor="@color/color_555555"
             android:textSize="16sp" />
 
@@ -73,7 +73,6 @@
             android:fontFamily="@font/pretendard_semi_bold"
             android:hint="내용을 입력하세요"
             android:imeOptions="actionDone"
-            android:inputType="text"
             android:textColorHint="@color/color_BCBCBC"
             android:textSize="20sp" />
 
@@ -326,7 +325,7 @@
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:paddingVertical="27dp"
-        android:text="비용 추가하기"
+        android:text="비용 수정하기"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
