@@ -13,10 +13,12 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.BillingHelperFragmentBinding
 import com.example.moiz.databinding.ItemBillingBalanceBinding
+import com.example.moiz.presentation.util.toCostFormat
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
-@AndroidEntryPoint class BillingHelperFragment(private val travelId: Int) : Fragment() {
+@AndroidEntryPoint
+class BillingHelperFragment(private val travelId: Int) : Fragment() {
     private lateinit var binding: BillingHelperFragmentBinding
     private val viewModel: BillingHelperViewModel by viewModels()
     private lateinit var adapter: BalancePercentAdapter
@@ -86,10 +88,7 @@ import java.text.DecimalFormat
                         ItemBillingBalanceBinding.inflate(LayoutInflater.from(context), this, false)
                     binding.tvUser.text = balance.user?.nickname
 
-                    // TODO
-                    // 화폐 단위 표기
-                    val decimalformat = DecimalFormat("#,###")
-                    binding.tvAmount.text = "${decimalformat.format(balance.amount)}"
+                    binding.tvAmount.text = balance.amount.toCostFormat()
                     binding.tvPaidBy.text = "${balance.paid_by?.nickname}"
                     addView(binding.root)
                 }
