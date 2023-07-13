@@ -5,8 +5,8 @@ import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
 import com.example.moiz.data.network.dto.ResponseBillingHelper
+import com.example.moiz.data.network.dto.ResponseMessage
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
-import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.ShareTokenDto
@@ -22,6 +22,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.text.Charsets.UTF_8
 
 class TravelRepositoryImpl @Inject constructor(private val travelService: TravelService) :
     TravelRepository {
@@ -95,7 +96,7 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
-    override suspend fun deleteTravel(token: String, travelId: Int): ResponseTravelDeleteDto {
+    override suspend fun deleteTravel(token: String, travelId: Int): ResponseMessage {
         return travelService.deleteTravel(token, travelId).body()!!
     }
 
@@ -177,4 +178,18 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         }
     }
 
+    override suspend fun postCompleteSettlement(travelId: Int, token: String): ResponseMessage {
+        val result = travelService.postCompleteSettlement(token, travelId)
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            // 400 error 발생하는 경우 body 가 empty 이기 때문에 errorBody 를 파싱
+            val peekSource = result.errorBody()?.source()?.peek()
+            val contentType = result.errorBody()?.contentType()
+            val charset = contentType?.let { contentType.charset(UTF_8) }
+            val response = peekSource?.readString(charset!!)
+            val message = response?.split("\"")?.get(3)!!
+            ResponseMessage(message = message)
+        }
+    }
 }
