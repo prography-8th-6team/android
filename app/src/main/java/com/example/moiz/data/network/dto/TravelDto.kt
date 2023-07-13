@@ -188,7 +188,7 @@ data class PostJoinCodeDto(
     var token: String?
 )
 
-data class ResponseTravelDeleteDto(
+data class ResponseMessage(
     @SerializedName("message")
     val message: String,
 )
