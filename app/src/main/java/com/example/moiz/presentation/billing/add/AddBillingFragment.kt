@@ -86,7 +86,7 @@ class AddBillingFragment : Fragment() {
     }
 
     private fun itemOnClick(data: InputCostEntity) {
-        viewModel.updateCost(data)
+        viewModel.updateCost(data, adapter.billingType)
         binding.etPrice.setText(viewModel.totalAmount.toString())
     }
 
