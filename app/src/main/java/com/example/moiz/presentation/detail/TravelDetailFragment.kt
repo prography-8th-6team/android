@@ -78,23 +78,6 @@ class TravelDetailFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    val view =
-                        (binding.vpViewpagerMain[0] as RecyclerView).layoutManager?.findViewByPosition(
-                            position
-                        )
-                    view?.post {
-                        val wMeasureSpec =
-                            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
-                        val hMeasureSpec =
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                        view.measure(wMeasureSpec, hMeasureSpec)
-                        if (binding.vpViewpagerMain.layoutParams.height != view.measuredHeight) {
-                            binding.vpViewpagerMain.layoutParams =
-                                (binding.vpViewpagerMain.layoutParams).also { lp ->
-                                    lp.height = view.measuredHeight
-                                }
-                        }
-                    }
                 }
             })
         }
