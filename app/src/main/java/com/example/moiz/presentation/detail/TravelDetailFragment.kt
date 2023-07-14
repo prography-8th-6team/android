@@ -31,6 +31,7 @@ import com.example.moiz.presentation.util.CustomDialog
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.Currency
 
 @AndroidEntryPoint
@@ -78,23 +79,6 @@ class TravelDetailFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    val view =
-                        (binding.vpViewpagerMain[0] as RecyclerView).layoutManager?.findViewByPosition(
-                            position
-                        )
-                    view?.post {
-                        val wMeasureSpec =
-                            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
-                        val hMeasureSpec =
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                        view.measure(wMeasureSpec, hMeasureSpec)
-                        if (binding.vpViewpagerMain.layoutParams.height != view.measuredHeight) {
-                            binding.vpViewpagerMain.layoutParams =
-                                (binding.vpViewpagerMain.layoutParams).also { lp ->
-                                    lp.height = view.measuredHeight
-                                }
-                        }
-                    }
                 }
             })
         }
