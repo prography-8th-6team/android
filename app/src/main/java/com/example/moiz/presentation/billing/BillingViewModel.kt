@@ -130,7 +130,7 @@ class BillingViewModel @Inject constructor(
         updateParam(5, null)
     }
 
-    fun updateCost(data: InputCostEntity) {
+    fun updateCost(data: InputCostEntity, isDutch: Boolean) {
         if (data.isChecked) checkCnt++
         else checkCnt--
 
@@ -142,7 +142,7 @@ class BillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
-        updateTotalAmount()
+        if (!isDutch) updateTotalAmount()
     }
 
     fun changeCost(data: InputCostEntity) {
@@ -171,6 +171,5 @@ class BillingViewModel @Inject constructor(
 
         updateParam(5, null)
     }
-
 }
 
