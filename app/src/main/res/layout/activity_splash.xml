@@ -25,7 +25,7 @@
         android:id="@+id/tv_subText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard_regular"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="당신의 여정을 함께하는 리스트"
         android:textColor="#5C5C5C"
         android:textSize="20sp"
