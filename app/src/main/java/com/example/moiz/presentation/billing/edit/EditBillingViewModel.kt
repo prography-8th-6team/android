@@ -45,7 +45,7 @@ class EditBillingViewModel @Inject constructor(
     fun getBillingDetail(id: Int, token: String) {
         viewModelScope.launch {
             getBillingDetailUseCase.invoke(id, token).let {
-                Timber.d("BillingDetailDto: $it")
+                getBillingMembers(it.travel!!, token)
                 totalAmount = it.total_amount?.toDouble()!!
                 imageCnt = it.images?.size!!
                 checkCnt = it.participants!!.size
@@ -60,7 +60,7 @@ class EditBillingViewModel @Inject constructor(
                     it.participants.map { participants ->
                         SettlementsDto(
                             participants.user?.id,
-                            participants.captured_amount?.toDouble()
+                            participants.total_amount?.toDouble()
                         )
                     }
                 )
@@ -68,25 +68,17 @@ class EditBillingViewModel @Inject constructor(
         }
     }
 
-    fun putBilling(id: Int, token: String, imgList: List<FileResult>) {
-        viewModelScope.launch {
-            putBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
-        }
-    }
-
     fun getBillingMembers(id: Int, token: String) {
         viewModelScope.launch {
             getBillingMembersUseCase.invoke(id, token).let {
                 _members.value = it
-                _temp.value = it.map { member ->
-                    InputCostEntity(
-                        member.id!!,
-                        false,
-                        member.name!!,
-                        0.0
-                    )
-                }
             }
+        }
+    }
+
+    fun putBilling(id: Int, token: String, imgList: List<FileResult>) {
+        viewModelScope.launch {
+            putBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
         }
     }
 
@@ -165,32 +157,6 @@ class EditBillingViewModel @Inject constructor(
         _temp.value = temp
 
         updateTotalAmount()
-    }
 
-    fun changeCost(data: InputCostEntity) {
-        val temp = _temp.value?.toMutableList()
-        temp?.forEach {
-            if (it.userId == data.userId) {
-                totalAmount -= it.cost
-                totalAmount += data.cost
-                it.cost = data.cost
-            }
-        }
-        _temp.value = temp
-
-        updateParam(5, null)
-    }
-
-    fun clearCost() {
-        totalAmount = 0.0
-        checkCnt = 0
-        val temp = _temp.value?.toMutableList()
-        temp?.forEach {
-            it.isChecked = false
-            it.cost = 0.0
-        }
-        _temp.value = temp
-
-        updateParam(5, null)
     }
 }
