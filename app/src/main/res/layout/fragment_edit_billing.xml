@@ -318,7 +318,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_add_billing"
+        android:id="@+id/tv_edit_billing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_F1F0F0"

@@ -10,9 +10,9 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="true"
         android:overScrollMode="never"
+        android:paddingBottom="72dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingVertical="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
