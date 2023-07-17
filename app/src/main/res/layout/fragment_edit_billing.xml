@@ -267,7 +267,7 @@
                     android:gravity="center"
                     android:paddingBottom="7dp"
                     android:text="1/N"
-                    android:textColor="@color/color_555555"
+                    android:textColor="@color/color_EBEAEA"
                     android:textSize="16sp"
                     android:translationZ="100dp" />
 
@@ -286,7 +286,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="직접 입력"
-                        android:textColor="@color/color_EBEAEA"
+                        android:textColor="@color/color_555555"
                         android:textSize="16sp"
                         android:translationZ="100dp" />
 
