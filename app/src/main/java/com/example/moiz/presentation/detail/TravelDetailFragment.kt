@@ -27,8 +27,7 @@ import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.example.moiz.presentation.util.CustomDialog
-import com.example.moiz.presentation.util.hide
-import com.example.moiz.presentation.util.show
+import com.example.moiz.presentation.util.showOrHide
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,11 +92,7 @@ import java.util.Currency
                         }
                     }
 
-                    if (position != 0) {
-                        binding.grBottomNavigation.hide()
-                    } else {
-                        binding.grBottomNavigation.show()
-                    }
+                    binding.grBottomNavigation.showOrHide(position == 0)
                 }
             })
         }
