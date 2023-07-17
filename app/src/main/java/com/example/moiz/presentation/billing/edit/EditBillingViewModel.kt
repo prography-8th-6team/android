@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
@@ -15,7 +14,6 @@ import com.example.moiz.domain.usecase.PutBillingsUseCase
 import com.example.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,6 +70,18 @@ class EditBillingViewModel @Inject constructor(
         viewModelScope.launch {
             getBillingMembersUseCase.invoke(id, token).let {
                 _members.value = it
+                val temp = ArrayList<InputCostEntity>()
+                paramList.value?.settlements?.forEach { settlement ->
+                    it.forEach { member ->
+                        if (member.id == settlement?.user)
+                            temp.add(
+                                InputCostEntity(
+                                    settlement?.user!!, true,
+                                    member.name.toString(), settlement.amount!!
+                                )
+                            )
+                    }
+                }.apply { _temp.value = temp }
             }
         }
     }
@@ -144,7 +154,21 @@ class EditBillingViewModel @Inject constructor(
         updateParam(5, null)
     }
 
-    fun updateCost(data: InputCostEntity) {
+    fun changeCost(data: InputCostEntity) {
+        val temp = _temp.value?.toMutableList()
+        temp?.forEach {
+            if (it.userId == data.userId) {
+                totalAmount -= it.cost
+                totalAmount += data.cost
+                it.cost = data.cost
+            }
+        }
+        _temp.value = temp
+
+        updateParam(5, null)
+    }
+
+    fun updateCost(data: InputCostEntity, isDutch: Boolean) {
         if (data.isChecked) checkCnt++
         else checkCnt--
 
@@ -156,7 +180,19 @@ class EditBillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
-        updateTotalAmount()
+        if (!isDutch) updateTotalAmount()
+    }
 
+    fun clearCost() {
+        totalAmount = 0.0
+        checkCnt = 0
+        val temp = _temp.value?.toMutableList()
+        temp?.forEach {
+            it.isChecked = false
+            it.cost = 0.0
+        }
+        _temp.value = temp
+
+        updateParam(5, null)
     }
 }
