@@ -15,7 +15,6 @@ import com.example.moiz.databinding.BillingHelperFragmentBinding
 import com.example.moiz.databinding.ItemBillingBalanceBinding
 import com.example.moiz.presentation.util.toCostFormat
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.DecimalFormat
 
 @AndroidEntryPoint
 class BillingHelperFragment(private val travelId: Int) : Fragment() {

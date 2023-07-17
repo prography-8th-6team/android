@@ -1,13 +1,9 @@
 package com.example.moiz.presentation.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.autofill.UserData
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.datastore.core.DataStore
-import androidx.lifecycle.asLiveData
+import androidx.appcompat.app.AppCompatActivity
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.ActivityLoginBinding
 import com.example.moiz.presentation.main.MainActivity
