@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.BillingHelperFragmentBinding
 import com.example.moiz.databinding.ItemBillingBalanceBinding
+import com.example.moiz.presentation.util.CustomDialog
 import com.example.moiz.presentation.util.toCostFormat
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +41,15 @@ import dagger.hilt.android.AndroidEntryPoint
         initView()
 
         binding.btnComplete.setOnClickListener {
-            postCompleteSettlement()
+            val dialog = CustomDialog("정산을 완료하셨습니까?", "취소", "정산 완료") {
+                UserDataStore.getUserToken(requireContext())
+                    .asLiveData()
+                    .observe(viewLifecycleOwner) {
+                        viewModel.postCompleteSettlement("Bearer $it", travelId)
+                    }
+            }
+            dialog.isCancelable = false
+            dialog.show(requireActivity().supportFragmentManager, "settlement")
         }
 
         viewModel.completeResponse.observe(viewLifecycleOwner) {
@@ -101,8 +111,7 @@ import dagger.hilt.android.AndroidEntryPoint
                     val binding =
                         ItemBillingBalanceBinding.inflate(LayoutInflater.from(context), this, false)
                     binding.tvUser.text = balance.user?.nickname
-
-                    binding.tvAmount.text = balance.amount.toCostFormat()
+                    binding.tvAmount.text = balance.amount?.toInt().toCostFormat()
                     binding.tvPaidBy.text = "${balance.paid_by?.nickname}"
                     addView(binding.root)
                 }
