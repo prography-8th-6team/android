@@ -197,7 +197,7 @@ data class BalancesDto(
     @SerializedName("user")
     val user:UserDto?,
     @SerializedName("amount")
-    val amount:Int?,
+    val amount:Double?,
     @SerializedName("paid_by")
     val paid_by:UserDto?,
 )
