@@ -27,13 +27,19 @@ import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.example.moiz.presentation.util.CustomDialog
+import com.example.moiz.presentation.util.onClickDebounced
 import com.example.moiz.presentation.util.showOrHide
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
-@AndroidEntryPoint class TravelDetailFragment : Fragment() {
+@AndroidEntryPoint
+class TravelDetailFragment : Fragment() {
 
     private lateinit var binding: TravelDetailFragmentBinding
     private val viewModel: DetailViewModel by viewModels()
@@ -55,7 +61,8 @@ import java.util.Currency
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it")
+                args.travelId, "Bearer $it"
+            )
         }
         initViews()
         initViewPager()
@@ -65,7 +72,8 @@ import java.util.Currency
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment())
+            ScheduleFragment()
+        )
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
@@ -84,7 +92,27 @@ import java.util.Currency
             when (position) {
                 0 -> tab.text = "가계부"
                 1 -> tab.text = "계산도우미"
-                2 -> tab.text = "일정"
+                2 -> {
+                    tab.text = "일정"
+                    tab.view.isClickable = false
+                    tab.view.setOnTouchListener { _, action ->
+                        if (action.action == 0) {
+                            val balloon = Balloon.Builder(requireContext())
+                                .setHeight(BalloonSizeSpec.WRAP)
+                                .setText("일정 기능은 출시 예정입니다.")
+                                .setTextColorResource(R.color.color_555555)
+                                .setBackgroundColorResource(R.color.white)
+                                .setTextSize(14f)
+                                .setPadding(12)
+                                .setCornerRadius(8f)
+                                .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                                .build()
+                            balloon.showAsDropDown(tab.view)
+                            balloon.dismissWithDelay(1500L)
+                        }
+                        true
+                    }
+                }
             }
         }.attach()
     }
@@ -100,7 +128,8 @@ import java.util.Currency
             val popupView = inflater.inflate(R.layout.item_travel_detail_popup, null)
 
             val popupWindow = PopupWindow(
-                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             popupWindow.isOutsideTouchable = true
             popupWindow.isFocusable = true
             popupWindow.showAsDropDown(ivAdditional, -80, 20)
@@ -113,7 +142,8 @@ import java.util.Currency
                                 requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val temp = "moiz://deeplink?code=${it.toekn}"
                             val clip = ClipData.newPlainText(
-                                "label", temp)
+                                "label", temp
+                            )
                             clipboard.setPrimaryClip(clip)
                             popupWindow.dismiss()
                             Toast.makeText(requireContext(), "공유 코드가 복사되었습니다.", Toast.LENGTH_SHORT)
@@ -173,12 +203,14 @@ import java.util.Currency
 
         ivAddAccount.setOnClickListener {
             findNavController().navigate(
-                R.id.goto_add_billing, bundleOf("travelId" to args.travelId))
+                R.id.goto_add_billing, bundleOf("travelId" to args.travelId)
+            )
         }
     }
 
     private fun goToEditTravel(travelId: Int) {
         findNavController().navigate(
-            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId))
+            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId)
+        )
     }
 }
