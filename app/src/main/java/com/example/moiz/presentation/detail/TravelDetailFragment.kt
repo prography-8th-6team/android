@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,13 +27,13 @@ import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.example.moiz.presentation.util.CustomDialog
+import com.example.moiz.presentation.util.showOrHide
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
-@AndroidEntryPoint
-class TravelDetailFragment : Fragment() {
+@AndroidEntryPoint class TravelDetailFragment : Fragment() {
 
     private lateinit var binding: TravelDetailFragmentBinding
     private val viewModel: DetailViewModel by viewModels()
@@ -56,8 +55,7 @@ class TravelDetailFragment : Fragment() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it"
-            )
+                args.travelId, "Bearer $it")
         }
         initViews()
         initViewPager()
@@ -67,8 +65,7 @@ class TravelDetailFragment : Fragment() {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment()
-        )
+            ScheduleFragment())
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
@@ -78,6 +75,7 @@ class TravelDetailFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    binding.grBottomNavigation.showOrHide(position == 0)
                 }
             })
         }
@@ -102,8 +100,7 @@ class TravelDetailFragment : Fragment() {
             val popupView = inflater.inflate(R.layout.item_travel_detail_popup, null)
 
             val popupWindow = PopupWindow(
-                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+                popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             popupWindow.isOutsideTouchable = true
             popupWindow.isFocusable = true
             popupWindow.showAsDropDown(ivAdditional, -80, 20)
@@ -116,9 +113,7 @@ class TravelDetailFragment : Fragment() {
                                 requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val temp = "moiz://deeplink?code=${it.toekn}"
                             val clip = ClipData.newPlainText(
-                                "label",
-                                temp
-                            )
+                                "label", temp)
                             clipboard.setPrimaryClip(clip)
                             popupWindow.dismiss()
                             Toast.makeText(requireContext(), "공유 코드가 복사되었습니다.", Toast.LENGTH_SHORT)
@@ -162,8 +157,7 @@ class TravelDetailFragment : Fragment() {
             tvMemo.text = data.description
 
             val currencySymbol = Currency.getInstance(data.currency).symbol
-            tvMyCost.text =
-                currencySymbol + " " + data.my_total_billing?.toInt().toCostFormat()
+            tvMyCost.text = currencySymbol + " " + data.my_total_billing?.toInt().toCostFormat()
             tvTotalCost.text = currencySymbol + " " + data.total_amount?.toInt().toCostFormat()
 
             llTravelMember.apply {
@@ -179,14 +173,12 @@ class TravelDetailFragment : Fragment() {
 
         ivAddAccount.setOnClickListener {
             findNavController().navigate(
-                R.id.goto_add_billing, bundleOf("travelId" to args.travelId)
-            )
+                R.id.goto_add_billing, bundleOf("travelId" to args.travelId))
         }
     }
 
     private fun goToEditTravel(travelId: Int) {
         findNavController().navigate(
-            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId)
-        )
+            R.id.action_detailFragment_to_editTravelListFragment, bundleOf("travelId" to travelId))
     }
 }

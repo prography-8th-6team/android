@@ -4,8 +4,8 @@ import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostJoinCodeDto
 import com.example.moiz.data.network.dto.ResponseBillingHelper
+import com.example.moiz.data.network.dto.ResponseMessage
 import com.example.moiz.data.network.dto.ResponseTravelCreateDto
-import com.example.moiz.data.network.dto.ResponseTravelDeleteDto
 import com.example.moiz.data.network.dto.ResponseTravelDetailDto
 import com.example.moiz.data.network.dto.ResponseTravelListDto
 import com.example.moiz.data.network.dto.ShareTokenDto
@@ -78,7 +78,7 @@ interface TravelService {
     suspend fun deleteTravel(
         @Header("Authorization") token: String?,
         @Path("id") id: Int,
-    ): Response<ResponseTravelDeleteDto>
+    ): Response<ResponseMessage>
 
     @Multipart
     @PUT("billings/{id}")
@@ -111,4 +111,10 @@ interface TravelService {
         @Header("Authorization") token: String?,
         @Path("id") id: Int,
     ): Response<ResponseBillingHelper>
+
+    @POST("travels/{id}/complete-settlement")
+    suspend fun postCompleteSettlement(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+    ): Response<ResponseMessage>
 }

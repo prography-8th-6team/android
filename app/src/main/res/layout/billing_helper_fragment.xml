@@ -105,10 +105,14 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/btn_pay"
+        android:id="@+id/btn_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:backgroundTint="@color/color_f55c5c"
+        android:gravity="center"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:paddingVertical="27dp"
         android:text="정산 완료"
         android:textColor="@color/white"
