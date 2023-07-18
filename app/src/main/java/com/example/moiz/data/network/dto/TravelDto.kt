@@ -188,7 +188,7 @@ data class PostJoinCodeDto(
     var token: String?
 )
 
-data class ResponseTravelDeleteDto(
+data class ResponseMessage(
     @SerializedName("message")
     val message: String,
 )
@@ -197,7 +197,7 @@ data class BalancesDto(
     @SerializedName("user")
     val user:UserDto?,
     @SerializedName("amount")
-    val amount:Int?,
+    val amount:Double?,
     @SerializedName("paid_by")
     val paid_by:UserDto?,
 )

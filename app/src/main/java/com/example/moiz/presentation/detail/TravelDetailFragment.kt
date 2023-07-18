@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,8 +27,14 @@ import com.example.moiz.presentation.billingHelper.BillingHelperFragment
 import com.example.moiz.presentation.detail.billing.BillingFragment
 import com.example.moiz.presentation.detail.schedule.ScheduleFragment
 import com.example.moiz.presentation.util.CustomDialog
+import com.example.moiz.presentation.util.onClickDebounced
+import com.example.moiz.presentation.util.showOrHide
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -78,6 +83,7 @@ class TravelDetailFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    binding.grBottomNavigation.showOrHide(position == 0)
                 }
             })
         }
@@ -86,7 +92,27 @@ class TravelDetailFragment : Fragment() {
             when (position) {
                 0 -> tab.text = "가계부"
                 1 -> tab.text = "계산도우미"
-                2 -> tab.text = "일정"
+                2 -> {
+                    tab.text = "일정"
+                    tab.view.isClickable = false
+                    tab.view.setOnTouchListener { _, action ->
+                        if (action.action == 0) {
+                            val balloon = Balloon.Builder(requireContext())
+                                .setHeight(BalloonSizeSpec.WRAP)
+                                .setText("일정 기능은 출시 예정입니다.")
+                                .setTextColorResource(R.color.color_555555)
+                                .setBackgroundColorResource(R.color.white)
+                                .setTextSize(14f)
+                                .setPadding(12)
+                                .setCornerRadius(8f)
+                                .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                                .build()
+                            balloon.showAsDropDown(tab.view)
+                            balloon.dismissWithDelay(1500L)
+                        }
+                        true
+                    }
+                }
             }
         }.attach()
     }
@@ -116,8 +142,7 @@ class TravelDetailFragment : Fragment() {
                                 requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val temp = "moiz://deeplink?code=${it.toekn}"
                             val clip = ClipData.newPlainText(
-                                "label",
-                                temp
+                                "label", temp
                             )
                             clipboard.setPrimaryClip(clip)
                             popupWindow.dismiss()
@@ -162,8 +187,7 @@ class TravelDetailFragment : Fragment() {
             tvMemo.text = data.description
 
             val currencySymbol = Currency.getInstance(data.currency).symbol
-            tvMyCost.text =
-                currencySymbol + " " + data.my_total_billing?.toInt().toCostFormat()
+            tvMyCost.text = currencySymbol + " " + data.my_total_billing?.toInt().toCostFormat()
             tvTotalCost.text = currencySymbol + " " + data.total_amount?.toInt().toCostFormat()
 
             llTravelMember.apply {

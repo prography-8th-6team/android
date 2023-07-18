@@ -117,6 +117,12 @@
         </LinearLayout>
     </com.example.moiz.presentation.util.CustomNestedScrollView>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gr_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="iv_add_account, view, tv_my_pay, tv_my_cost, tv_total_cost_text, tv_total_cost" />
+
     <ImageView
         android:id="@+id/iv_add_account"
         android:layout_width="56dp"
@@ -138,6 +144,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/tv_my_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -163,6 +170,7 @@
         tools:text="$ 1,520" />
 
     <TextView
+        android:id="@+id/tv_total_cost_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

@@ -4,21 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.BillingHelperFragmentBinding
 import com.example.moiz.databinding.ItemBillingBalanceBinding
+import com.example.moiz.presentation.util.CustomDialog
 import com.example.moiz.presentation.util.toCostFormat
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.DecimalFormat
 
-@AndroidEntryPoint
-class BillingHelperFragment(private val travelId: Int) : Fragment() {
+@AndroidEntryPoint class BillingHelperFragment(private val travelId: Int) : Fragment() {
     private lateinit var binding: BillingHelperFragmentBinding
     private val viewModel: BillingHelperViewModel by viewModels()
     private lateinit var adapter: BalancePercentAdapter
@@ -38,10 +39,27 @@ class BillingHelperFragment(private val travelId: Int) : Fragment() {
         getBillingsHelper()
         getBillingMembers()
         initView()
+
+        binding.btnComplete.setOnClickListener {
+            val dialog = CustomDialog("정산을 완료하셨습니까?", "취소", "정산 완료") {
+                UserDataStore.getUserToken(requireContext())
+                    .asLiveData()
+                    .observe(viewLifecycleOwner) {
+                        viewModel.postCompleteSettlement("Bearer $it", travelId)
+                    }
+            }
+            dialog.isCancelable = false
+            dialog.show(requireActivity().supportFragmentManager, "settlement")
+        }
+
+        viewModel.completeResponse.observe(viewLifecycleOwner) {
+            if (it == "정산할 금액이 없습니다.") {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun getBillingsHelper() {
-        // travel Id 수정
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             viewModel.getBillingsHelper(travelId, "Bearer $it")
         }
@@ -50,6 +68,12 @@ class BillingHelperFragment(private val travelId: Int) : Fragment() {
     private fun getBillingMembers() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             viewModel.getBillingMembers(travelId, "Bearer $it")
+        }
+    }
+
+    private fun postCompleteSettlement() {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.postCompleteSettlement("Bearer $it", travelId)
         }
     }
 
@@ -87,8 +111,7 @@ class BillingHelperFragment(private val travelId: Int) : Fragment() {
                     val binding =
                         ItemBillingBalanceBinding.inflate(LayoutInflater.from(context), this, false)
                     binding.tvUser.text = balance.user?.nickname
-
-                    binding.tvAmount.text = balance.amount.toCostFormat()
+                    binding.tvAmount.text = balance.amount?.toInt().toCostFormat()
                     binding.tvPaidBy.text = "${balance.paid_by?.nickname}"
                     addView(binding.root)
                 }
@@ -97,13 +120,13 @@ class BillingHelperFragment(private val travelId: Int) : Fragment() {
     }
 
     private fun setBtnPayEnabled() {
-        binding.btnPay.isEnabled = true
-        binding.btnPay.backgroundTintList = context?.getColorStateList(R.color.color_f55c5c)
+        binding.btnComplete.isEnabled = true
+        binding.btnComplete.backgroundTintList = context?.getColorStateList(R.color.color_f55c5c)
     }
 
     private fun setBtnPayDisabled() {
-        binding.btnPay.isEnabled = false
-        binding.btnPay.backgroundTintList = context?.getColorStateList(R.color.color_ebeaea)
+        binding.btnComplete.isEnabled = false
+        binding.btnComplete.backgroundTintList = context?.getColorStateList(R.color.color_ebeaea)
     }
 
     private fun setBillingPercentVisible() {
