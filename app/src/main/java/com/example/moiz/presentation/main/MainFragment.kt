@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.moiz.R
@@ -17,7 +17,6 @@ import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.MainFragmentBinding
 import com.example.moiz.presentation.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
@@ -35,20 +34,22 @@ import kotlinx.coroutines.launch
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.btnCreate.setOnClickListener { goToCreateTravelList() }
         adapter = TravelAdapter { goToDetail(it) }
         binding.rvTravelList.adapter = adapter
         binding.rvTravelList.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
         getTravelList()
+        getUserProfile()
         viewModel.list.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        viewModel.nickName.observe(viewLifecycleOwner) {
+            binding.tvTitle.text = "${it}님의 여행 리스트"
+        }
     }
 
     private fun getTravelList() {
-        lifecycleScope.launch {
-            UserDataStore.getUserToken(requireContext()).collect {
-                viewModel.getTravelList("Bearer $it")
-            }
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.getTravelList("Bearer $it")
+
         }
 
         viewModel.response.observe(viewLifecycleOwner) {
@@ -61,6 +62,20 @@ import kotlinx.coroutines.launch
                 it.results?.let { it1 -> viewModel.setTravelList(it1) }
             }
         }
+    }
+
+    private fun getUserProfile() {
+        UserDataStore.getUserToken(requireContext())
+            .asLiveData()
+            .observe(viewLifecycleOwner) { token ->
+                UserDataStore.getUserId(requireContext())
+                    .asLiveData()
+                    .observe(viewLifecycleOwner) { id ->
+                        if (token != "" && id != "") {
+                            viewModel.getUserProfile("Bearer $token", id.toInt())
+                        }
+                    }
+            }
     }
 
     private fun goToCreateTravelList() {

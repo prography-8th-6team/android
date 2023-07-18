@@ -19,3 +19,19 @@ data class UserInfoDto(
     @SerializedName("nickname")
     val nickname: String?,
 )
+
+data class UserProfileResponseDto(
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("results")
+    val results: UserProfileDto?,
+)
+
+data class UserProfileDto(
+    @SerializedName("nickname")
+    val nickname:String?,
+    @SerializedName("fcm_token")
+    val fcm_token:String?,
+    @SerializedName("created")
+    val created:String?,
+)
