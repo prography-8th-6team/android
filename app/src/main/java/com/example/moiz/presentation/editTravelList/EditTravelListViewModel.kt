@@ -42,11 +42,13 @@ import javax.inject.Inject
         viewModelScope.launch { endDate.asFlow().collect { checkValidate() } }
         viewModelScope.launch { color.asFlow().collect { checkValidate() } }
         viewModelScope.launch { currency.asFlow().collect { checkValidate() } }
+        viewModelScope.launch { memo.asFlow().collect { checkValidate() } }
     }
 
     private fun checkValidate() {
         isEnabled.value =
-            (title.value != travelDetail.value?.title) || (startDate.value != travelDetail.value?.start_date) || (endDate.value != travelDetail.value?.end_date) || (color.value != travelDetail.value?.color) || (currency.value != travelDetail.value?.currency)
+            (title.value != travelDetail.value?.title) || (startDate.value != travelDetail.value?.start_date) || (endDate.value != travelDetail.value?.end_date) || (color.value != travelDetail.value?.color) || (currency.value != travelDetail.value?.currency || (memo.value != travelDetail.value?.description))
+
     }
 
     fun setTitle(value: String) {
