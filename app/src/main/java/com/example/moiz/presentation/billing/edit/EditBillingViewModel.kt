@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moiz.data.network.dto.BillingDetailDto
 import com.example.moiz.data.network.dto.BillingMembersDto
 import com.example.moiz.data.network.dto.PostBillingDto
 import com.example.moiz.data.network.dto.SettlementsDto
@@ -15,7 +14,6 @@ import com.example.moiz.domain.usecase.PutBillingsUseCase
 import com.example.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,7 +43,7 @@ class EditBillingViewModel @Inject constructor(
     fun getBillingDetail(id: Int, token: String) {
         viewModelScope.launch {
             getBillingDetailUseCase.invoke(id, token).let {
-                Timber.d("BillingDetailDto: $it")
+                getBillingMembers(it.travel!!, token)
                 totalAmount = it.total_amount?.toDouble()!!
                 imageCnt = it.images?.size!!
                 checkCnt = it.participants!!.size
@@ -60,7 +58,7 @@ class EditBillingViewModel @Inject constructor(
                     it.participants.map { participants ->
                         SettlementsDto(
                             participants.user?.id,
-                            participants.captured_amount?.toDouble()
+                            participants.total_amount?.toDouble()
                         )
                     }
                 )
@@ -68,25 +66,29 @@ class EditBillingViewModel @Inject constructor(
         }
     }
 
-    fun putBilling(id: Int, token: String, imgList: List<FileResult>) {
-        viewModelScope.launch {
-            putBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
-        }
-    }
-
     fun getBillingMembers(id: Int, token: String) {
         viewModelScope.launch {
             getBillingMembersUseCase.invoke(id, token).let {
                 _members.value = it
-                _temp.value = it.map { member ->
-                    InputCostEntity(
-                        member.id!!,
-                        false,
-                        member.name!!,
-                        0.0
-                    )
-                }
+                val temp = ArrayList<InputCostEntity>()
+                paramList.value?.settlements?.forEach { settlement ->
+                    it.forEach { member ->
+                        if (member.id == settlement?.user)
+                            temp.add(
+                                InputCostEntity(
+                                    settlement?.user!!, true,
+                                    member.name.toString(), settlement.amount!!
+                                )
+                            )
+                    }
+                }.apply { _temp.value = temp }
             }
+        }
+    }
+
+    fun putBilling(id: Int, token: String, imgList: List<FileResult>) {
+        viewModelScope.launch {
+            putBillingsUseCase.invoke(id, token, paramList.value!!, imgList)
         }
     }
 
@@ -152,21 +154,6 @@ class EditBillingViewModel @Inject constructor(
         updateParam(5, null)
     }
 
-    fun updateCost(data: InputCostEntity) {
-        if (data.isChecked) checkCnt++
-        else checkCnt--
-
-        val temp = _temp.value?.toMutableList()
-        temp?.forEach {
-            if (it.userId == data.userId) {
-                it.isChecked = data.isChecked
-            }
-        }
-        _temp.value = temp
-
-        updateTotalAmount()
-    }
-
     fun changeCost(data: InputCostEntity) {
         val temp = _temp.value?.toMutableList()
         temp?.forEach {
@@ -179,6 +166,21 @@ class EditBillingViewModel @Inject constructor(
         _temp.value = temp
 
         updateParam(5, null)
+    }
+
+    fun updateCost(data: InputCostEntity, isDutch: Boolean) {
+        if (data.isChecked) checkCnt++
+        else checkCnt--
+
+        val temp = _temp.value?.toMutableList()
+        temp?.forEach {
+            if (it.userId == data.userId) {
+                it.isChecked = data.isChecked
+            }
+        }
+        _temp.value = temp
+
+        if (!isDutch) updateTotalAmount()
     }
 
     fun clearCost() {
