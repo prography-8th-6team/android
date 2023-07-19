@@ -104,9 +104,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:tabGravity="fill"
                 app:tabIndicatorColor="@color/color_555555"
+                app:tabMaxWidth="0dp"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/color_555555"
                 app:tabTextColor="@color/color_EBEAEA" />
+
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_viewpager_main"

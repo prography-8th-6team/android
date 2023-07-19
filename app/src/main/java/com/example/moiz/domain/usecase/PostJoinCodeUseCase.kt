@@ -1,8 +1,6 @@
 package com.example.moiz.domain.usecase
 
 import com.example.moiz.data.network.dto.PostJoinCodeDto
-import com.example.moiz.data.network.dto.ResponseTravelCreateDto
-import com.example.moiz.data.network.dto.TravelCreateDto
 import com.example.moiz.domain.repository.TravelRepository
 import javax.inject.Inject
 

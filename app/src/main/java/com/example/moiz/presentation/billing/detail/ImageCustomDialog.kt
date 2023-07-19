@@ -13,7 +13,6 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
-import com.example.moiz.databinding.CustomDialogBinding
 import com.example.moiz.databinding.DialogImgCustomBinding
 
 class ImageCustomDialog(

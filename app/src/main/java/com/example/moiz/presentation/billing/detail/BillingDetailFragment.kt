@@ -15,6 +15,7 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.FragmentDetailBillingBinding
 import com.example.moiz.databinding.ItemBillingDetailMemberBinding
+import com.example.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -108,11 +109,7 @@ class BillingDetailFragment : Fragment() {
                         )
                     binding.tvName.text = participant.user?.nickname
                     binding.tvAmount.text = "$currencySymbol ${participant.total_amount}"
-                    if (participant.user?.nickname == data.paid_by) {
-                        binding.tvPaidBy.visibility = View.VISIBLE
-                    } else {
-                        binding.tvPaidBy.visibility = View.GONE
-                    }
+                    binding.tvPaidBy.showOrGone(participant.user?.nickname == data.paid_by)
                     addView(binding.root)
                 }
             }
