@@ -14,6 +14,7 @@ import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.data.network.dto.BillingDto
 import com.example.moiz.databinding.FragmentBillingBinding
+import com.example.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +51,11 @@ class BillingFragment(private val travelId: Int) : Fragment() {
         rvAccounts.adapter = adapter
 
         viewModel.list.observe(viewLifecycleOwner) { data ->
-            data.billings.let { adapter.submitList(data.billings) }
+            rvAccounts.showOrGone(!data.billings.isNullOrEmpty())
+            tvEmpty.showOrGone(data.billings.isNullOrEmpty())
+            if (!data.billings.isNullOrEmpty()) {
+                adapter.submitList(data.billings)
+            }
         }
     }
 
