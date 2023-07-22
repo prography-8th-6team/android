@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.moiz.BuildConfig
 import com.example.moiz.R
 import com.example.moiz.data.UserDataStore
 import com.example.moiz.databinding.MainFragmentBinding
@@ -36,8 +38,15 @@ import dagger.hilt.android.AndroidEntryPoint
         super.onViewCreated(view, savedInstanceState)
         binding.btnCreate.setOnClickListener { goToCreateTravelList() }
         adapter = TravelAdapter { goToDetail(it) }
-        binding.rvTravelList.adapter = adapter
-        binding.rvTravelList.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
+
+        with(binding) {
+            rvTravelList.adapter = adapter
+            rvTravelList.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
+            btnDrawer.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
+            imgClose.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
+            tvVersion.text = "현재버전 ${BuildConfig.VERSION_NAME}"
+        }
+
         getTravelList()
         getUserProfile()
         viewModel.list.observe(viewLifecycleOwner) { adapter.submitList(it) }
