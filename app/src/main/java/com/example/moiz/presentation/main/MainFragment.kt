@@ -1,6 +1,7 @@
 package com.example.moiz.presentation.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
     private lateinit var binding: MainFragmentBinding
     private lateinit var adapter: TravelAdapter
     val viewModel by viewModels<MainViewModel>()
+    val privacyUrl = "https://sites.google.com/view/jernylist/%ED%99%88"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
             btnDrawer.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
             imgClose.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
             tvVersion.text = "현재버전 ${BuildConfig.VERSION_NAME}"
+            tvPrivacy.setOnClickListener { goToPrivacyPage() }
         }
 
         getTravelList()
@@ -53,6 +56,11 @@ import dagger.hilt.android.AndroidEntryPoint
         viewModel.nickName.observe(viewLifecycleOwner) {
             binding.tvTitle.text = "${it}님의 여행 리스트"
         }
+    }
+
+    private fun goToPrivacyPage() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(privacyUrl))
+        startActivity(intent)
     }
 
     private fun getTravelList() {
