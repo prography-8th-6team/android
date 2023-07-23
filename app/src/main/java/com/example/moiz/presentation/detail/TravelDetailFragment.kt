@@ -4,6 +4,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +31,9 @@ import com.example.moiz.presentation.util.onClickDebounced
 import com.example.moiz.presentation.util.showOrHide
 import com.example.moiz.presentation.util.toCostFormat
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
@@ -133,12 +138,41 @@ class TravelDetailFragment : Fragment() {
             popupWindow.showAsDropDown(ivAdditional, -80, 20)
 
             popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
+                /*
+                viewModel.postGenerateInviteToken(args.travelId, token)
+                    .observe(viewLifecycleOwner) {
+                        val inviteLink =
+                            "https://moizjernyList.page.link/invite?code=${it.toekn}"
+
+                        FirebaseDynamicLinks.getInstance().createDynamicLink()
+                            .setLink(Uri.parse(inviteLink))
+                            .setDomainUriPrefix("https://moizjernyList.page.link")
+                            .setAndroidParameters(
+                                AndroidParameters.Builder()
+                                    .setMinimumVersion(1)
+                                    .build()
+                            )
+                            .buildShortDynamicLink()
+                            .addOnSuccessListener { shortDynamicLink ->
+                                val sendIntent = Intent()
+                                sendIntent.action = Intent.ACTION_SEND
+                                sendIntent.putExtra(
+                                    Intent.EXTRA_TEXT,
+                                    shortDynamicLink.shortLink.toString()
+                                )
+                                sendIntent.type = "text/plain"
+                                startActivity(sendIntent)
+                            }
+                    }
+                 */
                 val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {
                     viewModel.postGenerateInviteToken(args.travelId, token)
                         .observe(viewLifecycleOwner) {
                             val clipboard =
                                 requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                            val temp = "moiz://deeplink?code=${it.toekn}"
+
+                            val temp =
+                                "https://moizjernyList.page.link/invite?code=${it.toekn}"
                             val clip = ClipData.newPlainText(
                                 "label", temp
                             )
@@ -150,6 +184,7 @@ class TravelDetailFragment : Fragment() {
                 }
                 dialog.isCancelable = false
                 dialog.show(requireActivity().supportFragmentManager, "share")
+
             }
 
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
