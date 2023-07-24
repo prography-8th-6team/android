@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "804115813406",
+    "project_id": "moiz-90a08",
+    "storage_bucket": "moiz-90a08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804115813406:android:82bc3fcc9b2159d30d8a0f",
+        "android_client_info": {
+          "package_name": "com.example.moiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804115813406-dedfmt3ncbd4irsfm02ja3sidbmora8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moiz",
+            "certificate_hash": "447b1a3dd84f2fb34178b268352761fff8ee7c23"
+          }
+        },
+        {
+          "client_id": "804115813406-v2m9sbmft4g7933vheu4jl960j4c1jjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuSIMP3AGd20nVbNctr6kPpL-KGhPWMYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804115813406-v2m9sbmft4g7933vheu4jl960j4c1jjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
