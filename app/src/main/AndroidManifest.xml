@@ -31,12 +31,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="moizjernylist.page.link"
+                    android:host="jernymoiz.page.link"
                     android:path="/invite"
                     android:scheme="https" />
 
                 <data
-                    android:host="moizjernylist.page.link"
+                    android:host="jernymoiz.page.link"
                     android:path="/invite"
                     android:scheme="http" />
             </intent-filter>

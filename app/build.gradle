@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.moiz'
+    namespace 'com.jerny.moiz'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.moiz"
+        applicationId "com.jerny.moiz"
         minSdk 24
         targetSdk 33
         versionCode 1
