@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.moiz.presentation.main.MainFragment"
+        android:name="com.jerny.moiz.presentation.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/main_fragment">
         <action
@@ -20,13 +20,13 @@
 
     <fragment
         android:id="@+id/createTravelListFragment"
-        android:name="com.example.moiz.presentation.createTravelList.CreateTravelListFragment"
+        android:name="com.jerny.moiz.presentation.createTravelList.CreateTravelListFragment"
         android:label="CreateTravelListFragment"
         tools:layout="@layout/create_travel_list_fragment" />
 
     <fragment
         android:id="@+id/detailBillingFragment"
-        android:name="com.example.moiz.presentation.billing.detail.BillingDetailFragment"
+        android:name="com.jerny.moiz.presentation.billing.detail.BillingDetailFragment"
         android:label="BillingDetailFragment"
         tools:layout="@layout/fragment_detail_billing">
         <argument
@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/editBillingFragment"
-        android:name="com.example.moiz.presentation.billing.edit.EditBillingFragment"
+        android:name="com.jerny.moiz.presentation.billing.edit.EditBillingFragment"
         android:label="EditBillingFragment"
         tools:layout="@layout/fragment_edit_billing">
         <argument
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/editTravelListFragment"
-        android:name="com.example.moiz.presentation.editTravelList.EditTravelListFragment"
+        android:name="com.jerny.moiz.presentation.editTravelList.EditTravelListFragment"
         android:label="EditTravelListFragment"
         tools:layout="@layout/edit_travel_list_fragment">
         <argument
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.moiz.presentation.detail.TravelDetailFragment"
+        android:name="com.jerny.moiz.presentation.detail.TravelDetailFragment"
         android:label="TravelDetailFragment"
         tools:layout="@layout/travel_detail_fragment">
         <action
@@ -78,14 +78,14 @@
 
     <fragment
         android:id="@+id/billingFragment"
-        android:name="com.example.moiz.presentation.detail.billing.BillingFragment"
+        android:name="com.jerny.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
         tools:layout="@layout/fragment_billing">
     </fragment>
 
     <fragment
         android:id="@+id/addBillingFragment"
-        android:name="com.example.moiz.presentation.billing.add.AddBillingFragment"
+        android:name="com.jerny.moiz.presentation.billing.add.AddBillingFragment"
         android:label="AddBillingFragment"
         tools:layout="@layout/fragment_add_billing">
         <argument
@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/billingHelperFragment"
-        android:name="com.example.moiz.presentation.billingHelper.BillingHelperFragment"
+        android:name="com.jerny.moiz.presentation.billingHelper.BillingHelperFragment"
         android:label="BillingHelperFragment"
         tools:layout="@layout/billing_helper_fragment" />
 </navigation>

@@ -7,7 +7,7 @@
 
         <variable
             name="activity"
-            type="com.example.moiz.presentation.login.LoginActivity" />
+            type="com.jerny.moiz.presentation.login.LoginActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
