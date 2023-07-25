@@ -35,7 +35,7 @@
 
     </LinearLayout>
 
-    <com.example.moiz.presentation.util.CustomNestedScrollView
+    <com.jerny.moiz.presentation.util.CustomNestedScrollView
         android:id="@+id/nsv_travel_detail"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -119,7 +119,7 @@
                 android:nestedScrollingEnabled="true" />
 
         </LinearLayout>
-    </com.example.moiz.presentation.util.CustomNestedScrollView>
+    </com.jerny.moiz.presentation.util.CustomNestedScrollView>
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/gr_bottom_navigation"
