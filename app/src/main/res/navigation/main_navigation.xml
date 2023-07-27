@@ -25,6 +25,18 @@
         tools:layout="@layout/create_travel_list_fragment" />
 
     <fragment
+        android:id="@+id/AddWishListFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.AddWishListFragment"
+        android:label="AddWishListFragment"
+        tools:layout="@layout/fragment_add_wish_list" />
+
+    <fragment
+        android:id="@+id/AddScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.AddScheduleFragment"
+        android:label="AddScheduleFragment"
+        tools:layout="@layout/fragment_add_schedule" />
+
+    <fragment
         android:id="@+id/detailBillingFragment"
         android:name="com.jerny.moiz.presentation.billing.detail.BillingDetailFragment"
         android:label="BillingDetailFragment"
@@ -74,14 +86,19 @@
         <action
             android:id="@+id/action_billingFragment_to_detailBillingFragment"
             app:destination="@id/detailBillingFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_addWishListFragment"
+            app:destination="@id/AddWishListFragment" />
+        <action
+            android:id="@+id/action_billingFragment_to_addScheduleFragment"
+            app:destination="@id/AddScheduleFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/billingFragment"
         android:name="com.jerny.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
-        tools:layout="@layout/fragment_billing">
-    </fragment>
+        tools:layout="@layout/fragment_billing"></fragment>
 
     <fragment
         android:id="@+id/addBillingFragment"
