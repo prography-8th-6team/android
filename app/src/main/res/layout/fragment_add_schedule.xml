@@ -187,7 +187,7 @@
         app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
 
     <TextView
-        android:id="@+id/tv_add_billing"
+        android:id="@+id/tv_add_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_F1F0F0"
@@ -217,5 +217,5 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/ll_content"
         app:layout_constraintEnd_toEndOf="parent" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>
