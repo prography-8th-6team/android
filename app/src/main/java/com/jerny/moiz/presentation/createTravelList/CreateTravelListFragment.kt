@@ -18,7 +18,8 @@ import com.jerny.moiz.databinding.CreateTravelListFragmentBinding
 import com.jerny.moiz.domain.model.Currency
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint class CreateTravelListFragment : Fragment() {
+@AndroidEntryPoint
+class CreateTravelListFragment : Fragment() {
     private lateinit var binding: CreateTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<CreateTravelListViewModel>()
@@ -39,6 +40,8 @@ import dagger.hilt.android.AndroidEntryPoint
         initSpinner()
         setDatePickerDialog()
         setRadioGroup()
+
+        binding.imgBack.setOnClickListener { findNavController().popBackStack() }
 
         binding.btnCreate.setOnClickListener { postTravel() }
         viewModel.isEnabled.observe(viewLifecycleOwner) {
@@ -113,7 +116,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("f9b7a4")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f9b7a4))
+                            requireContext(), R.color.color_f9b7a4
+                        )
+                    )
                 }
 
                 R.id.btn_d8f4f1 -> {
@@ -125,7 +130,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("d8f4f1")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_d8f4f1))
+                            requireContext(), R.color.color_d8f4f1
+                        )
+                    )
                 }
 
                 R.id.btn_f8f2c3 -> {
@@ -137,7 +144,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("f8f2c3")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f8f2c3))
+                            requireContext(), R.color.color_f8f2c3
+                        )
+                    )
                 }
 
                 R.id.btn_a4e8c0 -> {
@@ -149,7 +158,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("a4e8c0")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_a4e8c0))
+                            requireContext(), R.color.color_a4e8c0
+                        )
+                    )
                 }
 
                 R.id.btn_abe8ff -> {
@@ -161,7 +172,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("abe8ff")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_abe8ff))
+                            requireContext(), R.color.color_abe8ff
+                        )
+                    )
                 }
 
                 else -> {
@@ -173,7 +186,9 @@ import dagger.hilt.android.AndroidEntryPoint
                     viewModel.setColor("f4f4f4")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f4f4f4))
+                            requireContext(), R.color.color_f4f4f4
+                        )
+                    )
                 }
             }
         }
@@ -185,7 +200,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f9b7a4))
+                    requireContext(), R.color.color_f9b7a4
+                )
+            )
         }
 
         binding.btnD8f4f1.apply {
@@ -193,7 +210,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_d8f4f1))
+                    requireContext(), R.color.color_d8f4f1
+                )
+            )
         }
 
         binding.btnF8f2c3.apply {
@@ -201,7 +220,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f8f2c3))
+                    requireContext(), R.color.color_f8f2c3
+                )
+            )
         }
 
         binding.btnA4e8c0.apply {
@@ -209,7 +230,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_a4e8c0))
+                    requireContext(), R.color.color_a4e8c0
+                )
+            )
         }
 
         binding.btnAbe8ff.apply {
@@ -217,7 +240,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_abe8ff))
+                    requireContext(), R.color.color_abe8ff
+                )
+            )
         }
 
         binding.btnF4f4f4.apply {
@@ -225,7 +250,9 @@ import dagger.hilt.android.AndroidEntryPoint
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f4f4f4))
+                    requireContext(), R.color.color_f4f4f4
+                )
+            )
         }
     }
 
@@ -236,7 +263,8 @@ import dagger.hilt.android.AndroidEntryPoint
             end_date = viewModel.endDate.value?.replace(".", "-"),
             color = viewModel.color.value,
             description = viewModel.memo.value,
-            currency = viewModel.currency.value)
+            currency = viewModel.currency.value
+        )
 
         UserDataStore.getUserToken(requireContext())
             .asLiveData()
