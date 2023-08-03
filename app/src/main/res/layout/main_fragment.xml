@@ -71,19 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="40dp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/tv_empty_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/pretendard_medium"
-                        android:gravity="center"
-                        android:text="하단 +버튼을 눌러\n여행 리스트를 추가해보세요!"
-                        android:textColor="@color/color_BCBCBC"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:layout_marginTop="40dp" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
