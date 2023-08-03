@@ -69,7 +69,7 @@ class TravelDetailFragment : Fragment() {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment(startDate, endDate))
+            ScheduleFragment(args.travelId, startDate, endDate))
 
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 

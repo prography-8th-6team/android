@@ -1,5 +1,6 @@
 package com.jerny.moiz.data.network
 
+import com.jerny.moiz.data.network.service.ScheduleService
 import com.jerny.moiz.data.network.service.TravelService
 import com.jerny.moiz.data.network.service.UserService
 import dagger.Module
@@ -35,6 +36,11 @@ class NetworkModule {
     @Singleton
     fun provideTravelService(retrofit: Retrofit): TravelService =
         retrofit.create(TravelService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideScheduleService(retrofit: Retrofit): ScheduleService =
+        retrofit.create(ScheduleService::class.java)
 
     @Provides
     @Singleton
