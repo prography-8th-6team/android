@@ -1,6 +1,6 @@
 package com.jerny.moiz.domain.usecase
 
-import com.jerny.moiz.data.network.dto.ScheduleDto
+import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.domain.repository.ScheduleRepository
 import javax.inject.Inject
 
@@ -10,6 +10,6 @@ class GetScheduleListUseCase @Inject constructor(
     suspend operator fun invoke(
         token: String,
         id: String,
-        type:Int
-    ): List<ScheduleDto> = repository.getScheduleList(token, id, type)
+        type: Int,
+    ): ResponseScheduleListDto = repository.getScheduleList(token, id, type)
 }

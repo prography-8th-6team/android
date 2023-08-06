@@ -17,10 +17,10 @@ class ScheduleViewModel @Inject constructor(
     private val _scheduleList = MutableLiveData<List<ScheduleDto>>()
     val scheduleList: LiveData<List<ScheduleDto>> = _scheduleList
 
-    fun getScheduleList(token: String, id: String, type: Int =2) {
+    fun getScheduleList(token: String, id: String, type: Int = 2) {
         viewModelScope.launch {
             getScheduleListUseCase.invoke(token, id, type).let {
-                _scheduleList.value = it
+                _scheduleList.value = it.results?.schedules!!
             }
         }
     }

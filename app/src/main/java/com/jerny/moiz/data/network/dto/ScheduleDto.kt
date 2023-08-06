@@ -2,11 +2,28 @@ package com.jerny.moiz.data.network.dto
 
 import com.google.gson.annotations.SerializedName
 
+data class ScheduleListDto(
+    @SerializedName("id")
+    val id:Int?,
+    @SerializedName("description")
+    val description:String?,
+    @SerializedName("members")
+    val members: List<String>?,
+    @SerializedName("title")
+    val title:String?,
+    @SerializedName("start_date")
+    val start_date:String?,
+    @SerializedName("end_date")
+    val end_date:String?,
+    @SerializedName("schedules")
+    val schedules:List<ScheduleDto>?
+)
+
 data class ScheduleDto(
     @SerializedName("travel")
     val travel:Int?,
     @SerializedName("images")
-    val images:List<ScheduleImage>,
+    val images:List<String?>,
     @SerializedName("id")
     val id:Int?,
     @SerializedName("title")
@@ -28,15 +45,9 @@ data class ScheduleDto(
     @SerializedName("updated")
     val updated:String?,
 )
-
-data class ScheduleImage(
-    @SerializedName("image")
-    val image:String?,
-)
-
 data class ResponseScheduleListDto(
     @SerializedName("message")
     val message: String?,
     @SerializedName("results")
-    val results: List<ScheduleDto>?,
+    val results: ScheduleListDto?,
 )
