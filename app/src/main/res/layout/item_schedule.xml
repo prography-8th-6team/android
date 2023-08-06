@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_total"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="23dp"
-    android:orientation="horizontal">
+    android:layout_marginStart="19dp"
+    android:orientation="horizontal"
+    android:paddingVertical="16dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,6 +17,7 @@
             android:id="@+id/tv_order"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_gravity="center"
             android:background="@drawable/bg_circle"
             android:backgroundTint="@color/color_d8f4f1"
             android:fontFamily="@font/pretendard_regular"
@@ -28,16 +31,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_regular"
-            android:text="11:00"
+            android:text="11:00-12:30"
             android:textColor="@color/color_707070"
             android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:background="@drawable/bg_radius_15"
+        android:layout_marginStart="17dp"
+        android:background="@drawable/bg_radius_5"
         android:backgroundTint="@color/color_F9F9F9"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
@@ -53,6 +57,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_description"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:fontFamily="@font/pretendard_regular"
@@ -61,6 +66,4 @@
             android:textSize="12sp" />
 
     </LinearLayout>
-
-
 </LinearLayout>
