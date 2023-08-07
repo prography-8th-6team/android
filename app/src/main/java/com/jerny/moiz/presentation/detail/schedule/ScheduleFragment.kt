@@ -38,6 +38,9 @@ class ScheduleFragment(
 
     private val wishList = arrayListOf<Fragment>()
 
+    private val fragmentList = arrayListOf<Fragment>()
+    private val tabTitles = arrayListOf<String>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
