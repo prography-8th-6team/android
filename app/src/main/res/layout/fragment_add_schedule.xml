@@ -201,4 +201,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_imgCnt"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="-6dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/color_F55C5C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="6sp"
+        android:translationZ="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/ll_content"
+        app:layout_constraintEnd_toEndOf="parent" />
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
