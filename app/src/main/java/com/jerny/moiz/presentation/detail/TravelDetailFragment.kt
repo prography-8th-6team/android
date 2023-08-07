@@ -17,6 +17,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.ItemTravelMemberBinding
@@ -27,10 +28,6 @@ import com.jerny.moiz.presentation.detail.schedule.ScheduleFragment
 import com.jerny.moiz.presentation.util.CustomDialog
 import com.jerny.moiz.presentation.util.showOrHide
 import com.jerny.moiz.presentation.util.toCostFormat
-import com.google.android.material.tabs.TabLayoutMediator
-import com.skydoves.balloon.Balloon
-import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -57,19 +54,23 @@ class TravelDetailFragment : Fragment() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it"
-            )
+                args.travelId, "Bearer $it")
         }
         initViews()
-        initViewPager()
+
+        viewModel.list.observe(viewLifecycleOwner) {
+            if (!it.start_date.isNullOrEmpty() && !it.end_date.isNullOrEmpty()) {
+                initViewPager(it.start_date, it.end_date)
+            }
+        }
     }
 
-    private fun initViewPager() {
+    private fun initViewPager(startDate: String, endDate: String) {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment()
-        )
+            ScheduleFragment(args.travelId, startDate, endDate))
+
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
@@ -89,25 +90,27 @@ class TravelDetailFragment : Fragment() {
                 0 -> tab.text = "가계부"
                 1 -> tab.text = "계산도우미"
                 2 -> {
-                    tab.text = "일정"
+                    tab.text = "일정"/*
                     tab.view.isClickable = false
                     tab.view.setOnTouchListener { _, action ->
                         if (action.action == 0) {
-                            val balloon = Balloon.Builder(requireContext())
-                                .setHeight(BalloonSizeSpec.WRAP)
-                                .setText("일정 기능은 출시 예정입니다.")
-                                .setTextColorResource(R.color.color_555555)
-                                .setBackgroundColorResource(R.color.white)
-                                .setTextSize(14f)
-                                .setPadding(12)
-                                .setCornerRadius(8f)
-                                .setBalloonAnimation(BalloonAnimation.ELASTIC)
-                                .build()
+                            val balloon =
+                                Balloon.Builder(requireContext())
+                                    .setHeight(BalloonSizeSpec.WRAP)
+                                    .setText("일정 기능은 출시 예정입니다.")
+                                    .setTextColorResource(R.color.color_555555)
+                                    .setBackgroundColorResource(R.color.white)
+                                    .setTextSize(14f)
+                                    .setPadding(12)
+                                    .setCornerRadius(8f)
+                                    .setBalloonAnimation(BalloonAnimation.ELASTIC)
+                                    .build()
                             balloon.showAsDropDown(tab.view)
                             balloon.dismissWithDelay(1500L)
                         }
                         true
                     }
+                    */
                 }
             }
         }.attach()
