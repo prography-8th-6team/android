@@ -58,7 +58,8 @@ class TravelDetailFragment : Fragment() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it")
+                args.travelId, "Bearer $it"
+            )
         }
         initViews()
 
@@ -73,7 +74,8 @@ class TravelDetailFragment : Fragment() {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment(args.travelId, startDate, endDate))
+            ScheduleFragment(args.travelId, startDate, endDate)
+        )
 
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
@@ -126,7 +128,9 @@ class TravelDetailFragment : Fragment() {
 
             popupView.findViewById<TextView>(R.id.tv_schedule).setOnClickListener {
                 popupWindow.dismiss()
-                findNavController().navigate(R.id.action_billingFragment_to_addScheduleFragment)
+                findNavController().navigate(
+                    R.id.goto_add_schedule, bundleOf("travelId" to args.travelId)
+                )
             }
         }
 

@@ -25,12 +25,6 @@
         tools:layout="@layout/create_travel_list_fragment" />
 
     <fragment
-        android:id="@+id/AddWishListFragment"
-        android:name="com.jerny.moiz.presentation.detail.schedule.AddWishListFragment"
-        android:label="AddWishListFragment"
-        tools:layout="@layout/fragment_add_wish_list" />
-
-    <fragment
         android:id="@+id/AddScheduleFragment"
         android:name="com.jerny.moiz.presentation.detail.schedule.AddScheduleFragment"
         android:label="AddScheduleFragment"
@@ -77,6 +71,9 @@
         <action
             android:id="@+id/goto_add_billing"
             app:destination="@id/addBillingFragment" />
+        <action
+            android:id="@+id/goto_add_schedule"
+            app:destination="@id/AddScheduleFragment" />
         <argument
             android:name="travelId"
             app:argType="integer" />
@@ -99,6 +96,16 @@
         android:name="com.jerny.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
         tools:layout="@layout/fragment_billing"></fragment>
+
+    <fragment
+        android:id="@+id/AddWishListFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.AddWishListFragment"
+        android:label="AddWishListFragment"
+        tools:layout="@layout/fragment_add_wish_list">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/addBillingFragment"

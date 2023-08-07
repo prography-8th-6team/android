@@ -39,11 +39,11 @@ class AddScheduleViewModel @Inject constructor(
         _isValidated.value = when (type) {
             // type 1 : 장바구니, type 2 : 일정
             1 -> {
-                title != "" && description != "" && category != ""
+                title != "" && category != ""
             }
 
             else -> {
-                title != "" && description != "" && category != "" && date != "" && start_at != "" && end_at != ""
+                title != "" && category != "" && date != "" && start_at != "" && end_at != ""
             }
         }
     }
@@ -51,41 +51,36 @@ class AddScheduleViewModel @Inject constructor(
     fun updateParam(type: Int, value: Any?) {
         when (type) {
             0 -> {
-                paramList.value?.travel = value as Int?
-                isValidate()
-            }
-
-            1 -> {
                 paramList.value?.title = value as String?
                 isValidate()
             }
 
-            2 -> {
+            1 -> {
                 paramList.value?.description = value as String?
                 isValidate()
             }
 
-            3 -> {
+            2 -> {
                 paramList.value?.type = value as Int?
                 isValidate()
             }
 
-            4 -> {
+            3 -> {
                 paramList.value?.category = value as String?
                 isValidate()
             }
 
-            5 -> {
+            4 -> {
                 paramList.value?.date = value as String?
                 isValidate()
             }
 
-            6 -> {
+            5 -> {
                 paramList.value?.start_at = value as String?
                 isValidate()
             }
 
-            7 -> {
+            6 -> {
                 paramList.value?.end_at = value as String?
                 isValidate()
             }
