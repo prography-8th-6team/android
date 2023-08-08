@@ -19,9 +19,11 @@ import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.MainFragmentBinding
 import com.jerny.moiz.presentation.login.LoginActivity
+import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint class MainFragment : Fragment() {
+@AndroidEntryPoint
+class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
     private lateinit var adapter: TravelAdapter
     val viewModel by viewModels<MainViewModel>()
@@ -52,7 +54,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
         getTravelList()
         getUserProfile()
-        viewModel.list.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        viewModel.list.observe(viewLifecycleOwner) {
+            binding.rvTravelList.showOrGone(it.isNotEmpty())
+            binding.tvEmptyList.showOrGone(it.isEmpty())
+            adapter.submitList(it)
+        }
         viewModel.nickName.observe(viewLifecycleOwner) {
             binding.tvTitle.text = "${it}님의 여행 리스트"
         }
@@ -72,7 +78,8 @@ import dagger.hilt.android.AndroidEntryPoint
         viewModel.response.observe(viewLifecycleOwner) {
             if (it.message == "Forbidden") {
                 val intent = Intent(
-                    requireContext(), LoginActivity::class.java)
+                    requireContext(), LoginActivity::class.java
+                )
                 startActivity(intent)
                 requireActivity().finish()
             } else {
@@ -101,6 +108,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
     private fun goToDetail(travelId: Int) {
         findNavController().navigate(
-            R.id.action_mainFragment_to_detailFragment, bundleOf("travelId" to travelId))
+            R.id.action_mainFragment_to_detailFragment, bundleOf("travelId" to travelId)
+        )
     }
 }
