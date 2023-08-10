@@ -28,7 +28,11 @@
         android:id="@+id/AddScheduleFragment"
         android:name="com.jerny.moiz.presentation.detail.schedule.AddScheduleFragment"
         android:label="AddScheduleFragment"
-        tools:layout="@layout/fragment_add_schedule" />
+        tools:layout="@layout/fragment_add_schedule">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailBillingFragment"
@@ -87,7 +91,7 @@
             android:id="@+id/action_detailFragment_to_addWishListFragment"
             app:destination="@id/AddWishListFragment" />
         <action
-            android:id="@+id/action_billingFragment_to_addScheduleFragment"
+            android:id="@+id/action_detailFragment_to_addScheduleFragment"
             app:destination="@id/AddScheduleFragment" />
     </fragment>
 

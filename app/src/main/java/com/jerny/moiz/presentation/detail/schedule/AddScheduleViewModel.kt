@@ -38,11 +38,11 @@ class AddScheduleViewModel @Inject constructor(
         _isValidated.value = when (type) {
             // type pending : 장바구니, type confirmed : 일정
             "pending" -> {
-                title != "" && category != ""
+                title != ""
             }
 
             else -> {
-                title != "" && category != "" && date != "" && start_at != "" && end_at != ""
+                title != "" && date != "" && start_at != "" && end_at != ""
             }
         }
     }
