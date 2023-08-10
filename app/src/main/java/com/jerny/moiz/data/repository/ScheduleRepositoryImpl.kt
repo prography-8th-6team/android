@@ -11,6 +11,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import timber.log.Timber
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: ScheduleService) :
@@ -33,20 +34,19 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
 
     override suspend fun postSchedule(
         token: String,
-        id: Int,
+        travelId: Int,
         data: PostScheduleDto,
         imgList: List<FileResult>?
     ) {
         val temp = hashMapOf<String, RequestBody>()
-        temp["travel"] = data.travel.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["title"] = data.title.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["description"] =
-            data.description.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         temp["type"] = data.type.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        temp["date"] = data.date.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["title"] = data.title.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         temp["start_at"] = data.start_at.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         temp["end_at"] = data.end_at.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["date"] = data.date.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["category"] = data.category.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        temp["description"] =
+            data.description.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
@@ -54,6 +54,6 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
             )
         }
 
-        scheduleService.postTravelSchedule(token, id.toString(), temp, imgFile)
+        scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
     }
 }

@@ -10,7 +10,7 @@ interface ScheduleRepository {
 
     suspend fun postSchedule(
         token: String,
-        id: Int,
+        travelId: Int,
         data: PostScheduleDto,
         imgList: List<FileResult>?
     )

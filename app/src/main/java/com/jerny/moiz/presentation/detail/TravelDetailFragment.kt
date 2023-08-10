@@ -123,7 +123,7 @@ class TravelDetailFragment : Fragment() {
 
             popupView.findViewById<TextView>(R.id.tv_wishList).setOnClickListener {
                 popupWindow.dismiss()
-                findNavController().navigate(R.id.action_billingFragment_to_addWishListFragment)
+                findNavController().navigate(R.id.action_detailFragment_to_addWishListFragment, bundleOf("travelId" to args.travelId))
             }
 
             popupView.findViewById<TextView>(R.id.tv_schedule).setOnClickListener {

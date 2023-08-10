@@ -55,9 +55,7 @@ data class ResponseScheduleListDto(
 
 data class PostScheduleDto(
     @SerializedName("type")
-    var type: Int?,
-    @SerializedName("travel")
-    var travel: Int?,
+    var type: String?,
     @SerializedName("title")
     var title: String?,
     @SerializedName("description")

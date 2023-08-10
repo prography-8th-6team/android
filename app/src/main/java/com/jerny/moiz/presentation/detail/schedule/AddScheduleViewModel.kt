@@ -25,10 +25,9 @@ class AddScheduleViewModel @Inject constructor(
     val isValidated: LiveData<Boolean> = _isValidated
 
     private var paramList: MutableLiveData<PostScheduleDto> = PostScheduleDto(
-        travel = 0,
         title = "",
         description = "",
-        type = 0,
+        type = "",
         category = "",
         date = "",
         start_at = "",
@@ -37,8 +36,8 @@ class AddScheduleViewModel @Inject constructor(
 
     private fun isValidate() = with(paramList.value!!) {
         _isValidated.value = when (type) {
-            // type 1 : 장바구니, type 2 : 일정
-            1 -> {
+            // type pending : 장바구니, type confirmed : 일정
+            "pending" -> {
                 title != "" && category != ""
             }
 
@@ -61,7 +60,7 @@ class AddScheduleViewModel @Inject constructor(
             }
 
             2 -> {
-                paramList.value?.type = value as Int?
+                paramList.value?.type = value as String?
                 isValidate()
             }
 
@@ -87,9 +86,9 @@ class AddScheduleViewModel @Inject constructor(
         }
     }
 
-    fun postSchedule(id: Int, token: String, imgList: List<FileResult>) {
+    fun postSchedule(token: String, travelId: Int, imgList: List<FileResult>) {
         viewModelScope.launch {
-            postScheduleUseCase.invoke(id, token, paramList.value!!, imgList)
+            postScheduleUseCase.invoke(token, travelId, paramList.value!!, imgList)
         }
     }
 }

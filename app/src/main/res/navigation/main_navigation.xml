@@ -84,7 +84,7 @@
             android:id="@+id/action_billingFragment_to_detailBillingFragment"
             app:destination="@id/detailBillingFragment" />
         <action
-            android:id="@+id/action_billingFragment_to_addWishListFragment"
+            android:id="@+id/action_detailFragment_to_addWishListFragment"
             app:destination="@id/AddWishListFragment" />
         <action
             android:id="@+id/action_billingFragment_to_addScheduleFragment"
