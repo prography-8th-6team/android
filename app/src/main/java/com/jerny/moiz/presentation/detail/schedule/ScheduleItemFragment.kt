@@ -16,7 +16,7 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
     private lateinit var binding: FragmentScheduleItemBinding
     private val viewModel: ScheduleViewModel by viewModels()
     private lateinit var adapter: ScheduleAdapter
-    private lateinit var list: List<ScheduleDto>
+    private lateinit var list: ArrayList<ScheduleDto>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,10 +41,10 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
 //        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
 //            viewModel.getScheduleList("Bearer $it", id.toString())
 //        }
-        adapter = ScheduleAdapter(requireContext())
+        adapter = ScheduleAdapter(requireContext(), list)
         rvSchedule.layoutManager = LinearLayoutManager(context)
         rvSchedule.adapter = adapter
-        adapter.submitList(list)
+
 
 //        viewModel.scheduleList.observe(viewLifecycleOwner) { data ->
 //            adapter.submitList(data)
@@ -52,7 +52,7 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
     }
 
     private fun setList() {
-        list = listOf(
+        list = arrayListOf(
             ScheduleDto(
                 travel = 34,
                 images = listOf(),

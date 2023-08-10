@@ -7,16 +7,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout.LayoutParams
 import android.widget.LinearLayout
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jerny.moiz.R
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(
-    DiffCallback) {
+class ScheduleAdapter(private val context: Context, private val items: ArrayList<ScheduleDto>) :
+    RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
@@ -62,20 +60,14 @@ class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, S
         return ViewHolder(binding)
     }
 
+    override fun getItemCount() = items.size
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(items[position])
     }
 
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ScheduleDto>() {
-            override fun areItemsTheSame(oldItem: ScheduleDto, newItem: ScheduleDto): Boolean {
-                return (oldItem.id == newItem.id)
-            }
-
-            override fun areContentsTheSame(oldItem: ScheduleDto, newItem: ScheduleDto): Boolean {
-                return oldItem == newItem
-            }
-        }
+    fun removeData(position: Int) {
+        items.removeAt(position)
+        notifyItemChanged(position)
     }
-
 }
