@@ -3,6 +3,7 @@ package com.jerny.moiz.data.network.service
 import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.data.network.dto.ResponseScheduleDto
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
+import com.jerny.moiz.data.network.dto.ScheduleDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

@@ -104,6 +104,7 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
                 "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
         }
         scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
+        scheduleService.putTravelSchedule(token, travel_pk, id, temp, imgFile)
     }
 
 }
