@@ -17,28 +17,28 @@ import com.jerny.moiz.databinding.FragmentScheduleItemBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScheduleItemFragment(private val travel_pk:Int, private val date:String) : Fragment() {
-    private lateinit var binding:FragmentScheduleItemBinding
-    private val viewModel:ScheduleViewModel by viewModels()
-    private lateinit var adapter:ScheduleAdapter
+class ScheduleItemFragment(private val travel_pk: Int, private val date: String) : Fragment() {
+    private lateinit var binding: FragmentScheduleItemBinding
+    private val viewModel: ScheduleViewModel by viewModels()
+    private lateinit var adapter: ScheduleAdapter
     private val list = MutableLiveData<ArrayList<ScheduleDto>>(arrayListOf())
 
     override fun onCreateView(
-        inflater:LayoutInflater,
-        container:ViewGroup?,
-        savedInstanceState:Bundle?,
-    ):View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         binding = FragmentScheduleItemBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view:View, savedInstanceState:Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        setList()
         initViews()
 
         adapter = ScheduleAdapter(requireContext(), object : ScheduleAdapter.OnClickListener {
-            override fun delete(id:Int) {
+            override fun delete(id: Int) {
                 deleteSchedule(id)
             }
 
@@ -74,11 +74,12 @@ class ScheduleItemFragment(private val travel_pk:Int, private val date:String) :
         }
     }
 
-    private fun deleteSchedule(id:Int) {
+    private fun deleteSchedule(id: Int) {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             viewModel.deleteSchedule("Bearer $it", travel_pk.toString(), id.toString())
         }
     }
+
 //    private fun setList() {
 //        list.value = arrayListOf(
 //            ScheduleDto(

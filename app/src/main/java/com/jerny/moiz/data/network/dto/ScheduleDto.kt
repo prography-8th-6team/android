@@ -53,6 +53,13 @@ data class ResponseScheduleListDto(
     val results: ScheduleListDto?,
 )
 
+data class ResponseScheduleDto(
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("results")
+    val results: ScheduleDto?,
+)
+
 data class PostScheduleDto(
     @SerializedName("type")
     var type: String?,
