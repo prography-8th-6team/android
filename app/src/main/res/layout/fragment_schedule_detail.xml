@@ -51,6 +51,7 @@
         app:layout_constraintTop_toBottomOf="@id/ll_toolbar">
 
         <TextView
+            android:id="@+id/tv_wish_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -64,6 +65,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/tv_schedule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -259,7 +261,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_end" />
 
-    <EditText
+    <TextView
         android:id="@+id/et_memo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -268,11 +270,17 @@
         android:layout_marginEnd="16dp"
         android:background="@null"
         android:fontFamily="@font/pretendard_regular"
-        android:hint="메모를 입력하세요"
         android:textColor="@color/color_2f3233"
         android:textColorHint="@color/color_bcbcbc"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_memo"
         app:layout_constraintTop_toBottomOf="@id/dp_end_date" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/schedule_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="dp_end_date, tv_end, dp_start_date, tv_start, dp_date, tv_date" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
