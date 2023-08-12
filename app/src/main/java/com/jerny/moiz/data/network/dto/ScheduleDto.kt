@@ -8,7 +8,7 @@ data class ScheduleListDto(
     @SerializedName("description")
     val description:String?,
     @SerializedName("members")
-    val members: List<String>?,
+    val members:List<String>?,
     @SerializedName("title")
     val title:String?,
     @SerializedName("start_date")
@@ -16,7 +16,7 @@ data class ScheduleListDto(
     @SerializedName("end_date")
     val end_date:String?,
     @SerializedName("schedules")
-    val schedules:List<ScheduleDto>?
+    val schedules:List<ScheduleDto>?,
 )
 
 data class ScheduleDto(
@@ -31,7 +31,7 @@ data class ScheduleDto(
     @SerializedName("description")
     val description:String?,
     @SerializedName("type")
-    val type:Int?,
+    val type:String?,
     @SerializedName("category")
     val category:String?,
     @SerializedName("date")
@@ -45,9 +45,10 @@ data class ScheduleDto(
     @SerializedName("updated")
     val updated:String?,
 )
+
 data class ResponseScheduleListDto(
     @SerializedName("message")
-    val message: String?,
+    val message:String?,
     @SerializedName("results")
-    val results: ScheduleListDto?,
+    val results:ScheduleListDto?,
 )
