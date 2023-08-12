@@ -4,19 +4,19 @@ import com.google.gson.annotations.SerializedName
 
 data class ScheduleListDto(
     @SerializedName("id")
-    val id:Int?,
+    val id: Int?,
     @SerializedName("description")
-    val description:String?,
+    val description: String?,
     @SerializedName("members")
     val members: List<String>?,
     @SerializedName("title")
-    val title:String?,
+    val title: String?,
     @SerializedName("start_date")
-    val start_date:String?,
+    val start_date: String?,
     @SerializedName("end_date")
-    val end_date:String?,
+    val end_date: String?,
     @SerializedName("schedules")
-    val schedules:List<ScheduleDto>?
+    val schedules: List<ScheduleDto>?
 )
 
 data class ScheduleDto(
