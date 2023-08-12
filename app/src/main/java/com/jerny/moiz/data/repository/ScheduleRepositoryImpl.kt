@@ -112,7 +112,6 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
             )
         }
         scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
-        scheduleService.putTravelSchedule(token, travel_pk, id, temp, imgFile)
     }
     
 }
