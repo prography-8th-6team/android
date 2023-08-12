@@ -14,14 +14,14 @@ import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context: Context, private val items: MutableList<ScheduleDto>) :
+class ScheduleAdapter(private val context:Context, private val items:ArrayList<ScheduleDto>) :
     RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
-    val Int.dp: Int
+    val Int.dp:Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-    inner class ViewHolder(private val binding: ItemScheduleBinding) : RecyclerView.ViewHolder(
+    inner class ViewHolder(private val binding:ItemScheduleBinding) : RecyclerView.ViewHolder(
         binding.root) {
-        fun bind(schedule: ScheduleDto) {
+        fun bind(schedule:ScheduleDto) {
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
 
@@ -60,7 +60,7 @@ class ScheduleAdapter(private val context: Context, private val items: MutableLi
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent:ViewGroup, viewType:Int):ViewHolder {
         val binding =
             ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -68,14 +68,13 @@ class ScheduleAdapter(private val context: Context, private val items: MutableLi
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder:ViewHolder, position:Int) {
         holder.bind(items[position])
 
     }
 
-    fun removeData(position: Int) {
+    fun removeData(position:Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
-        notifyDataSetChanged()
     }
 }
