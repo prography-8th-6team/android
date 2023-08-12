@@ -1,11 +1,14 @@
 package com.jerny.moiz.presentation.detail.schedule
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.FragmentScheduleItemBinding
@@ -16,7 +19,8 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
     private lateinit var binding: FragmentScheduleItemBinding
     private val viewModel: ScheduleViewModel by viewModels()
     private lateinit var adapter: ScheduleAdapter
-    private lateinit var list: ArrayList<ScheduleDto>
+    private val list = MutableLiveData<ArrayList<ScheduleDto>>(arrayListOf())
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,14 +41,26 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
         binding.root.requestLayout()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initViews() = with(binding) {
 //        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
 //            viewModel.getScheduleList("Bearer $it", id.toString())
 //        }
-        adapter = ScheduleAdapter(requireContext(), list)
+        adapter = list.value?.let { ScheduleAdapter(requireContext(), it) }!!
         rvSchedule.layoutManager = LinearLayoutManager(context)
         rvSchedule.adapter = adapter
 
+        val swiperHelperCallback = SwipeHelperCallback(adapter).apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+        }
+
+        ItemTouchHelper(swiperHelperCallback).attachToRecyclerView(binding.rvSchedule)
+
+        // 다른 곳 터치하면 기존 뷰 닫기
+        binding.rvSchedule.setOnTouchListener { view, motionEvent ->
+            swiperHelperCallback.removePreviousClamp(binding.rvSchedule)
+            false
+        }
 
 //        viewModel.scheduleList.observe(viewLifecycleOwner) { data ->
 //            adapter.submitList(data)
@@ -52,7 +68,7 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
     }
 
     private fun setList() {
-        list = arrayListOf(
+        list.value = arrayListOf(
             ScheduleDto(
                 travel = 34,
                 images = listOf(),

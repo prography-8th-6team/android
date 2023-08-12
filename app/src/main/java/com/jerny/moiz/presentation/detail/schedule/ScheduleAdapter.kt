@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout.LayoutParams
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.jerny.moiz.R
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context: Context, private val items: ArrayList<ScheduleDto>) :
+class ScheduleAdapter(private val context: Context, private val items: MutableList<ScheduleDto>) :
     RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
@@ -24,18 +25,17 @@ class ScheduleAdapter(private val context: Context, private val items: ArrayList
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
 
-            val totalParams =
-                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val totalParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             val scheduleParams =
                 LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             if (schedule.end_at.isNullOrEmpty()) {
                 binding.tvTime.text = "${schedule.start_at}"
-                totalParams.setMargins(37.dp, 0, 16.dp, 0)
+                totalParams.setMargins(37.dp, 0, 0, 0)
                 scheduleParams.setMargins(38.dp, 0, 0, 0)
 
             } else {
                 binding.tvTime.text = "${schedule.start_at}-${schedule.end_at}"
-                totalParams.setMargins(19.dp, 0, 16.dp, 0)
+                totalParams.setMargins(19.dp, 0, 0, 0)
                 scheduleParams.setMargins(17.dp, 0, 0, 0)
             }
             binding.llTotal.layoutParams = totalParams
@@ -51,6 +51,12 @@ class ScheduleAdapter(private val context: Context, private val items: ArrayList
             }
 
             binding.tvDescription.text = schedule.description
+
+            binding.tvRemove.setOnClickListener {
+                removeData(adapterPosition)
+                Toast.makeText(
+                    binding.root.context, "삭제 완료!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -64,10 +70,12 @@ class ScheduleAdapter(private val context: Context, private val items: ArrayList
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
+
     }
 
     fun removeData(position: Int) {
         items.removeAt(position)
-        notifyItemChanged(position)
+        notifyItemRemoved(position)
+        notifyDataSetChanged()
     }
 }
