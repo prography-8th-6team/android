@@ -7,13 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.jerny.moiz.data.network.dto.PostScheduleDto
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.domain.usecase.GetScheduleDetailUseCase
+import com.jerny.moiz.domain.usecase.PutTravelScheduleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleDetailViewModel @Inject constructor(
-    private val getScheduleDetailUseCase: GetScheduleDetailUseCase
+    private val getScheduleDetailUseCase: GetScheduleDetailUseCase,
+    private val putTravelScheduleUseCase: PutTravelScheduleUseCase
 ) : ViewModel() {
     private val _scheduleData = MutableLiveData<ScheduleDto?>()
     val scheduleData: LiveData<ScheduleDto?> = _scheduleData
@@ -43,13 +45,21 @@ class ScheduleDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateParam(type: String, date: String? = null, startAt: String? = null, endAt: String? = null) {
+    fun updateParam(
+        type: String,
+        date: String? = null,
+        startAt: String? = null,
+        endAt: String? = null
+    ) {
         paramList.value?.type = type
         paramList.value?.date = date
         paramList.value?.start_at = startAt
         paramList.value?.end_at = endAt
-
-
     }
 
+    fun putSchedule(token: String, travelId: Int, id: Int) {
+        viewModelScope.launch {
+            putTravelScheduleUseCase.invoke(token, travelId, id, paramList.value!!)
+        }
+    }
 }
