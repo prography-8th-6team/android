@@ -44,6 +44,8 @@ class ScheduleDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentScheduleDetailBinding
     private val viewModel: ScheduleDetailViewModel by viewModels()
+    private val args: ScheduleDetailFragmentArgs by navArgs()
+    private var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,30 +61,8 @@ class ScheduleDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getScheduleDetail("Bearer $it", "49", 16)
-        }
-
-        tvSchedule.setOnClickListener {
-            val dialog = ScheduleDialog() { date, start, end ->
-                setTop("confirmed")
-                viewModel.updateParam("confirmed", date, start, end)
-                scheduleGroup.show()
-                dpDate.text = date
-                dpStartDate.text = start
-                dpEndDate.text = end
-            }
-            dialog.isCancelable = false
-            dialog.show(requireActivity().supportFragmentManager, "schedule")
-        }
-
-        tvWishList.setOnClickListener {
-            val dialog = CustomDialog("일정에서 장바구니로 이동시키면 날짜와 시간이 모두 초기화됩니다.", "취소", "장바구니로 이동") {
-                setTop("pending")
-                viewModel.updateParam("pending")
-                scheduleGroup.gone()
-            }
-            dialog.isCancelable = false
-            dialog.show(requireActivity().supportFragmentManager, "wishList")
+            token = it
+            viewModel.getScheduleDetail("Bearer $token", args.travelId.toString(), 16)
         }
 
         ivBack.setOnClickListener {
@@ -94,6 +74,34 @@ class ScheduleDetailFragment : Fragment() {
                 setTop(data.type!!)
                 tvBillingTitle.text = data.title
                 etMemo.text = data.description
+
+                tvSchedule.setOnClickListener {
+                    val dialog = ScheduleDialog() { date, start, end ->
+                        setTop("confirmed")
+                        viewModel.updateParam("confirmed", date, start, end)
+                        scheduleGroup.show()
+                        dpDate.text = date
+                        dpStartDate.text = start
+                        dpEndDate.text = end
+
+                        viewModel.putSchedule("Bearer $token", args.travelId, data.id!!)
+                    }
+                    dialog.isCancelable = false
+                    dialog.show(requireActivity().supportFragmentManager, "schedule")
+                }
+
+                tvWishList.setOnClickListener {
+                    val dialog =
+                        CustomDialog("일정에서 장바구니로 이동시키면 날짜와 시간이 모두 초기화됩니다.", "취소", "장바구니로 이동") {
+                            setTop("pending")
+                            viewModel.updateParam("pending")
+                            scheduleGroup.gone()
+
+                            viewModel.putSchedule("Bearer $token", args.travelId, data.id!!)
+                        }
+                    dialog.isCancelable = false
+                    dialog.show(requireActivity().supportFragmentManager, "wishList")
+                }
 
                 scheduleGroup.showOrGone(data.type == "confirmed")
                 if (data.type == "confirmed") {

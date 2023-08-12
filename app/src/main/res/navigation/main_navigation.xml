@@ -80,8 +80,7 @@
         android:id="@+id/billingFragment"
         android:name="com.jerny.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
-        tools:layout="@layout/fragment_billing">
-    </fragment>
+        tools:layout="@layout/fragment_billing"></fragment>
 
     <fragment
         android:id="@+id/addBillingFragment"
@@ -92,6 +91,17 @@
             android:name="travelId"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/scheduleDetailFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.detail.ScheduleDetailFragment"
+        android:label="scheduleDetailFragment"
+        tools:layout="@layout/fragment_schedule_detail">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+    </fragment>
+
     <fragment
         android:id="@+id/billingHelperFragment"
         android:name="com.jerny.moiz.presentation.billingHelper.BillingHelperFragment"
