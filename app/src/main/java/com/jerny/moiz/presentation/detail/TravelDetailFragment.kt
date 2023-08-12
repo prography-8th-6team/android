@@ -58,7 +58,8 @@ class TravelDetailFragment : Fragment() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it")
+                args.travelId, "Bearer $it"
+            )
         }
         initViews()
 
