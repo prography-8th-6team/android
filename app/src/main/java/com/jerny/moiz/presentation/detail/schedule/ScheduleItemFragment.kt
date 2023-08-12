@@ -49,6 +49,7 @@ class ScheduleItemFragment(private val id: Int, private val date: String) : Frag
         adapter = list.value?.let { ScheduleAdapter(requireContext(), it) }!!
         rvSchedule.layoutManager = LinearLayoutManager(context)
         rvSchedule.adapter = adapter
+        adapter.submitList(list)
 
         val swiperHelperCallback = SwipeHelperCallback(adapter).apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
