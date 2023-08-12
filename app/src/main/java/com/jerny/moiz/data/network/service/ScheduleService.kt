@@ -57,6 +57,7 @@ interface ScheduleService {
         @Header("Authorization") token: String?,
         @Path("travel_pk") id: String,
         @PartMap data: HashMap<String, RequestBody>,
-        @Part img: List<MultipartBody.Part>? = null,
+        @Part img: List<MultipartBody.Part>? = null
     )
+
 }

@@ -49,6 +49,7 @@ interface ScheduleRepository {
         token: String,
         travelId: Int,
         data: PostScheduleDto,
-        imgList: List<FileResult>?,
+        imgList: List<FileResult>?
     )
+
 }
