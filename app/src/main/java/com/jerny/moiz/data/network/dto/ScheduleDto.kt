@@ -31,7 +31,7 @@ data class ScheduleDto(
     @SerializedName("description")
     val description:String?,
     @SerializedName("type")
-    val type:Int?,
+    val type:String?,
     @SerializedName("category")
     val category:String?,
     @SerializedName("date")
@@ -57,4 +57,21 @@ data class ResponseScheduleDto(
     val message: String?,
     @SerializedName("results")
     val results: ScheduleDto?,
+)
+
+data class PostScheduleDto(
+    @SerializedName("type")
+    var type: String?,
+    @SerializedName("title")
+    var title: String?,
+    @SerializedName("description")
+    var description: String?,
+    @SerializedName("start_at")
+    var start_at: String?,
+    @SerializedName("end_at")
+    var end_at: String?,
+    @SerializedName("date")
+    var date: String?,
+    @SerializedName("category")
+    var category: String?
 )
