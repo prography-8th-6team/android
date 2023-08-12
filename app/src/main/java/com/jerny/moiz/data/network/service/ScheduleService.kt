@@ -40,4 +40,14 @@ interface ScheduleService {
         @PartMap data: HashMap<String, RequestBody>,
         @Part img: List<MultipartBody.Part>? = null
     )
+
+    @Multipart
+    @POST("travels/{travel_pk}/schedules")
+    suspend fun postTravelSchedule(
+        @Header("Authorization") token: String?,
+        @Path("travel_pk") id: String,
+        @PartMap data: HashMap<String, RequestBody>,
+        @Part img: List<MultipartBody.Part>? = null
+    )
+
 }
