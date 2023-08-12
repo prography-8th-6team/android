@@ -1,5 +1,6 @@
 package com.jerny.moiz.data.repository
 
+import com.jerny.moiz.data.network.dto.ResponseScheduleDto
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.data.network.service.ScheduleService
 import com.jerny.moiz.domain.repository.ScheduleRepository
@@ -21,4 +22,19 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
 
         }
     }
+
+    override suspend fun getScheduleDetail(
+        token: String?,
+        travel_pk: String,
+        id: String
+    ): ResponseScheduleDto {
+        return if (scheduleService.getScheduleDetail(token, travel_pk, id).isSuccessful) {
+            scheduleService.getScheduleDetail(token, travel_pk, id).body()!!
+        } else {
+            ResponseScheduleDto(
+                message = scheduleService.getScheduleDetail(token, travel_pk, id).message(),
+                results = null)
+        }
+    }
+
 }
