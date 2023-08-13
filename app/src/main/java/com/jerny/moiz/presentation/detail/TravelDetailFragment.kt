@@ -28,6 +28,9 @@ import com.jerny.moiz.presentation.detail.schedule.ScheduleFragment
 import com.jerny.moiz.presentation.util.CustomDialog
 import com.jerny.moiz.presentation.util.showOrHide
 import com.jerny.moiz.presentation.util.toCostFormat
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Currency
 
@@ -90,7 +93,7 @@ class TravelDetailFragment : Fragment() {
                 0 -> tab.text = "가계부"
                 1 -> tab.text = "계산도우미"
                 2 -> {
-                    tab.text = "일정"/*
+                    tab.text = "일정"
                     tab.view.isClickable = false
                     tab.view.setOnTouchListener { _, action ->
                         if (action.action == 0) {
@@ -110,7 +113,6 @@ class TravelDetailFragment : Fragment() {
                         }
                         true
                     }
-                    */
                 }
             }
         }.attach()
