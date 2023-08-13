@@ -41,11 +41,13 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         data: TravelCreateDto,
         token: String,
     ): ResponseTravelCreateDto {
-        return if (travelService.postTravel(data, token).isSuccessful) {
-            travelService.postTravel(data, token).body()!!
+        val result = travelService.postTravel(data, token)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.postTravel(data, token).message(), results = null)
+                message = travelService.postTravel(data, token).message(), results = null
+            )
         }
     }
 
