@@ -6,19 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentJourneyBinding
 import com.jerny.moiz.presentation.detail.ViewPagerAdapter
-import com.jerny.moiz.presentation.util.gone
-import com.jerny.moiz.presentation.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,13 +23,9 @@ class ScheduleFragment(
     private val endDate: String,
 ) : Fragment() {
     private lateinit var binding: FragmentJourneyBinding
-    private val viewModel: ScheduleViewModel by viewModels()
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     private val fragmentList = arrayListOf<Fragment>()
     private val tabTitles = arrayListOf<String>()
-
-    private val wishList = arrayListOf<Fragment>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,42 +39,7 @@ class ScheduleFragment(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initFragmentList()
-
-        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getScheduleList("Bearer $it", id.toString(), "pending")
-        }
-
-        binding.ivHide.setOnClickListener {
-            if (binding.viewPager.visibility == View.GONE) binding.viewPager.show()
-            else binding.viewPager.gone()
-        }
-
-        viewModel.scheduleList.observe(viewLifecycleOwner) {
-            it.chunked(8).forEach { list ->
-                wishList.add(WishListItemFragment(list) {
-                    findNavController().navigate(
-                        R.id.action_detailFragment_to_scheduleDetailFragment,
-                        bundleOf("travelId" to id, "scheduleId" to it)
-                    )
-                })
-            }.run {
-                viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
-
-                binding.viewPager.apply {
-                    adapter = viewPagerAdapter
-
-                    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                        override fun onPageSelected(position: Int) {
-                            super.onPageSelected(position)
-                        }
-                    })
-                }
-
-            }
-        }
-
         binding.vpViewpagerSchedule.post {
             binding.vpViewpagerSchedule.currentItem = 0
         }

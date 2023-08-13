@@ -93,9 +93,6 @@
         <action
             android:id="@+id/action_detailFragment_to_addScheduleFragment"
             app:destination="@id/AddScheduleFragment" />
-        <action
-            android:id="@+id/action_detailFragment_to_scheduleDetailFragment"
-            app:destination="@id/scheduleDetailFragment" />
     </fragment>
 
     <fragment
@@ -131,9 +128,6 @@
         tools:layout="@layout/fragment_schedule_detail">
         <argument
             android:name="travelId"
-            app:argType="integer" />
-        <argument
-            android:name="scheduleId"
             app:argType="integer" />
     </fragment>
 

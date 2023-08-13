@@ -62,7 +62,7 @@ class ScheduleDetailFragment : Fragment() {
 
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = it
-            viewModel.getScheduleDetail("Bearer $token", args.travelId.toString(), args.scheduleId)
+            viewModel.getScheduleDetail("Bearer $token", args.travelId.toString(), 16)
         }
 
         ivBack.setOnClickListener {
