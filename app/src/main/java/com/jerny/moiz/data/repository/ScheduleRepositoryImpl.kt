@@ -1,5 +1,6 @@
 package com.jerny.moiz.data.repository
 
+import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.data.network.service.ScheduleService
 import com.jerny.moiz.domain.repository.ScheduleRepository
@@ -19,6 +20,19 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService:Sch
             ResponseScheduleListDto(
                 message = scheduleService.getScheduleList(token, id, type, date).message(),
                 results = null)
+        }
+    }
+
+    override suspend fun deleteSchedule(
+        token:String,
+        travel_pk:String?,
+        id:String?,
+    ):ResponseMessage {
+        return if (scheduleService.deleteSchedule(token, travel_pk, id).isSuccessful) {
+            scheduleService.deleteSchedule(token, travel_pk, id).body()!!
+        } else {
+            ResponseMessage(
+                message = scheduleService.deleteSchedule(token, travel_pk, id).message())
         }
     }
 }

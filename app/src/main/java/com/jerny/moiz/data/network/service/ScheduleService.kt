@@ -1,7 +1,9 @@
 package com.jerny.moiz.data.network.service
 
+import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -15,4 +17,11 @@ interface ScheduleService {
         @Query("type") type:String?,
         @Query("date") date:String?,
     ):Response<ResponseScheduleListDto>
+
+    @DELETE("travels/{travel_pk}/schedules/{id}")
+    suspend fun deleteSchedule(
+        @Header("Authorization") token:String?,
+        @Path("travel_pk") travel_pk:String?,
+        @Path("id") id:String?,
+    ):Response<ResponseMessage>
 }
