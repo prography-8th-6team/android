@@ -93,6 +93,26 @@ class AddBillingFragment : Fragment() {
         rvPaidForMembers.layoutManager = LinearLayoutManager(context)
         rvPaidForMembers.adapter = adapter
 
+        root.setOnClickListener {
+            val mInputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mInputMethodManager.hideSoftInputFromWindow(
+                root.windowToken,
+                0
+            )
+
+            if (etPrice.text.isNotEmpty()) {
+                viewModel.totalAmount = etPrice.text.toString().toDouble()
+                viewModel.updateTotalAmount()
+            }
+
+            if (etName.text.isNotEmpty()) {
+                viewModel.updateParam(0, etName.text.toString())
+            }
+            etPrice.clearFocus()
+            etName.clearFocus()
+        }
+
         viewModel.temp.observe(viewLifecycleOwner) {
             it?.let { adapter.submitList(it) }
         }
