@@ -13,11 +13,11 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService:Sch
         type:String?,
         date:String?,
     ):ResponseScheduleListDto {
-        return if (scheduleService.getTravelDetail(token, id, type, date).isSuccessful) {
-            scheduleService.getTravelDetail(token, id, type, date).body()!!
+        return if (scheduleService.getScheduleList(token, id, type, date).isSuccessful) {
+            scheduleService.getScheduleList(token, id, type, date).body()!!
         } else {
             ResponseScheduleListDto(
-                message = scheduleService.getTravelDetail(token, id, type, date).message(),
+                message = scheduleService.getScheduleList(token, id, type, date).message(),
                 results = null)
         }
     }

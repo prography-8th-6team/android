@@ -9,10 +9,10 @@ import retrofit2.http.Query
 
 interface ScheduleService {
     @GET("travels/{travel_pk}/schedules")
-    suspend fun getTravelDetail(
-        @Header("Authorization") token: String?,
-        @Path("travel_pk") id: String,
-        @Query("type") type: String?,
-        @Query("date") date: String?,
-    ): Response<ResponseScheduleListDto>
+    suspend fun getScheduleList(
+        @Header("Authorization") token:String?,
+        @Path("travel_pk") id:String,
+        @Query("type") type:String?,
+        @Query("date") date:String?,
+    ):Response<ResponseScheduleListDto>
 }
