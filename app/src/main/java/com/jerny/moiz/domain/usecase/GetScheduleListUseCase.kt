@@ -10,6 +10,6 @@ class GetScheduleListUseCase @Inject constructor(
     suspend operator fun invoke(
         token: String,
         id: String,
-        type: Int,
+        type: String,
     ): ResponseScheduleListDto = repository.getScheduleList(token, id, type)
 }

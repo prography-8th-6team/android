@@ -20,7 +20,7 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
     override suspend fun getScheduleList(
         token: String,
         id: String,
-        type: Int,
+        type: String,
     ): ResponseScheduleListDto {
         return if (scheduleService.getTravelDetail(token, id, type).isSuccessful) {
             scheduleService.getTravelDetail(token, id, type).body()!!
