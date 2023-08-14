@@ -21,7 +21,7 @@ interface ScheduleService {
     suspend fun getTravelDetail(
         @Header("Authorization") token: String?,
         @Path("travel_pk") id: String,
-        @Query("type") type: Int,
+        @Query("type") type: String,
     ): Response<ResponseScheduleListDto>
 
     @GET("travels/{travel_pk}/schedules/{id}")

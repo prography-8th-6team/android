@@ -7,7 +7,7 @@ import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.presentation.util.FileResult
 
 interface ScheduleRepository {
-    suspend fun getScheduleList(token: String, id: String, type: Int): ResponseScheduleListDto
+    suspend fun getScheduleList(token: String, id: String, type: String): ResponseScheduleListDto
 
     suspend fun getScheduleDetail(
         token: String?,
