@@ -50,11 +50,11 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
 
     override suspend fun putTravelSchedule(
         token: String?,
-        travel_pk: String,
+        travelPk: String,
         id: String,
         data: PostScheduleDto,
         imgList: List<FileResult>?
-    ) {
+    ): ResponseScheduleDto {
         val temp = hashMapOf<String, RequestBody>()
         temp["type"] = data.type.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         temp["title"] = data.title.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -70,10 +70,19 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
                 "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
             )
         }
+
+        val result = scheduleService.putTravelSchedule(token, travelPk, id, temp, imgFile)
         
-        scheduleService.putTravelSchedule(token, travel_pk, id, temp, imgFile)
+        return if (result.isSuccessful) {
+            result.body()!!
+        } else {
+            ResponseScheduleDto(
+                message = result.message(),
+                results = null
+            )
+        }
     }
-    
+
     override suspend fun postSchedule(
         token: String,
         travelId: Int,
@@ -97,5 +106,5 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         }
         scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
     }
-    
+
 }

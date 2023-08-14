@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.detail.schedule
+package com.jerny.moiz.presentation.detail.schedule.edit
 
 import android.app.Activity
 import android.app.TimePickerDialog
@@ -19,128 +19,102 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
-import com.jerny.moiz.databinding.CreateTravelListFragmentBinding
-import com.jerny.moiz.databinding.FragmentAddScheduleBinding
-import com.jerny.moiz.databinding.FragmentAddWishListBinding
+import com.jerny.moiz.databinding.FragmentEditScheduleBinding
+import com.jerny.moiz.domain.model.Currency
+import com.jerny.moiz.presentation.billing.add.AddBillingAdapter
+import com.jerny.moiz.presentation.billing.edit.EditBillingFragmentArgs
+import com.jerny.moiz.presentation.billing.edit.EditBillingViewModel
+import com.jerny.moiz.presentation.common.BaseFragment
 import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
+import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @AndroidEntryPoint
-class AddScheduleFragment : Fragment() {
+class EditScheduleFragment : BaseFragment(R.layout.fragment_edit_schedule) {
 
-    private lateinit var binding: FragmentAddScheduleBinding
-
-    private val viewModel: AddScheduleViewModel by viewModels()
-    private val args: AddScheduleFragmentArgs by navArgs()
-
+    private lateinit var binding: FragmentEditScheduleBinding
+    private val viewModel: EditScheduleViewModel by viewModels()
+    private val args: EditScheduleFragmentArgs by navArgs()
     var tempImgFile = arrayListOf<FileResult>()
     var camUri: Uri? = null
+    var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        binding = FragmentAddScheduleBinding.inflate(inflater, container, false)
-
+    ): View {
+        binding = FragmentEditScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.updateParam(2, "confirmed")
-
-        viewModel.isValidated.observe(viewLifecycleOwner) {
-            tvAddSchedule.isEnabled = it
-            tvAddSchedule.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (it) R.color.color_F55C5C else R.color.color_F1F0F0
-                )
-            )
+    override fun init() = with(binding) {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            token = "Bearer $it"
+            viewModel.getScheduleDetail("Bearer $it", args.travelId.toString(), args.scheduleId)
         }
 
-        imgBack.setOnClickListener {
+        ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        root.setOnClickListener {
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                root.windowToken,
-                0
-            )
-            if (etMemo.text.isNotEmpty())
-                viewModel.updateParam(1, etMemo.text.toString())
-            if (etName.text.isNotEmpty())
-                viewModel.updateParam(0, etName.text.toString())
-            etName.clearFocus()
-            etMemo.clearFocus()
+        tvEditSchedule.setOnClickListener {
+            viewModel.putSchedule(token.toString(), args.travelId, args.scheduleId, tempImgFile)
         }
 
-        dpDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
-            datePickerFragment.setOnOkClickListener { year, month, day ->
-                dpDate.text = "$year.$month.$day"
-                viewModel.updateParam(4, "$year-$month-$day")
+        viewModel.isSuccess.observe(viewLifecycleOwner) {
+            if (it) {
+                findNavController().popBackStack()
             }
-            datePickerFragment.show(childFragmentManager, null)
         }
 
-        dpStartDate.setOnClickListener {
-            val cal = Calendar.getInstance()
-
-            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                cal.set(Calendar.HOUR_OF_DAY, hour)
-                cal.set(Calendar.MINUTE, minute)
-
-                val startDate = SimpleDateFormat("HH:mm").format(cal.time)
-                dpStartDate.text = startDate
-                viewModel.updateParam(5, startDate)
+        viewModel.isValidated.observe(viewLifecycleOwner) {
+            viewModel.isValidated.observe(viewLifecycleOwner) {
+                tvEditSchedule.isEnabled = it
+                tvEditSchedule.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (it) R.color.color_F55C5C else R.color.color_F1F0F0
+                    )
+                )
             }
-
-            TimePickerDialog(
-                context,
-                timeSetListener,
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-                true
-            ).show()
         }
 
-        dpEndDate.setOnClickListener {
-            val cal = Calendar.getInstance()
+        viewModel.scheduleData.observe(viewLifecycleOwner) {
+            it?.let {
+                tvTitle.text = if (it.type == "pending") "장바구니 수정" else "일정 수정"
+                tvEditSchedule.text = if (it.type == "pending") "장바구니 수정하기" else "일정 수정하기"
+                etName.setText(it.title)
+                etMemo.setText(it.description)
 
-            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                cal.set(Calendar.HOUR_OF_DAY, hour)
-                cal.set(Calendar.MINUTE, minute)
+                scheduleGroup.showOrGone(it.type != "pending")
 
-                val endDate = SimpleDateFormat("HH:mm").format(cal.time)
-                dpEndDate.text = endDate
-                viewModel.updateParam(6, endDate)
+                dpDate.text = it.date
+                dpStartDate.text = it.start_at
+                dpEndDate.text = it.end_at
+
+                when (it.category) {
+                    "food" -> ivCategory.setImageResource(R.drawable.ic_category_food)
+                    "transportation" -> ivCategory.setImageResource(R.drawable.ic_category_transportation)
+                    "hotel" -> ivCategory.setImageResource(R.drawable.ic_category_hotel)
+                    "market" -> ivCategory.setImageResource(R.drawable.ic_category_market)
+                    "shopping" -> ivCategory.setImageResource(R.drawable.ic_category_shopping)
+                    else -> ivCategory.setImageResource(R.drawable.ic_category_other)
+                }
             }
-
-            TimePickerDialog(
-                context,
-                timeSetListener,
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-                true
-            ).show()
         }
 
         ivCategory.setOnClickListener {
@@ -196,6 +170,57 @@ class AddScheduleFragment : Fragment() {
             popupWindow.showAsDropDown(ivCategory, -132, 20)
         }
 
+        dpDate.setOnClickListener {
+            val datePickerFragment = DatePickerDialog()
+            datePickerFragment.setOnOkClickListener { year, month, day ->
+                dpDate.text = "$year.$month.$day"
+                viewModel.updateParam(4, "$year-$month-$day")
+            }
+            datePickerFragment.show(childFragmentManager, null)
+        }
+
+        dpStartDate.setOnClickListener {
+            val cal = Calendar.getInstance()
+
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                cal.set(Calendar.HOUR_OF_DAY, hour)
+                cal.set(Calendar.MINUTE, minute)
+
+                val startDate = SimpleDateFormat("HH:mm").format(cal.time)
+                dpStartDate.text = startDate
+                viewModel.updateParam(5, startDate)
+            }
+
+            TimePickerDialog(
+                context,
+                timeSetListener,
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                true
+            ).show()
+        }
+
+        dpEndDate.setOnClickListener {
+            val cal = Calendar.getInstance()
+
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                cal.set(Calendar.HOUR_OF_DAY, hour)
+                cal.set(Calendar.MINUTE, minute)
+
+                val endDate = SimpleDateFormat("HH:mm").format(cal.time)
+                dpEndDate.text = endDate
+                viewModel.updateParam(6, endDate)
+            }
+
+            TimePickerDialog(
+                context,
+                timeSetListener,
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                true
+            ).show()
+        }
+
         etName.setOnEditorActionListener { _, _, _ ->
             val mInputMethodManager =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -208,11 +233,19 @@ class AddScheduleFragment : Fragment() {
             true
         }
 
-        tvAddSchedule.setOnClickListener {
-            UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-                viewModel.postSchedule("Bearer $it", args.travelId, tempImgFile)
-                findNavController().popBackStack()
-            }
+        root.setOnClickListener {
+            val mInputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mInputMethodManager.hideSoftInputFromWindow(
+                root.windowToken,
+                0
+            )
+
+            viewModel.updateParam(1, etMemo.text.toString())
+            if (etMemo.text.isNotEmpty()) viewModel.updateParam(0, etName.text.toString())
+
+            etName.clearFocus()
+            etMemo.clearFocus()
         }
 
         ivImg.setOnClickListener {
@@ -259,6 +292,7 @@ class AddScheduleFragment : Fragment() {
                 launcher.launch(Intent.createChooser(intent, "파일을 선택해주세요."))
             }
         }
+
     }
 
     private var cameraLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -313,14 +347,15 @@ class AddScheduleFragment : Fragment() {
         }
     }
 
-    private fun setImgCnt() = with(binding) {
-        if (tempImgFile.size == 0) {
-            ivImg.setImageResource(R.drawable.ic_unselect_img)
-            tvImgCnt.visibility = View.GONE
+    private fun setImgCnt() {
+        if (viewModel.imageCnt + tempImgFile.size == 0) {
+            binding.ivImg.setImageResource(R.drawable.ic_unselect_img)
+            binding.tvImgCnt.visibility = View.GONE
         } else {
-            ivImg.setImageResource(R.drawable.ic_select_img)
-            tvImgCnt.visibility = View.VISIBLE
-            tvImgCnt.text = tempImgFile.size.toString()
+            binding.ivImg.setImageResource(R.drawable.ic_select_img)
+            binding.tvImgCnt.visibility = View.VISIBLE
+            binding.tvImgCnt.text = (tempImgFile.size + viewModel.imageCnt).toString()
         }
     }
+
 }

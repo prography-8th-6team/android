@@ -1,28 +1,33 @@
-package com.jerny.moiz.presentation.detail.schedule
+package com.jerny.moiz.presentation.detail.schedule.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jerny.moiz.data.network.dto.BillingMembersDto
-import com.jerny.moiz.data.network.dto.PostBillingDto
 import com.jerny.moiz.data.network.dto.PostScheduleDto
-import com.jerny.moiz.data.network.dto.SettlementsDto
-import com.jerny.moiz.domain.model.InputCostEntity
-import com.jerny.moiz.domain.usecase.PostScheduleUseCase
+import com.jerny.moiz.data.network.dto.ScheduleDto
+import com.jerny.moiz.domain.usecase.GetScheduleDetailUseCase
+import com.jerny.moiz.domain.usecase.PutTravelScheduleUseCase
 import com.jerny.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddScheduleViewModel @Inject constructor(
-    private val postScheduleUseCase: PostScheduleUseCase
-) :
-    ViewModel() {
+class EditScheduleViewModel @Inject constructor(
+    private val getScheduleDetailUseCase: GetScheduleDetailUseCase,
+    private val putTravelScheduleUseCase: PutTravelScheduleUseCase
+) : ViewModel() {
+    private val _scheduleData = MutableLiveData<ScheduleDto?>()
+    val scheduleData: LiveData<ScheduleDto?> = _scheduleData
+
+    private val _isSuccess = MutableLiveData<Boolean>(false)
+    val isSuccess: LiveData<Boolean> = _isSuccess
 
     private val _isValidated = MutableLiveData<Boolean>()
     val isValidated: LiveData<Boolean> = _isValidated
+
+    var imageCnt: Int = 0
 
     private var paramList: MutableLiveData<PostScheduleDto> = PostScheduleDto(
         title = "",
@@ -86,9 +91,30 @@ class AddScheduleViewModel @Inject constructor(
         }
     }
 
-    fun postSchedule(token: String, travelId: Int, imgList: List<FileResult>) {
+    fun getScheduleDetail(token: String, travelId: String, id: Int) {
         viewModelScope.launch {
-            postScheduleUseCase.invoke(token, travelId, paramList.value!!, imgList)
+            getScheduleDetailUseCase.invoke(token, travelId, id).let {
+                _scheduleData.value = it.results
+                paramList.value?.title = it.results?.title
+                paramList.value?.description = it.results?.description
+                paramList.value?.type = it.results?.type
+                paramList.value?.category = it.results?.category
+
+                imageCnt = it.results?.images?.size ?: 0
+                isValidate()
+            }
+        }
+    }
+
+    fun putSchedule(token: String, travelId: Int, id: Int, imgList: List<FileResult>) {
+        viewModelScope.launch {
+            _isSuccess.value = putTravelScheduleUseCase.invoke(
+                token,
+                travelId,
+                id,
+                paramList.value!!,
+                imgList
+            ).results != null
         }
     }
 }

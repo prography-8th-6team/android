@@ -135,6 +135,22 @@
         <argument
             android:name="scheduleId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_scheduleDetailFragment_to_editScheduleFragment"
+            app:destination="@id/editScheduleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.edit.EditScheduleFragment"
+        android:label="editScheduleFragment"
+        tools:layout="@layout/fragment_edit_schedule">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+        <argument
+            android:name="scheduleId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

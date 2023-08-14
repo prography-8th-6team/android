@@ -21,7 +21,7 @@ interface ScheduleRepository {
         id: String,
         data: PostScheduleDto,
         imgList: List<FileResult>?
-    )
+    ): ResponseScheduleDto
 
     suspend fun postSchedule(
         token: String,
