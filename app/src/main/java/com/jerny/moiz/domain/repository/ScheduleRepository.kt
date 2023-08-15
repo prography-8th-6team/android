@@ -31,53 +31,10 @@ interface ScheduleRepository {
         imgList: List<FileResult>?,
     )
 
-    suspend fun getScheduleDetail(
-        token: String?,
-        travel_pk: String,
-        id: String
-    ): ResponseScheduleDto
-
-    suspend fun putTravelSchedule(
-        token: String?,
-        travel_pk: String,
-        id: String,
-        data: PostScheduleDto,
-        imgList: List<FileResult>?
-    )
-
-    suspend fun getScheduleDetail(
-        token: String?,
-        travel_pk: String,
-        id: String
-    ): ResponseScheduleDto
-
-    suspend fun putTravelSchedule(
-        token: String?,
-        travel_pk: String,
-        id: String,
-        data: PostScheduleDto,
-        imgList: List<FileResult>?
-    )
-
-    suspend fun getScheduleDetail(
-        token: String?,
-        travel_pk: String,
-        id: String
-    ): ResponseScheduleDto
-
-    suspend fun putTravelSchedule(
-        token: String?,
-        travel_pk: String,
-        id: String,
-        data: PostScheduleDto,
-        imgList: List<FileResult>?
-    )
-
     suspend fun postSchedule(
         token: String,
         travelId: Int,
         data: PostScheduleDto,
         imgList: List<FileResult>?
     )
-
 }

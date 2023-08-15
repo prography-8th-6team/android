@@ -3,10 +3,6 @@ package com.jerny.moiz.data.repository
 import com.jerny.moiz.data.network.dto.PostScheduleDto
 import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.data.network.dto.ResponseScheduleDto
-import com.google.gson.Gson
-import com.jerny.moiz.data.network.dto.PostScheduleDto
-import com.jerny.moiz.data.network.dto.ResponseScheduleDto
-import com.google.gson.Gson
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.data.network.service.ScheduleService
 import com.jerny.moiz.domain.repository.ScheduleRepository
@@ -16,7 +12,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import timber.log.Timber
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: ScheduleService) :
@@ -86,10 +81,10 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
                 "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
             )
         }
-        
+
         scheduleService.putTravelSchedule(token, travel_pk, id, temp, imgFile)
     }
-    
+
     override suspend fun postSchedule(
         token: String,
         travelId: Int,
@@ -113,5 +108,5 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         }
         scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
     }
-    
+
 }
