@@ -17,7 +17,7 @@ import com.jerny.moiz.databinding.FragmentScheduleItemBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScheduleItemFragment(private val id:Int, private val date:String) : Fragment() {
+class ScheduleItemFragment(private val travel_pk:Int, private val date:String) : Fragment() {
     private lateinit var binding:FragmentScheduleItemBinding
     private val viewModel:ScheduleViewModel by viewModels()
     private lateinit var adapter:ScheduleAdapter
@@ -36,6 +36,26 @@ class ScheduleItemFragment(private val id:Int, private val date:String) : Fragme
         super.onViewCreated(view, savedInstanceState)
 //        setList()
         initViews()
+
+        adapter = ScheduleAdapter(requireContext(), object : ScheduleAdapter.OnClickListener {
+            override fun delete(id:Int) {
+                deleteSchedule(id)
+            }
+
+        })
+        binding.rvSchedule.layoutManager = LinearLayoutManager(context)
+        binding.rvSchedule.adapter = adapter
+
+        val swiperHelperCallback = SwipeHelperCallback(adapter).apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+        }
+
+        ItemTouchHelper(swiperHelperCallback).attachToRecyclerView(binding.rvSchedule)
+        // 다른 곳 터치하면 기존 뷰 닫기
+        binding.rvSchedule.setOnTouchListener { view, motionEvent ->
+            swiperHelperCallback.removePreviousClamp(binding.rvSchedule)
+            false
+        }
     }
 
     override fun onResume() {
@@ -46,29 +66,19 @@ class ScheduleItemFragment(private val id:Int, private val date:String) : Fragme
     @SuppressLint("ClickableViewAccessibility")
     private fun initViews() = with(binding) {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
-            viewModel.getScheduleList("Bearer $it", id.toString(), "confirmed", date = date)
+            viewModel.getScheduleList("Bearer $it", travel_pk.toString(), "confirmed", date = date)
         }
 
         viewModel.scheduleList.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                adapter = ScheduleAdapter(requireContext(), ArrayList(data))
-                rvSchedule.layoutManager = LinearLayoutManager(context)
-                rvSchedule.adapter = adapter
-
-                val swiperHelperCallback = SwipeHelperCallback(adapter).apply {
-                    setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
-                }
-
-                ItemTouchHelper(swiperHelperCallback).attachToRecyclerView(binding.rvSchedule)
-                // 다른 곳 터치하면 기존 뷰 닫기
-                binding.rvSchedule.setOnTouchListener { view, motionEvent ->
-                    swiperHelperCallback.removePreviousClamp(binding.rvSchedule)
-                    false
-                }
-            }
+            adapter.submitList(data)
         }
     }
 
+    private fun deleteSchedule(id:Int) {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.deleteSchedule("Bearer $it", travel_pk.toString(), id.toString())
+        }
+    }
 //    private fun setList() {
 //        list.value = arrayListOf(
 //            ScheduleDto(
