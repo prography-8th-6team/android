@@ -12,6 +12,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import timber.log.Timber
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: ScheduleService) :
@@ -54,7 +55,8 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         } else {
             ResponseScheduleDto(
                 message = scheduleService.getScheduleDetail(token, travel_pk, id).message(),
-                results = null)
+                results = null
+            )
         }
     }
 
@@ -63,7 +65,7 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         travel_pk: String,
         id: String,
         data: PostScheduleDto,
-        imgList: List<FileResult>?,
+        imgList: List<FileResult>?
     ) {
         val temp = hashMapOf<String, RequestBody>()
         temp["type"] = data.type.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -77,17 +79,18 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
-
+        
         scheduleService.putTravelSchedule(token, travel_pk, id, temp, imgFile)
     }
-
+    
     override suspend fun postSchedule(
         token: String,
         travelId: Int,
         data: PostScheduleDto,
-        imgList: List<FileResult>?,
+        imgList: List<FileResult>?
     ) {
         val temp = hashMapOf<String, RequestBody>()
         temp["type"] = data.type.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -101,9 +104,10 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
         scheduleService.postTravelSchedule(token, travelId.toString(), temp, imgFile)
     }
-
+    
 }

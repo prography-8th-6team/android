@@ -38,7 +38,7 @@ interface ScheduleService {
     suspend fun getScheduleDetail(
         @Header("Authorization") token: String?,
         @Path("travel_pk") travel_pk: String,
-        @Path("id") id: String,
+        @Path("id") id: String
     ): Response<ResponseScheduleDto>
 
     @Multipart
@@ -48,7 +48,7 @@ interface ScheduleService {
         @Path("travel_pk") travel_pk: String,
         @Path("id") id: String,
         @PartMap data: HashMap<String, RequestBody>,
-        @Part img: List<MultipartBody.Part>? = null,
+        @Part img: List<MultipartBody.Part>? = null
     )
 
     @Multipart
@@ -57,6 +57,7 @@ interface ScheduleService {
         @Header("Authorization") token: String?,
         @Path("travel_pk") id: String,
         @PartMap data: HashMap<String, RequestBody>,
-        @Part img: List<MultipartBody.Part>? = null,
+        @Part img: List<MultipartBody.Part>? = null
     )
+
 }
