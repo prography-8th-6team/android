@@ -6,7 +6,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout.LayoutParams
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,8 +15,8 @@ import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(
-    DiffCallback) {
+class ScheduleAdapter(private val context: Context, private val onClick: OnClickListener) :
+    ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(DiffCallback) {
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
@@ -26,18 +26,16 @@ class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, S
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
 
-            val totalParams =
-                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            val scheduleParams =
-                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val totalParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val scheduleParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             if (schedule.end_at.isNullOrEmpty()) {
                 binding.tvTime.text = "${schedule.start_at}"
-                totalParams.setMargins(37.dp, 0, 16.dp, 0)
+                totalParams.setMargins(37.dp, 0, 0, 0)
                 scheduleParams.setMargins(38.dp, 0, 0, 0)
 
             } else {
                 binding.tvTime.text = "${schedule.start_at}-${schedule.end_at}"
-                totalParams.setMargins(19.dp, 0, 16.dp, 0)
+                totalParams.setMargins(19.dp, 0, 0, 0)
                 scheduleParams.setMargins(17.dp, 0, 0, 0)
             }
             binding.llTotal.layoutParams = totalParams
@@ -53,6 +51,12 @@ class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, S
             }
 
             binding.tvDescription.text = schedule.description
+
+            binding.tvRemove.setOnClickListener {
+                schedule.id?.let { it1 -> onClick.delete(it1) }
+                Toast.makeText(
+                    binding.root.context, "삭제 완료!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -66,16 +70,23 @@ class ScheduleAdapter(private val context: Context) : ListAdapter<ScheduleDto, S
         holder.bind(getItem(position))
     }
 
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ScheduleDto>() {
-            override fun areItemsTheSame(oldItem: ScheduleDto, newItem: ScheduleDto): Boolean {
-                return (oldItem.id == newItem.id)
-            }
+    object DiffCallback : DiffUtil.ItemCallback<ScheduleDto>() {
+        override fun areItemsTheSame(
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
+            return oldItem == newItem
+        }
 
-            override fun areContentsTheSame(oldItem: ScheduleDto, newItem: ScheduleDto): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 
+    interface OnClickListener {
+        fun delete(id: Int)
+    }
 }

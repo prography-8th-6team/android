@@ -2,13 +2,17 @@ package com.jerny.moiz.presentation.detail
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -57,7 +61,8 @@ class TravelDetailFragment : Fragment() {
         UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
             token = "Bearer $it"
             viewModel.getTravelDetail(
-                args.travelId, "Bearer $it")
+                args.travelId, "Bearer $it"
+            )
         }
         initViews()
 
@@ -72,7 +77,8 @@ class TravelDetailFragment : Fragment() {
         val fragmentList = arrayListOf(
             BillingFragment(args.travelId),
             BillingHelperFragment(args.travelId),
-            ScheduleFragment(args.travelId, startDate, endDate))
+            ScheduleFragment(args.travelId, startDate, endDate)
+        )
 
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
@@ -84,6 +90,7 @@ class TravelDetailFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     binding.grBottomNavigation.showOrHide(position == 0)
+                    binding.ivAddSchedule.showOrHide(position == 2)
                 }
             })
         }
@@ -92,28 +99,7 @@ class TravelDetailFragment : Fragment() {
             when (position) {
                 0 -> tab.text = "가계부"
                 1 -> tab.text = "계산도우미"
-                2 -> {
-                    tab.text = "일정"
-                    tab.view.isClickable = false
-                    tab.view.setOnTouchListener { _, action ->
-                        if (action.action == 0) {
-                            val balloon =
-                                Balloon.Builder(requireContext())
-                                    .setHeight(BalloonSizeSpec.WRAP)
-                                    .setText("일정 기능은 출시 예정입니다.")
-                                    .setTextColorResource(R.color.color_555555)
-                                    .setBackgroundColorResource(R.color.white)
-                                    .setTextSize(14f)
-                                    .setPadding(12)
-                                    .setCornerRadius(8f)
-                                    .setBalloonAnimation(BalloonAnimation.ELASTIC)
-                                    .build()
-                            balloon.showAsDropDown(tab.view)
-                            balloon.dismissWithDelay(1500L)
-                        }
-                        true
-                    }
-                }
+                2 -> tab.text = "일정"
             }
         }.attach()
     }
@@ -121,6 +107,34 @@ class TravelDetailFragment : Fragment() {
     private fun initViews() = with(binding) {
         ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        ivAddSchedule.setOnClickListener {
+            val inflater =
+                view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val popupView = inflater.inflate(R.layout.item_add_schedule, null)
+
+            val popupWindow =
+                PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            popupWindow.isOutsideTouchable = true
+            popupWindow.isFocusable = true
+            popupWindow.showAsDropDown(ivAddSchedule, 0, -600)
+
+            popupView.findViewById<TextView>(R.id.tv_wishList).setOnClickListener {
+                popupWindow.dismiss()
+                findNavController().navigate(R.id.action_detailFragment_to_addWishListFragment, bundleOf("travelId" to args.travelId))
+            }
+
+            popupView.findViewById<TextView>(R.id.tv_schedule).setOnClickListener {
+                popupWindow.dismiss()
+                findNavController().navigate(
+                    R.id.goto_add_schedule, bundleOf("travelId" to args.travelId)
+                )
+            }
         }
 
         ivAdditional.setOnClickListener {
