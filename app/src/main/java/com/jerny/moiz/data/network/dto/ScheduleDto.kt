@@ -48,7 +48,7 @@ data class ScheduleDto(
 
 data class ResponseScheduleListDto(
     @SerializedName("message")
-    val message: String?,
+    val message:String?,
     @SerializedName("results")
     val results: ScheduleListDto?,
 )

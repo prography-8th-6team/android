@@ -6,16 +6,17 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout.LayoutParams
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jerny.moiz.R
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context: Context, private val items: MutableList<ScheduleDto>) :
-    RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+class ScheduleAdapter(private val context: Context, private val onClick: OnClickListener) :
+    ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(DiffCallback) {
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
@@ -26,8 +27,7 @@ class ScheduleAdapter(private val context: Context, private val items: MutableLi
             binding.tvOrder.text = "${adapterPosition + 1}"
 
             val totalParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            val scheduleParams =
-                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val scheduleParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             if (schedule.end_at.isNullOrEmpty()) {
                 binding.tvTime.text = "${schedule.start_at}"
                 totalParams.setMargins(37.dp, 0, 0, 0)
@@ -53,7 +53,7 @@ class ScheduleAdapter(private val context: Context, private val items: MutableLi
             binding.tvDescription.text = schedule.description
 
             binding.tvRemove.setOnClickListener {
-                removeData(adapterPosition)
+                schedule.id?.let { it1 -> onClick.delete(it1) }
                 Toast.makeText(
                     binding.root.context, "삭제 완료!", Toast.LENGTH_SHORT).show()
             }
@@ -66,16 +66,27 @@ class ScheduleAdapter(private val context: Context, private val items: MutableLi
         return ViewHolder(binding)
     }
 
-    override fun getItemCount() = items.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-
+        holder.bind(getItem(position))
     }
 
-    fun removeData(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        notifyDataSetChanged()
+    object DiffCallback : DiffUtil.ItemCallback<ScheduleDto>() {
+        override fun areItemsTheSame(
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
+    }
+
+    interface OnClickListener {
+        fun delete(id: Int)
     }
 }

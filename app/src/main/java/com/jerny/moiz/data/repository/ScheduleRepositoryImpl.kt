@@ -1,8 +1,8 @@
 package com.jerny.moiz.data.repository
 
 import com.jerny.moiz.data.network.dto.PostScheduleDto
+import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.data.network.dto.ResponseScheduleDto
-import com.google.gson.Gson
 import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
 import com.jerny.moiz.data.network.service.ScheduleService
 import com.jerny.moiz.domain.repository.ScheduleRepository
@@ -12,7 +12,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import timber.log.Timber
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: ScheduleService) :
@@ -20,23 +19,35 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
     override suspend fun getScheduleList(
         token: String,
         id: String,
-        type: String,
+        type: String?,
+        date: String?,
     ): ResponseScheduleListDto {
-        return if (scheduleService.getTravelDetail(token, id, type).isSuccessful) {
-            scheduleService.getTravelDetail(token, id, type).body()!!
+        return if (scheduleService.getScheduleList(token, id, type, date).isSuccessful) {
+            scheduleService.getScheduleList(token, id, type, date).body()!!
         } else {
             ResponseScheduleListDto(
-                message = scheduleService.getTravelDetail(token, id, type).message(),
-                results = null
-            )
+                message = scheduleService.getScheduleList(token, id, type, date).message(),
+                results = null)
+        }
+    }
 
+    override suspend fun deleteSchedule(
+        token: String,
+        travel_pk: String?,
+        id: String?,
+    ): ResponseMessage {
+        return if (scheduleService.deleteSchedule(token, travel_pk, id).isSuccessful) {
+            scheduleService.deleteSchedule(token, travel_pk, id).body()!!
+        } else {
+            ResponseMessage(
+                message = scheduleService.deleteSchedule(token, travel_pk, id).message())
         }
     }
 
     override suspend fun getScheduleDetail(
         token: String?,
         travel_pk: String,
-        id: String
+        id: String,
     ): ResponseScheduleDto {
         return if (scheduleService.getScheduleDetail(token, travel_pk, id).isSuccessful) {
             scheduleService.getScheduleDetail(token, travel_pk, id).body()!!
@@ -81,6 +92,7 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
                 results = null
             )
         }
+
     }
 
     override suspend fun postSchedule(

@@ -1,16 +1,15 @@
 package com.jerny.moiz.domain.usecase
 
-import com.jerny.moiz.data.network.dto.ResponseScheduleListDto
+import com.jerny.moiz.data.network.dto.ResponseMessage
 import com.jerny.moiz.domain.repository.ScheduleRepository
 import javax.inject.Inject
 
-class GetScheduleListUseCase @Inject constructor(
+class DeleteScheduleUseCase @Inject constructor(
     private val repository:ScheduleRepository,
 ) {
     suspend operator fun invoke(
         token:String,
+        travel_pk:String,
         id:String,
-        type:String?,
-        date:String?,
-    ):ResponseScheduleListDto = repository.getScheduleList(token, id, type, date)
+    ):ResponseMessage = repository.deleteSchedule(token, travel_pk, id)
 }
