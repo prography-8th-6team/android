@@ -70,7 +70,7 @@ import dagger.hilt.android.AndroidEntryPoint
         }
 
         viewModel.response.observe(viewLifecycleOwner) {
-            if (it.message == "Forbidden") {
+            if (it.message == "Forbidden" || it.message == "Unauthorized") {
                 val intent = Intent(
                     requireContext(), LoginActivity::class.java)
                 startActivity(intent)
