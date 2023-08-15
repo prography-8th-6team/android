@@ -13,13 +13,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleViewModel @Inject constructor(
-    private val getScheduleListUseCase:GetScheduleListUseCase,
-    private val deleteScheduleUseCase:DeleteScheduleUseCase,
+    private val getScheduleListUseCase: GetScheduleListUseCase,
+    private val deleteScheduleUseCase: DeleteScheduleUseCase,
 ) : ViewModel() {
     private val _scheduleList = MutableLiveData<List<ScheduleDto>>()
-    val scheduleList:LiveData<List<ScheduleDto>> = _scheduleList
+    val scheduleList: LiveData<List<ScheduleDto>> = _scheduleList
 
-    fun getScheduleList(token:String, id:String, type:String? = "confirmed", date:String) {
+    fun getScheduleList(
+        token: String,
+        id: String,
+        type: String? = "confirmed",
+        date: String? = null,
+    ) {
         viewModelScope.launch {
             getScheduleListUseCase.invoke(token, id, type, date).let {
                 _scheduleList.value = it.results?.schedules!!
@@ -27,7 +32,7 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-    fun deleteSchedule(token:String, travel_pk:String, id:String) {
+    fun deleteSchedule(token: String, travel_pk: String, id: String) {
         viewModelScope.launch {
             deleteScheduleUseCase.invoke(token, travel_pk, id).let {
 
