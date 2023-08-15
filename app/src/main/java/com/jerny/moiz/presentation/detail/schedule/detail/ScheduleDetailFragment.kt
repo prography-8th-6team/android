@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -67,6 +68,13 @@ class ScheduleDetailFragment : Fragment() {
 
         ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        tvEdit.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_scheduleDetailFragment_to_editScheduleFragment,
+                bundleOf("travelId" to args.travelId, "scheduleId" to args.scheduleId)
+            )
         }
 
         viewModel.scheduleData.observe(viewLifecycleOwner) { data ->

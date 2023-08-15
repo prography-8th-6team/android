@@ -49,7 +49,7 @@ interface ScheduleService {
         @Path("id") id: String,
         @PartMap data: HashMap<String, RequestBody>,
         @Part img: List<MultipartBody.Part>? = null
-    )
+    ): Response<ResponseScheduleDto>
 
     @Multipart
     @POST("travels/{travel_pk}/schedules")

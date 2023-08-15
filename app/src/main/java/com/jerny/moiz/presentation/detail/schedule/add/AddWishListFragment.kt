@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.detail.schedule
+package com.jerny.moiz.presentation.detail.schedule.add
 
 import android.app.Activity
 import android.content.ContentValues
@@ -26,13 +26,11 @@ import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddWishListBinding
-import com.jerny.moiz.presentation.billing.BillingViewModel
-import com.jerny.moiz.presentation.billing.add.AddBillingFragmentArgs
+import com.jerny.moiz.presentation.detail.schedule.add.AddWishListFragmentArgs
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class AddWishListFragment : Fragment() {

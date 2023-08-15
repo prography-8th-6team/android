@@ -28,8 +28,8 @@ interface ScheduleRepository {
         travel_pk: String,
         id: String,
         data: PostScheduleDto,
-        imgList: List<FileResult>?,
-    )
+        imgList: List<FileResult>?
+    ): ResponseScheduleDto
 
     suspend fun postSchedule(
         token: String,

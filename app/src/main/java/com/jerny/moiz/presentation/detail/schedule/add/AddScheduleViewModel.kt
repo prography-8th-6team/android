@@ -1,14 +1,10 @@
-package com.jerny.moiz.presentation.detail.schedule
+package com.jerny.moiz.presentation.detail.schedule.add
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jerny.moiz.data.network.dto.BillingMembersDto
-import com.jerny.moiz.data.network.dto.PostBillingDto
 import com.jerny.moiz.data.network.dto.PostScheduleDto
-import com.jerny.moiz.data.network.dto.SettlementsDto
-import com.jerny.moiz.domain.model.InputCostEntity
 import com.jerny.moiz.domain.usecase.PostScheduleUseCase
 import com.jerny.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel

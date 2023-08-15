@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/AddScheduleFragment"
-        android:name="com.jerny.moiz.presentation.detail.schedule.AddScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.add.AddScheduleFragment"
         android:label="AddScheduleFragment"
         tools:layout="@layout/fragment_add_schedule">
         <argument
@@ -106,7 +106,7 @@
 
     <fragment
         android:id="@+id/AddWishListFragment"
-        android:name="com.jerny.moiz.presentation.detail.schedule.AddWishListFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.add.AddWishListFragment"
         android:label="AddWishListFragment"
         tools:layout="@layout/fragment_add_wish_list">
         <argument
@@ -129,6 +129,22 @@
         android:name="com.jerny.moiz.presentation.detail.schedule.detail.ScheduleDetailFragment"
         android:label="scheduleDetailFragment"
         tools:layout="@layout/fragment_schedule_detail">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+        <argument
+            android:name="scheduleId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_scheduleDetailFragment_to_editScheduleFragment"
+            app:destination="@id/editScheduleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.edit.EditScheduleFragment"
+        android:label="editScheduleFragment"
+        tools:layout="@layout/fragment_edit_schedule">
         <argument
             android:name="travelId"
             app:argType="integer" />
