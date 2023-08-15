@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout.LayoutParams
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,20 +15,19 @@ import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
 
-class ScheduleAdapter(private val context:Context, private val onClick:OnClickListener) :
+class ScheduleAdapter(private val context: Context, private val onClick: OnClickListener) :
     ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(DiffCallback) {
-    val Int.dp:Int
+    val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-    inner class ViewHolder(private val binding:ItemScheduleBinding) : RecyclerView.ViewHolder(
+    inner class ViewHolder(private val binding: ItemScheduleBinding) : RecyclerView.ViewHolder(
         binding.root) {
-        fun bind(schedule:ScheduleDto) {
+        fun bind(schedule: ScheduleDto) {
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
 
             val totalParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            val scheduleParams =
-                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val scheduleParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             if (schedule.end_at.isNullOrEmpty()) {
                 binding.tvTime.text = "${schedule.start_at}"
                 totalParams.setMargins(37.dp, 0, 0, 0)
@@ -62,33 +60,33 @@ class ScheduleAdapter(private val context:Context, private val onClick:OnClickLi
         }
     }
 
-    override fun onCreateViewHolder(parent:ViewGroup, viewType:Int):ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemScheduleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder:ViewHolder, position:Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
     object DiffCallback : DiffUtil.ItemCallback<ScheduleDto>() {
         override fun areItemsTheSame(
-            oldItem:ScheduleDto,
-            newItem:ScheduleDto,
-        ):Boolean {
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem:ScheduleDto,
-            newItem:ScheduleDto,
-        ):Boolean {
+            oldItem: ScheduleDto,
+            newItem: ScheduleDto,
+        ): Boolean {
             return oldItem.id == newItem.id
         }
     }
 
     interface OnClickListener {
-        fun delete(id:Int)
+        fun delete(id: Int)
     }
 }
