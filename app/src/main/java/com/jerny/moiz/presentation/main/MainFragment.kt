@@ -76,7 +76,7 @@ class MainFragment : Fragment() {
         }
 
         viewModel.response.observe(viewLifecycleOwner) {
-            if (it.message == "Forbidden") {
+            if (it.message == "Forbidden" || it.message == "Unauthorized") {
                 val intent = Intent(
                     requireContext(), LoginActivity::class.java
                 )
