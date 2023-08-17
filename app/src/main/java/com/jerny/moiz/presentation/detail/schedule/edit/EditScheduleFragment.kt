@@ -95,8 +95,8 @@ class EditScheduleFragment : BaseFragment(R.layout.fragment_edit_schedule) {
 
         viewModel.scheduleData.observe(viewLifecycleOwner) {
             it?.let {
-                tvTitle.text = if (it.type == "pending") "장바구니 수정" else "일정 수정"
-                tvEditSchedule.text = if (it.type == "pending") "장바구니 수정하기" else "일정 수정하기"
+                tvTitle.text = if (it.type == "pending") "위시리스트 수정" else "일정 수정"
+                tvEditSchedule.text = if (it.type == "pending") "위시리스트 수정하기" else "일정 수정하기"
                 etName.setText(it.title)
                 etMemo.setText(it.description)
 

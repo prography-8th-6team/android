@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/pretendard_bold"
-        android:text="장바구니"
+        android:text="위시리스트"
         android:textColor="@color/color_555555"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
