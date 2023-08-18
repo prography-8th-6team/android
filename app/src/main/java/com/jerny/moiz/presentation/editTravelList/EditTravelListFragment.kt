@@ -23,7 +23,8 @@ import com.jerny.moiz.presentation.createTravelList.SpinnerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint class EditTravelListFragment : Fragment() {
+@AndroidEntryPoint
+class EditTravelListFragment : Fragment() {
     private lateinit var binding: EditTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<EditTravelListViewModel>()
@@ -128,7 +129,7 @@ import kotlinx.coroutines.launch
 
     private fun initDatePickerDialog() {
         binding.dpStartDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setStartDate("$year-$month-$day")
             }
@@ -136,7 +137,7 @@ import kotlinx.coroutines.launch
         }
 
         binding.dpEndDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
+            val datePickerFragment = DatePickerDialog(viewModel.endDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setEndDate("$year-$month-$day")
             }
@@ -150,42 +151,54 @@ import kotlinx.coroutines.launch
                 "f9b7a4" -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f9b7a4))
+                            requireContext(), R.color.color_f9b7a4
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_f9b7a4)
                 }
 
                 "d8f4f1" -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_d8f4f1))
+                            requireContext(), R.color.color_d8f4f1
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_d8f4f1)
                 }
 
                 "f8f2c3" -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f8f2c3))
+                            requireContext(), R.color.color_f8f2c3
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_f8f2c3)
                 }
 
                 "a4e8c0" -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_a4e8c0))
+                            requireContext(), R.color.color_a4e8c0
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_a4e8c0)
                 }
 
                 "abe8ff" -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_abe8ff))
+                            requireContext(), R.color.color_abe8ff
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_abe8ff)
                 }
 
                 else -> {
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f4f4f4))
+                            requireContext(), R.color.color_f4f4f4
+                        )
+                    )
                     binding.rgColor.check(R.id.btn_f4f4f4)
                 }
             }
@@ -207,7 +220,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("f9b7a4")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f9b7a4))
+                            requireContext(), R.color.color_f9b7a4
+                        )
+                    )
                 }
 
                 R.id.btn_d8f4f1 -> {
@@ -219,7 +234,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("d8f4f1")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_d8f4f1))
+                            requireContext(), R.color.color_d8f4f1
+                        )
+                    )
                 }
 
                 R.id.btn_f8f2c3 -> {
@@ -231,7 +248,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("f8f2c3")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f8f2c3))
+                            requireContext(), R.color.color_f8f2c3
+                        )
+                    )
                 }
 
                 R.id.btn_a4e8c0 -> {
@@ -243,7 +262,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("a4e8c0")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_a4e8c0))
+                            requireContext(), R.color.color_a4e8c0
+                        )
+                    )
                 }
 
                 R.id.btn_abe8ff -> {
@@ -255,7 +276,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("abe8ff")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_abe8ff))
+                            requireContext(), R.color.color_abe8ff
+                        )
+                    )
                 }
 
                 else -> {
@@ -267,7 +290,9 @@ import kotlinx.coroutines.launch
                     viewModel.setColor("f4f4f4")
                     binding.viewLine.setBackgroundColor(
                         ContextCompat.getColor(
-                            requireContext(), R.color.color_f4f4f4))
+                            requireContext(), R.color.color_f4f4f4
+                        )
+                    )
                 }
             }
         }
@@ -279,7 +304,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f9b7a4))
+                    requireContext(), R.color.color_f9b7a4
+                )
+            )
         }
 
         binding.btnD8f4f1.apply {
@@ -287,7 +314,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_d8f4f1))
+                    requireContext(), R.color.color_d8f4f1
+                )
+            )
         }
 
         binding.btnF8f2c3.apply {
@@ -295,7 +324,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f8f2c3))
+                    requireContext(), R.color.color_f8f2c3
+                )
+            )
         }
 
         binding.btnA4e8c0.apply {
@@ -303,7 +334,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_a4e8c0))
+                    requireContext(), R.color.color_a4e8c0
+                )
+            )
         }
 
         binding.btnAbe8ff.apply {
@@ -311,7 +344,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_abe8ff))
+                    requireContext(), R.color.color_abe8ff
+                )
+            )
         }
 
         binding.btnF4f4f4.apply {
@@ -319,7 +354,9 @@ import kotlinx.coroutines.launch
             setBackgroundResource(R.drawable.bg_circle)
             backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    requireContext(), R.color.color_f4f4f4))
+                    requireContext(), R.color.color_f4f4f4
+                )
+            )
         }
     }
 
@@ -330,7 +367,8 @@ import kotlinx.coroutines.launch
             end_date = viewModel.endDate.value,
             color = viewModel.color.value,
             description = viewModel.memo.value,
-            currency = viewModel.currency.value)
+            currency = viewModel.currency.value
+        )
 
         lifecycleScope.launch {
             UserDataStore.getUserToken(requireContext()).collect { token ->
