@@ -1,9 +1,12 @@
 package com.jerny.moiz.presentation.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
+import androidx.navigation.Navigation.findNavController
+import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,11 +30,27 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         UserDataStore.getJoinCode(this@MainActivity).asLiveData().observe(this) { code ->
             UserDataStore.getUserToken(this@MainActivity).asLiveData().observe(this) { token ->
-                if(code != "" && token != "") {
+                if (code != "" && token != "") {
                     viewModel.postJoinCode(token, code)
                 }
             }
         }
     }
+
+    private var backKeyPressedTime: Long = 0
+    override fun onBackPressed() {
+        val navController = findNavController(this, R.id.nav_host_fragment)
+        if (navController.currentDestination?.id == R.id.mainFragment) {
+            if (System.currentTimeMillis() > backKeyPressedTime + 1000) {
+                backKeyPressedTime = System.currentTimeMillis()
+                Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT)
+                    .show()
+                return
+            }
+        }
+
+        super.onBackPressed()
+    }
+
 
 }
