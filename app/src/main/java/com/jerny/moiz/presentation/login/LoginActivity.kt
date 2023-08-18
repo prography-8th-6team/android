@@ -15,7 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
-@AndroidEntryPoint class LoginActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
     private var mBinding: ActivityLoginBinding? = null
@@ -43,6 +44,8 @@ import timber.log.Timber
             }
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
+
+            finish()
         }
 
         viewModel.userId.observe(this) {
