@@ -28,8 +28,8 @@ class WishListItemFragment(val list: List<ScheduleDto>, val onClick: (Int) -> Un
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.glAgeAddView.apply {
-            binding.glAgeAddView.removeAllViews()
+        binding.glWishList.apply {
+            binding.glWishList.removeAllViews()
             list.forEach { list ->
                 val ageItem = ItemWishListBinding.inflate(layoutInflater)
                 ageItem.tvTitle.text = list.title
