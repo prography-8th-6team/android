@@ -34,6 +34,12 @@ object UserDataStore {
         }
     }
 
+    suspend fun clear(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+    
     fun getUserId(context: Context): Flow<String> =
         context.dataStore.data.map { it -> it[PreferencesKeys.USER_ID] ?: "" }
 
