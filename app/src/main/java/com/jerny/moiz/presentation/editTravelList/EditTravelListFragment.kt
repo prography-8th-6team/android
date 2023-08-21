@@ -43,6 +43,11 @@ class EditTravelListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        binding.imgBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         getTravelDetail()
         initSpinner()
         initDatePickerDialog()
