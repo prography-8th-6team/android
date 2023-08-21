@@ -22,12 +22,14 @@ import java.util.Calendar
 import java.util.Date
 
 class ScheduleDialog(
+    private val tempStartDate: String?,
+    private val tempEndDate: String?,
     private val okClickListener: (String, String, String) -> Unit
 ) : DialogFragment() {
     lateinit var binding: DialogScheduleBinding
 
     private val currentDateTime = Calendar.getInstance().time
-    private val dateFormat = SimpleDateFormat("yyyy.MM.dd")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     private val timeFormat = SimpleDateFormat("HH:mm")
 
     private var date = dateFormat.format(currentDateTime)
@@ -45,10 +47,10 @@ class ScheduleDialog(
         binding.dpEndDate.text = endDate
 
         binding.dpDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(tempStartDate, tempEndDate)
             datePickerFragment.setOnOkClickListener { year, month, day ->
-                date = "$year.$month.$day"
-                binding.dpDate.text = date
+                date = "$year-$month-$day"
+                binding.dpDate.text = "$year.$month.$day"
             }
             datePickerFragment.show(childFragmentManager, null)
         }

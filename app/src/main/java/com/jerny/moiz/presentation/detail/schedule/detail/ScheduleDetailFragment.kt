@@ -85,16 +85,17 @@ class ScheduleDetailFragment : Fragment() {
 
                 tvSchedule.setOnClickListener {
                     if (data.type != "confirmed") {
-                        val dialog = ScheduleDialog { date, start, end ->
-                            setTop("confirmed")
-                            viewModel.updateParam("confirmed", date, start, end)
-                            scheduleGroup.show()
-                            dpDate.text = date
-                            dpStartDate.text = start
-                            dpEndDate.text = end
+                        val dialog =
+                            ScheduleDialog(args.startDate, args.endDate) { date, start, end ->
+                                setTop("confirmed")
+                                viewModel.updateParam("confirmed", date, start, end)
+                                scheduleGroup.show()
+                                dpDate.text = date
+                                dpStartDate.text = start
+                                dpEndDate.text = end
 
-                            viewModel.putSchedule("Bearer $token", args.travelId, data.id!!)
-                        }
+                                viewModel.putSchedule("Bearer $token", args.travelId, data.id!!)
+                            }
                         dialog.isCancelable = false
                         dialog.show(requireActivity().supportFragmentManager, "schedule")
                     }
