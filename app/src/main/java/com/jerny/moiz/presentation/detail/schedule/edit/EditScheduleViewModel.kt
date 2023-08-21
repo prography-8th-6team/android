@@ -41,7 +41,7 @@ class EditScheduleViewModel @Inject constructor(
 
     private fun isValidate() = with(paramList.value!!) {
         _isValidated.value = when (type) {
-            // type pending : 장바구니, type confirmed : 일정
+            // type pending : 위시리스트, type confirmed : 일정
             "pending" -> {
                 title != ""
             }

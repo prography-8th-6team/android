@@ -60,7 +60,7 @@
             android:fontFamily="@font/pretendard_semi_bold"
             android:gravity="center"
             android:paddingVertical="10dp"
-            android:text="장바구니"
+            android:text="위시리스트"
             android:textColor="@color/color_555555"
             android:textSize="20sp" />
 
