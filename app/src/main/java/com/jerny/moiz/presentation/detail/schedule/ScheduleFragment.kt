@@ -59,8 +59,8 @@ class ScheduleFragment(
         }
 
         binding.ivHide.setOnClickListener {
-            if (binding.viewPager.visibility == View.GONE) binding.viewPager.show()
-            else binding.viewPager.gone()
+            if (binding.flWishlist.visibility == View.GONE) binding.flWishlist.show()
+            else binding.flWishlist.gone()
         }
 
         viewModel.scheduleList.observe(viewLifecycleOwner) {
