@@ -2,12 +2,9 @@ package com.jerny.moiz.presentation.detail
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.ContentValues
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,10 +29,8 @@ import com.jerny.moiz.presentation.detail.schedule.ScheduleFragment
 import com.jerny.moiz.presentation.util.CustomDialog
 import com.jerny.moiz.presentation.util.showOrHide
 import com.jerny.moiz.presentation.util.toCostFormat
-import com.skydoves.balloon.Balloon
-import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.BalloonSizeSpec
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.util.Currency
 
 @AndroidEntryPoint
@@ -45,6 +40,8 @@ class TravelDetailFragment : Fragment() {
     private val viewModel: DetailViewModel by viewModels()
     private val args: TravelDetailFragmentArgs by navArgs()
     private var token: String = ""
+    val fromFormat = SimpleDateFormat("yyyy-MM-dd")
+    val toFormat = SimpleDateFormat("yy.MM.dd")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -233,7 +230,10 @@ class TravelDetailFragment : Fragment() {
 
         viewModel.list.observe(viewLifecycleOwner) { data ->
             tvTitle.text = data.title
-            tvData.text = data.start_date + "~" + data.end_date
+            tvData.text =
+                "${toFormat.format(fromFormat.parse(data.start_date))} - ${
+                    toFormat.format(fromFormat.parse(data.end_date))
+                }"
             tvMemo.text = data.description
 
             val currencySymbol = Currency.getInstance(data.currency).symbol
