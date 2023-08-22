@@ -343,7 +343,7 @@ class AddBillingFragment : Fragment() {
                         val tempDate =
                             year.toString() + "." + (month + 1).toString() + "." + day.toString()
                         tvPickerDate.text = tempDate
-                        viewModel.updateParam(3, tempDate)
+                        viewModel.updateParam(3, tempDate.replace(".","-"))
                     }
                 }, year, month, day)
             }?.show()

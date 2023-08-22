@@ -241,9 +241,9 @@ class EditBillingFragment : BaseFragment(R.layout.fragment_edit_billing) {
                 DatePickerDialog(it1, { _, year, month, day ->
                     run {
                         val tempDate =
-                            year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                            year.toString() + "." + (month + 1).toString() + "." + day.toString()
                         tvPickerDate.text = tempDate
-                        viewModel.updateParam(3, tempDate)
+                        viewModel.updateParam(3, tempDate.replace(".", "-"))
                     }
                 }, year, month, day)
             }?.show()
@@ -309,7 +309,7 @@ class EditBillingFragment : BaseFragment(R.layout.fragment_edit_billing) {
         viewModel.paramList.observe(viewLifecycleOwner) { data ->
             etName.setText(data.title)
             etPrice.setText(viewModel.totalAmount.toString())
-            tvPickerDate.text = data.paid_date
+            tvPickerDate.text = data.paid_date?.replace("-",".")
             when (data.category) {
                 "food" -> ivCategory.setImageResource(R.drawable.ic_category_food)
                 "transportation" -> ivCategory.setImageResource(R.drawable.ic_category_transportation)
