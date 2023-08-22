@@ -5,7 +5,9 @@ import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -26,13 +28,14 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
 
-            val totalParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            val scheduleParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val totalParams =
+                FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            val scheduleParams =
+                LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             if (schedule.end_at.isNullOrEmpty()) {
                 binding.tvTime.text = "${schedule.start_at}"
                 totalParams.setMargins(37.dp, 0, 0, 0)
                 scheduleParams.setMargins(38.dp, 0, 0, 0)
-
             } else {
                 binding.tvTime.text = "${schedule.start_at}-${schedule.end_at}"
                 totalParams.setMargins(19.dp, 0, 0, 0)
