@@ -89,7 +89,7 @@ class AddWishListFragment : Fragment() {
         ivCategory.setOnClickListener {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_category, null)
+            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
 
             val popupWindow =
                 PopupWindow(

@@ -28,7 +28,6 @@ import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddScheduleBinding
 import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
-import com.jerny.moiz.presentation.detail.schedule.add.AddScheduleFragmentArgs
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
@@ -145,7 +144,7 @@ class AddScheduleFragment : Fragment() {
         ivCategory.setOnClickListener {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_category, null)
+            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
 
             val popupWindow =
                 PopupWindow(
