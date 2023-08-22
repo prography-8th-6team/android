@@ -149,13 +149,13 @@ class AddScheduleFragment : Fragment() {
 
             val popupWindow =
                 PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    isOutsideTouchable = true
-                    isFocusable = true
-                }
+                isOutsideTouchable = true
+                isFocusable = true
+            }
 
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)
@@ -185,11 +185,6 @@ class AddScheduleFragment : Fragment() {
             popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_transportation)
                 viewModel.updateParam(3, "transportation")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_other).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_other)
-                viewModel.updateParam(3, "other")
             }
 
             popupWindow.showAsDropDown(ivCategory, -132, 20)
