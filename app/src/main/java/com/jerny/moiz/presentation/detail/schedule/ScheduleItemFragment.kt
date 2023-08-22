@@ -35,6 +35,8 @@ class ScheduleItemFragment(private val travel_pk: Int, private val date: String)
         adapter = ScheduleAdapter(requireContext(), object : ScheduleAdapter.OnClickListener {
             override fun delete(id: Int) {
                 deleteSchedule(id)
+                // 삭제 후 새로고침
+                getScheduleList()
             }
         })
         binding.rvSchedule.layoutManager = LinearLayoutManager(context)
