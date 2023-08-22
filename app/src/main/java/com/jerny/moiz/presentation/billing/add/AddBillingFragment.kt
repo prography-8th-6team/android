@@ -37,6 +37,7 @@ import com.jerny.moiz.presentation.createTravelList.SpinnerAdapter
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
+import com.jerny.moiz.presentation.util.hideKeyboard
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
@@ -131,6 +132,21 @@ class AddBillingFragment : Fragment() {
         val format = SimpleDateFormat("yyyy-MM-dd")
         tvPickerDate.text = format.format(calendar.time)
         viewModel.updateParam(3, format.format(calendar.time))
+
+        root.setOnClickListener {
+            it.hideKeyboard()
+
+            if (etPrice.text.isNotEmpty() && !etPrice.text.toString().startsWith("0")) {
+                viewModel.totalAmount = etPrice.text.toString().toDouble()
+                viewModel.updateTotalAmount()
+                etPrice.clearFocus()
+            }
+
+            if (etName.text.isNotEmpty()) {
+                viewModel.updateParam(0, etName.text.toString())
+                etName.clearFocus()
+            }
+        }
 
         etPrice.setOnEditorActionListener { _, _, _ ->
             if (etPrice.text.isEmpty() || etPrice.text.toString().startsWith("0")) {

@@ -19,15 +19,22 @@ import com.jerny.moiz.databinding.DialogScheduleBinding
 import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 
 class ScheduleDialog(
+    private val tempStartDate: String?,
+    private val tempEndDate: String?,
     private val okClickListener: (String, String, String) -> Unit
 ) : DialogFragment() {
     lateinit var binding: DialogScheduleBinding
 
-    private var date = ""
-    private var startDate = ""
-    private var endDate = ""
+    private val currentDateTime = Calendar.getInstance().time
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private val timeFormat = SimpleDateFormat("HH:mm")
+
+    private var date = dateFormat.format(currentDateTime)
+    private var startDate = timeFormat.format(currentDateTime)
+    private var endDate = timeFormat.format(currentDateTime)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,12 +42,15 @@ class ScheduleDialog(
         savedInstanceState: Bundle?,
     ): View? {
         binding = DialogScheduleBinding.inflate(inflater, container, false)
+        binding.dpDate.text = date
+        binding.dpStartDate.text = startDate
+        binding.dpEndDate.text = endDate
 
         binding.dpDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(tempStartDate, tempEndDate)
             datePickerFragment.setOnOkClickListener { year, month, day ->
-                date = "$year.$month.$day"
-                binding.dpDate.text = date
+                date = "$year-$month-$day"
+                binding.dpDate.text = "$year.$month.$day"
             }
             datePickerFragment.show(childFragmentManager, null)
         }

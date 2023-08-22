@@ -134,7 +134,7 @@ class EditTravelListFragment : Fragment() {
 
     private fun initDatePickerDialog() {
         binding.dpStartDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setStartDate("$year-$month-$day")
             }
@@ -142,7 +142,7 @@ class EditTravelListFragment : Fragment() {
         }
 
         binding.dpEndDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
+            val datePickerFragment = DatePickerDialog(viewModel.endDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setEndDate("$year-$month-$day")
             }

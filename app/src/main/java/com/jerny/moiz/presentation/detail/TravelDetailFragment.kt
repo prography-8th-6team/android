@@ -132,7 +132,12 @@ class TravelDetailFragment : Fragment() {
             popupView.findViewById<TextView>(R.id.tv_schedule).setOnClickListener {
                 popupWindow.dismiss()
                 findNavController().navigate(
-                    R.id.goto_add_schedule, bundleOf("travelId" to args.travelId)
+                    R.id.goto_add_schedule,
+                    bundleOf(
+                        "travelId" to args.travelId,
+                        "startDate" to viewModel.list.value?.start_date,
+                        "endDate" to viewModel.list.value?.end_date
+                    )
                 )
             }
         }

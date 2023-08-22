@@ -92,7 +92,7 @@ class AddScheduleFragment : Fragment() {
         }
 
         dpDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(args.startDate, args.endDate)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 dpDate.text = "$year.$month.$day"
                 viewModel.updateParam(4, "$year-$month-$day")

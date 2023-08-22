@@ -32,6 +32,12 @@
         <argument
             android:name="travelId"
             app:argType="integer" />
+        <argument
+            android:name="startDate"
+            app:argType="string" />
+        <argument
+            android:name="endDate"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -135,6 +141,12 @@
         <argument
             android:name="scheduleId"
             app:argType="integer" />
+        <argument
+            android:name="startDate"
+            app:argType="string" />
+        <argument
+            android:name="endDate"
+            app:argType="string" />
         <action
             android:id="@+id/action_scheduleDetailFragment_to_editScheduleFragment"
             app:destination="@id/editScheduleFragment" />

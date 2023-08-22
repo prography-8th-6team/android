@@ -67,7 +67,12 @@ class ScheduleFragment(
                 wishList.add(WishListItemFragment(list) {
                     findNavController().navigate(
                         R.id.action_detailFragment_to_scheduleDetailFragment,
-                        bundleOf("travelId" to id, "scheduleId" to it)
+                        bundleOf(
+                            "travelId" to id,
+                            "scheduleId" to it,
+                            "startDate" to startDate,
+                            "endDate" to endDate
+                        )
                     )
                 })
             }.run {
