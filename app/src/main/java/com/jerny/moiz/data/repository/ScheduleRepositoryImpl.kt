@@ -36,8 +36,9 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         travel_pk: String?,
         id: String?,
     ): ResponseMessage {
-        return if (scheduleService.deleteSchedule(token, travel_pk, id).isSuccessful) {
-            scheduleService.deleteSchedule(token, travel_pk, id).body()!!
+        val result = scheduleService.deleteSchedule(token, travel_pk, id)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseMessage(
                 message = scheduleService.deleteSchedule(token, travel_pk, id).message())
@@ -83,7 +84,7 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         }
 
         val result = scheduleService.putTravelSchedule(token, travelPk, id, temp, imgFile)
-        
+
         return if (result.isSuccessful) {
             result.body()!!
         } else {
