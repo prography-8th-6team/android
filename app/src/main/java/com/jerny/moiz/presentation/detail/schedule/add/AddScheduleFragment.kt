@@ -28,7 +28,6 @@ import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddScheduleBinding
 import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
-import com.jerny.moiz.presentation.detail.schedule.add.AddScheduleFragmentArgs
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
@@ -43,6 +42,13 @@ class AddScheduleFragment : Fragment() {
 
     private val viewModel: AddScheduleViewModel by viewModels()
     private val args: AddScheduleFragmentArgs by navArgs()
+
+    private val currentDateTime = Calendar.getInstance().time
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private val timeFormat = SimpleDateFormat("HH:mm")
+
+    private var date = dateFormat.format(currentDateTime)
+    private var dateTime = timeFormat.format(currentDateTime)
 
     var tempImgFile = arrayListOf<FileResult>()
     var camUri: Uri? = null
@@ -60,7 +66,14 @@ class AddScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
 
+        dpDate.text = date
+        dpStartDate.text = dateTime
+        dpEndDate.text = dateTime
+
         viewModel.updateParam(2, "confirmed")
+        viewModel.updateParam(4, date)
+        viewModel.updateParam(5, dateTime)
+        viewModel.updateParam(6, dateTime)
 
         viewModel.isValidated.observe(viewLifecycleOwner) {
             tvAddSchedule.isEnabled = it
