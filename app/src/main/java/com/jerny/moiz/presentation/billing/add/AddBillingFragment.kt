@@ -129,7 +129,7 @@ class AddBillingFragment : Fragment() {
         }
 
         val calendar = Calendar.getInstance()
-        val format = SimpleDateFormat("yyyy-MM-dd")
+        val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
         viewModel.updateParam(3, format.format(calendar.time))
 
@@ -341,7 +341,7 @@ class AddBillingFragment : Fragment() {
                 DatePickerDialog(it1, { _, year, month, day ->
                     run {
                         val tempDate =
-                            year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                            year.toString() + "." + (month + 1).toString() + "." + day.toString()
                         tvPickerDate.text = tempDate
                         viewModel.updateParam(3, tempDate)
                     }
