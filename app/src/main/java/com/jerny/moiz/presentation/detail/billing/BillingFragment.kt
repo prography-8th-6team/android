@@ -54,7 +54,7 @@ class BillingFragment(private val travelId: Int) : Fragment() {
             rvAccounts.showOrGone(!data.billings.isNullOrEmpty())
             tvEmpty.showOrGone(data.billings.isNullOrEmpty())
             if (!data.billings.isNullOrEmpty()) {
-                adapter.submitListEx(data.billings)
+                adapter.submitListEx(data.billings.sortedBy { it.paid_date })
             }
         }
     }
