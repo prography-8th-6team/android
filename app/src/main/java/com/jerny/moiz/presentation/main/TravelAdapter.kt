@@ -25,7 +25,7 @@ class TravelAdapter(private val onClickListener: (Int) -> Unit) : ListAdapter<Tr
         fun bind(travel: TravelDto) {
             val memberCount = travel.members?.size!!
             val fromFormat = SimpleDateFormat("yyyy-MM-dd")
-            val toFormat = SimpleDateFormat("yy-MM-dd")
+            val toFormat = SimpleDateFormat("yy.MM.dd")
 
             binding.tvTitle.text = travel.title
             binding.tvDate.text = "${toFormat.format(fromFormat.parse(travel.start_date))} - ${

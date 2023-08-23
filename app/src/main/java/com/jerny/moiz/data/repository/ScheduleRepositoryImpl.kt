@@ -39,7 +39,6 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         id: String?,
     ): ResponseMessage {
         val result = scheduleService.deleteSchedule(token, travel_pk, id)
-
         return if (result.isSuccessful) {
             result.body()!!
         } else {

@@ -19,6 +19,7 @@ import com.jerny.moiz.databinding.FragmentJourneyBinding
 import com.jerny.moiz.presentation.detail.ViewPagerAdapter
 import com.jerny.moiz.presentation.util.gone
 import com.jerny.moiz.presentation.util.show
+import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -60,8 +61,8 @@ class ScheduleFragment(
         }
 
         binding.ivHide.setOnClickListener {
-            if (binding.viewPager.visibility == View.GONE) binding.viewPager.show()
-            else binding.viewPager.gone()
+            if (binding.flWishlist.visibility == View.GONE) binding.flWishlist.show()
+            else binding.flWishlist.gone()
         }
 
         viewModel.scheduleList.observe(viewLifecycleOwner) {
@@ -113,14 +114,11 @@ class ScheduleFragment(
                     { setInit(it) },
                     { deleteSchedule(it) }) {
                     findNavController().navigate(
-                        R.id.action_detailFragment_to_scheduleDetailFragment,
-                        bundleOf(
+                        R.id.action_detailFragment_to_scheduleDetailFragment, bundleOf(
                             "travelId" to id,
                             "scheduleId" to it,
                             "startDate" to startDate,
-                            "endDate" to endDate
-                        )
-                    )
+                            "endDate" to endDate))
                 })
         }.run {
             viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
@@ -135,6 +133,9 @@ class ScheduleFragment(
                     }
                 })
             }
+
+            binding.viewPager.showOrGone(it.isNotEmpty())
+            binding.tvEmptyList.showOrGone(it.isEmpty())
         }
     }
 

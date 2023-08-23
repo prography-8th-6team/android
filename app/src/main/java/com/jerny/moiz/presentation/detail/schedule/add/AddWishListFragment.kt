@@ -26,7 +26,6 @@ import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddWishListBinding
-import com.jerny.moiz.presentation.detail.schedule.add.AddWishListFragmentArgs
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
@@ -90,17 +89,17 @@ class AddWishListFragment : Fragment() {
         ivCategory.setOnClickListener {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_category, null)
+            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
 
             val popupWindow =
                 PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    isOutsideTouchable = true
-                    isFocusable = true
-                }
+                isOutsideTouchable = true
+                isFocusable = true
+            }
 
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)
@@ -130,11 +129,6 @@ class AddWishListFragment : Fragment() {
             popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_transportation)
                 viewModel.updateParam(3, "transportation")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_other).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_other)
-                viewModel.updateParam(3, "other")
             }
 
             popupWindow.showAsDropDown(binding.ivCategory, -132, 20)
