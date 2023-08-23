@@ -66,6 +66,8 @@ class ScheduleFragment(
         }
 
         viewModel.scheduleList.observe(viewLifecycleOwner) {
+            binding.viewPager.showOrGone(it.isNotEmpty())
+            binding.tvEmptyList.showOrGone(it.isEmpty())
             it.chunked(8).forEach { list ->
                 wishList.add(
                     WishListItemFragment(
@@ -118,7 +120,9 @@ class ScheduleFragment(
                             "travelId" to id,
                             "scheduleId" to it,
                             "startDate" to startDate,
-                            "endDate" to endDate))
+                            "endDate" to endDate
+                        )
+                    )
                 })
         }.run {
             viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
@@ -133,9 +137,6 @@ class ScheduleFragment(
                     }
                 })
             }
-
-            binding.viewPager.showOrGone(it.isNotEmpty())
-            binding.tvEmptyList.showOrGone(it.isEmpty())
         }
     }
 
