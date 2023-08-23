@@ -36,6 +36,8 @@ class ScheduleFragment(
 
     private val fragmentList = arrayListOf<Fragment>()
     private val tabTitles = arrayListOf<String>()
+    private var isFlag: Boolean = false
+    private var isIdx: Int = 0
 
     private val wishList = arrayListOf<Fragment>()
 
@@ -65,14 +67,22 @@ class ScheduleFragment(
 
         viewModel.scheduleList.observe(viewLifecycleOwner) {
             it.chunked(8).forEach { list ->
-                wishList.add(WishListItemFragment(list) {
-                    findNavController().navigate(
-                        R.id.action_detailFragment_to_scheduleDetailFragment, bundleOf(
-                            "travelId" to id,
-                            "scheduleId" to it,
-                            "startDate" to startDate,
-                            "endDate" to endDate))
-                })
+                wishList.add(
+                    WishListItemFragment(
+                        list,
+                        false,
+                        { setInit(it) },
+                        { deleteSchedule(it) }) {
+                        findNavController().navigate(
+                            R.id.action_detailFragment_to_scheduleDetailFragment,
+                            bundleOf(
+                                "travelId" to id,
+                                "scheduleId" to it,
+                                "startDate" to startDate,
+                                "endDate" to endDate
+                            )
+                        )
+                    })
             }.run {
                 viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
 
@@ -82,19 +92,58 @@ class ScheduleFragment(
                     registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                         override fun onPageSelected(position: Int) {
                             super.onPageSelected(position)
+                            isIdx = position
                         }
                     })
                 }
-
             }
-
-            binding.viewPager.showOrGone(it.isNotEmpty())
-            binding.tvEmptyList.showOrGone(it.isEmpty())
         }
 
         binding.vpViewpagerSchedule.post {
             binding.vpViewpagerSchedule.currentItem = 0
         }
+    }
+
+    private fun setInit(isFlag: Boolean) {
+        wishList.clear()
+        viewModel.scheduleList.value?.chunked(8)?.forEach { list ->
+            wishList.add(
+                WishListItemFragment(
+                    list,
+                    isFlag,
+                    { setInit(it) },
+                    { deleteSchedule(it) }) {
+                    findNavController().navigate(
+                        R.id.action_detailFragment_to_scheduleDetailFragment, bundleOf(
+                            "travelId" to id,
+                            "scheduleId" to it,
+                            "startDate" to startDate,
+                            "endDate" to endDate))
+                })
+        }.run {
+            viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
+
+            binding.viewPager.apply {
+                adapter = viewPagerAdapter
+                setCurrentItem(isIdx, false)
+
+                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                    }
+                })
+            }
+
+            binding.viewPager.showOrGone(it.isNotEmpty())
+            binding.tvEmptyList.showOrGone(it.isEmpty())
+        }
+    }
+
+    private fun deleteSchedule(scheduleId: Int) {
+        UserDataStore.getUserToken(requireContext()).asLiveData().observe(viewLifecycleOwner) {
+            viewModel.deleteSchedule("Bearer $it", id.toString(), scheduleId.toString())
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

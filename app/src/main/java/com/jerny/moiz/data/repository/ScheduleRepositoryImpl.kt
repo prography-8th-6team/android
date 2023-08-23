@@ -22,12 +22,14 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         type: String?,
         date: String?,
     ): ResponseScheduleListDto {
-        return if (scheduleService.getScheduleList(token, id, type, date).isSuccessful) {
-            scheduleService.getScheduleList(token, id, type, date).body()!!
+        val result = scheduleService.getScheduleList(token, id, type, date)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseScheduleListDto(
                 message = scheduleService.getScheduleList(token, id, type, date).message(),
-                results = null)
+                results = null
+            )
         }
     }
 
@@ -41,7 +43,8 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
             result.body()!!
         } else {
             ResponseMessage(
-                message = scheduleService.deleteSchedule(token, travel_pk, id).message())
+                message = scheduleService.deleteSchedule(token, travel_pk, id).message()
+            )
         }
     }
 
@@ -50,8 +53,9 @@ class ScheduleRepositoryImpl @Inject constructor(private val scheduleService: Sc
         travel_pk: String,
         id: String,
     ): ResponseScheduleDto {
-        return if (scheduleService.getScheduleDetail(token, travel_pk, id).isSuccessful) {
-            scheduleService.getScheduleDetail(token, travel_pk, id).body()!!
+        val result = scheduleService.getScheduleDetail(token, travel_pk, id)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseScheduleDto(
                 message = scheduleService.getScheduleDetail(token, travel_pk, id).message(),

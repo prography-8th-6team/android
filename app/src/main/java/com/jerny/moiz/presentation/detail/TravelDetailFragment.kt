@@ -4,13 +4,14 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +20,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.ItemTravelMemberBinding
@@ -42,6 +45,7 @@ class TravelDetailFragment : Fragment() {
     private var token: String = ""
     val fromFormat = SimpleDateFormat("yyyy-MM-dd")
     val toFormat = SimpleDateFormat("yy.MM.dd")
+    private var selectedIdx: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,8 +84,9 @@ class TravelDetailFragment : Fragment() {
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
         binding.vpViewpagerMain.apply {
-            isUserInputEnabled = false
             adapter = viewPagerAdapter
+            isUserInputEnabled = false
+            setCurrentItem(selectedIdx, false)
 
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -98,10 +103,12 @@ class TravelDetailFragment : Fragment() {
                 1 -> tab.text = "계산도우미"
                 2 -> tab.text = "일정"
             }
+            selectedIdx = position
         }.attach()
     }
 
     private fun initViews() = with(binding) {
+
         ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -123,7 +130,10 @@ class TravelDetailFragment : Fragment() {
 
             popupView.findViewById<TextView>(R.id.tv_wishList).setOnClickListener {
                 popupWindow.dismiss()
-                findNavController().navigate(R.id.action_detailFragment_to_addWishListFragment, bundleOf("travelId" to args.travelId))
+                findNavController().navigate(
+                    R.id.action_detailFragment_to_addWishListFragment,
+                    bundleOf("travelId" to args.travelId)
+                )
             }
 
             popupView.findViewById<TextView>(R.id.tv_schedule).setOnClickListener {
@@ -152,7 +162,6 @@ class TravelDetailFragment : Fragment() {
             popupWindow.showAsDropDown(ivAdditional, -80, 20)
 
             popupView.findViewById<View>(R.id.tv_share).setOnClickListener {
-                /*
                 viewModel.postGenerateInviteToken(args.travelId, token)
                     .observe(viewLifecycleOwner) {
                         val inviteLink =
@@ -162,9 +171,7 @@ class TravelDetailFragment : Fragment() {
                             .setLink(Uri.parse(inviteLink))
                             .setDomainUriPrefix("https://jernymoiz.page.link")
                             .setAndroidParameters(
-                                AndroidParameters.Builder()
-                                    .setMinimumVersion(1)
-                                    .build()
+                                DynamicLink.AndroidParameters.Builder().build()
                             )
                             .buildShortDynamicLink()
                             .addOnSuccessListener { shortDynamicLink ->
@@ -178,7 +185,8 @@ class TravelDetailFragment : Fragment() {
                                 startActivity(sendIntent)
                             }
                     }
-                 */
+
+                /*
                 val dialog = CustomDialog("링크를 복사해 리스트를 공유하세요", "취소", "링크 복사") {
                     viewModel.postGenerateInviteToken(args.travelId, token)
                         .observe(viewLifecycleOwner) {
@@ -196,9 +204,9 @@ class TravelDetailFragment : Fragment() {
                                 .show()
                         }
                 }
-                dialog.isCancelable = false
+                dialog.isCancelable = true
                 dialog.show(requireActivity().supportFragmentManager, "share")
-
+                 */
             }
 
             popupView.findViewById<View>(R.id.tv_edit).setOnClickListener {
@@ -207,16 +215,16 @@ class TravelDetailFragment : Fragment() {
             }
 
             popupView.findViewById<View>(R.id.tv_delete).setOnClickListener {
+                popupWindow.dismiss()
                 val dialog = CustomDialog("리스트를 삭제하시겠습니까?", "취소", "네") {
                     UserDataStore.getUserToken(requireContext())
                         .asLiveData()
                         .observe(viewLifecycleOwner) {
                             viewModel.deleteTravel("Bearer $it", args.travelId)
                         }
-                    popupWindow.dismiss()
                     findNavController().navigateUp()
                 }
-                dialog.isCancelable = false
+                dialog.isCancelable = true
                 dialog.show(requireActivity().supportFragmentManager, "delete")
             }
         }
