@@ -64,9 +64,14 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
             binding.tvDescription.text = schedule.description
 
             binding.tvRemove.setOnClickListener {
-                schedule.id?.let { it1 -> onClick.delete(it1) }
-                Toast.makeText(
-                    binding.root.context, "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
+                val location = IntArray(2)
+                binding.tvOrder.getLocationOnScreen(location)
+                // swipe 했을 때만 삭제되게끔
+                if (location[0] < 0) {
+                    schedule.id?.let { it1 -> onClick.delete(it1) }
+                    Toast.makeText(
+                        binding.root.context, "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
