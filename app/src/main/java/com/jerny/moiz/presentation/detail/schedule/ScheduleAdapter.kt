@@ -16,11 +16,15 @@ import com.jerny.moiz.R
 import com.jerny.moiz.data.network.dto.ScheduleDto
 import com.jerny.moiz.databinding.ItemScheduleBinding
 import com.jerny.moiz.domain.model.Category
+import java.text.SimpleDateFormat
 
 class ScheduleAdapter(private val context: Context, private val onClick: OnClickListener) :
     ListAdapter<ScheduleDto, ScheduleAdapter.ViewHolder>(DiffCallback) {
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+
+    val fromFormat = SimpleDateFormat("HH:mm:ss")
+    val toFormat = SimpleDateFormat("HH:mm")
 
     inner class ViewHolder(private val binding: ItemScheduleBinding) : RecyclerView.ViewHolder(
         binding.root) {
@@ -32,12 +36,16 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
                 FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             val scheduleParams =
                 LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+
+            // 끝 시간이 없는 경우
             if (schedule.end_at.isNullOrEmpty()) {
-                binding.tvTime.text = "${schedule.start_at}"
+                binding.tvTime.text = "${toFormat.format(fromFormat.parse(schedule.start_at))}"
                 totalParams.setMargins(37.dp, 0, 0, 0)
                 scheduleParams.setMargins(38.dp, 0, 0, 0)
             } else {
-                binding.tvTime.text = "${schedule.start_at}-${schedule.end_at}"
+                binding.tvTime.text = "${toFormat.format(fromFormat.parse(schedule.start_at))}-${
+                    toFormat.format(fromFormat.parse(schedule.end_at))
+                }"
                 totalParams.setMargins(19.dp, 0, 0, 0)
                 scheduleParams.setMargins(17.dp, 0, 0, 0)
             }
@@ -58,7 +66,7 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
             binding.tvRemove.setOnClickListener {
                 schedule.id?.let { it1 -> onClick.delete(it1) }
                 Toast.makeText(
-                    binding.root.context, "삭제 완료!", Toast.LENGTH_SHORT).show()
+                    binding.root.context, "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
             }
         }
     }
