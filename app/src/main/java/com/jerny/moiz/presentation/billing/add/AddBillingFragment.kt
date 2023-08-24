@@ -131,7 +131,7 @@ class AddBillingFragment : Fragment() {
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
-        viewModel.updateParam(3, format.format(calendar.time))
+        viewModel.updateParam(3, format.format(calendar.time).replace(".","-"))
 
         root.setOnClickListener {
             it.hideKeyboard()
