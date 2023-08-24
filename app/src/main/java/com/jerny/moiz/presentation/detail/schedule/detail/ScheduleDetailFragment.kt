@@ -47,6 +47,7 @@ class ScheduleDetailFragment : Fragment() {
     private val viewModel: ScheduleDetailViewModel by viewModels()
     private val args: ScheduleDetailFragmentArgs by navArgs()
     private var token: String? = null
+    private var type: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,12 +80,13 @@ class ScheduleDetailFragment : Fragment() {
 
         viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
             data?.let {
+                type = data.type
                 setTop(data.type!!)
                 tvBillingTitle.text = data.title
                 etMemo.text = data.description
 
                 tvSchedule.setOnClickListener {
-                    if (data.type != "confirmed") {
+                    if (type != "confirmed") {
                         val dialog =
                             ScheduleDialog(args.startDate, args.endDate) { date, start, end ->
                                 setTop("confirmed")
@@ -98,11 +100,13 @@ class ScheduleDetailFragment : Fragment() {
                             }
                         dialog.isCancelable = false
                         dialog.show(requireActivity().supportFragmentManager, "schedule")
+
+                        type = "confirmed"
                     }
                 }
 
                 tvWishList.setOnClickListener {
-                    if (data.type != "pending") {
+                    if (type != "pending") {
                         val dialog =
                             CustomDialog("일정에서 장바구니로 이동시키면 날짜와 시간이 모두 초기화됩니다.", "취소", "장바구니로 이동") {
                                 setTop("pending")
@@ -113,6 +117,8 @@ class ScheduleDetailFragment : Fragment() {
                             }
                         dialog.isCancelable = false
                         dialog.show(requireActivity().supportFragmentManager, "wishList")
+
+                        type = "pending"
                     }
                 }
 

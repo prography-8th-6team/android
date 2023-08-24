@@ -47,9 +47,9 @@ class ScheduleDetailViewModel @Inject constructor(
 
     fun updateParam(
         type: String,
-        date: String? = null,
-        startAt: String? = null,
-        endAt: String? = null
+        date: String? = "",
+        startAt: String? = "",
+        endAt: String? = ""
     ) {
         paramList.value?.type = type
         paramList.value?.date = date
@@ -62,4 +62,5 @@ class ScheduleDetailViewModel @Inject constructor(
             putTravelScheduleUseCase.invoke(token, travelId, id, paramList.value!!)
         }
     }
+
 }

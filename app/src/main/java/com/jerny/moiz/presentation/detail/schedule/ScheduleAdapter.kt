@@ -27,7 +27,8 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
     val toFormat = SimpleDateFormat("HH:mm")
 
     inner class ViewHolder(private val binding: ItemScheduleBinding) : RecyclerView.ViewHolder(
-        binding.root) {
+        binding.root
+    ) {
         fun bind(schedule: ScheduleDto) {
             binding.tvName.text = schedule.title
             binding.tvOrder.text = "${adapterPosition + 1}"
@@ -63,6 +64,10 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
 
             binding.tvDescription.text = schedule.description
 
+            binding.llSchedule.setOnClickListener {
+                onClick.onClick(schedule)
+            }
+
             binding.tvRemove.setOnClickListener {
                 val location = IntArray(2)
                 binding.tvOrder.getLocationOnScreen(location)
@@ -70,7 +75,8 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
                 if (location[0] < 0) {
                     schedule.id?.let { it1 -> onClick.delete(it1) }
                     Toast.makeText(
-                        binding.root.context, "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
+                        binding.root.context, "일정이 삭제되었어요.", Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -104,5 +110,7 @@ class ScheduleAdapter(private val context: Context, private val onClick: OnClick
 
     interface OnClickListener {
         fun delete(id: Int)
+
+        fun onClick(schedule: ScheduleDto)
     }
 }
