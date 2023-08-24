@@ -10,6 +10,7 @@ import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var mBinding: ActivityMainBinding? = null
     private val binding get() = mBinding!!
     private val viewModel by viewModels<MainViewModel>()
+    private var isJoin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,13 @@ class MainActivity : AppCompatActivity() {
         UserDataStore.getJoinCode(this@MainActivity).asLiveData().observe(this) { code ->
             UserDataStore.getUserToken(this@MainActivity).asLiveData().observe(this) { token ->
                 if (code != "" && token != "") {
-                    viewModel.postJoinCode(token, code)
+                    if (!isJoin) {
+                        viewModel.postJoinCode("Bearer $token", code)
+                        isJoin = true
+                        runBlocking {
+                            UserDataStore.setJoinCode(this@MainActivity, "")
+                        }
+                    }
                 }
             }
         }
@@ -51,6 +59,5 @@ class MainActivity : AppCompatActivity() {
 
         super.onBackPressed()
     }
-
 
 }
