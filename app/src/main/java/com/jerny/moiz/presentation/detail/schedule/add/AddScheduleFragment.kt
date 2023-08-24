@@ -66,12 +66,12 @@ class AddScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
 
-        dpDate.text = date
+        dpDate.text = args.startDate.replace("-", ".")
         dpStartDate.text = dateTime
         dpEndDate.text = dateTime
 
         viewModel.updateParam(2, "confirmed")
-        viewModel.updateParam(4, date)
+        viewModel.updateParam(4, args.startDate)
         viewModel.updateParam(5, dateTime)
         viewModel.updateParam(6, dateTime)
 
@@ -162,13 +162,13 @@ class AddScheduleFragment : Fragment() {
 
             val popupWindow =
                 PopupWindow(
-                popupView,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply {
-                isOutsideTouchable = true
-                isFocusable = true
-            }
+                    isOutsideTouchable = true
+                    isFocusable = true
+                }
 
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)
