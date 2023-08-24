@@ -93,6 +93,7 @@ class TravelDetailFragment : Fragment() {
                     super.onPageSelected(position)
                     binding.grBottomNavigation.showOrHide(position == 0)
                     binding.ivAddSchedule.showOrHide(position == 2)
+                    selectedIdx = position
                 }
             })
         }
@@ -103,7 +104,6 @@ class TravelDetailFragment : Fragment() {
                 1 -> tab.text = "계산도우미"
                 2 -> tab.text = "일정"
             }
-            selectedIdx = position
         }.attach()
     }
 
