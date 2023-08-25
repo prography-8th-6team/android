@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.jerny.moiz.presentation.createTravelList.CreateTravelListViewModel" />
+            type="com.jerny.moiz.presentation.travel.create.CreateTravelListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

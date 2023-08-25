@@ -21,24 +21,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentEditScheduleBinding
-import com.jerny.moiz.domain.model.Currency
-import com.jerny.moiz.presentation.billing.add.AddBillingAdapter
-import com.jerny.moiz.presentation.billing.edit.EditBillingFragmentArgs
-import com.jerny.moiz.presentation.billing.edit.EditBillingViewModel
 import com.jerny.moiz.presentation.common.BaseFragment
-import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
+import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
 import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 

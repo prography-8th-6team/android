@@ -35,7 +35,7 @@ import com.jerny.moiz.domain.model.Currency
 import com.jerny.moiz.domain.model.InputCostEntity
 import com.jerny.moiz.presentation.billing.add.AddBillingAdapter
 import com.jerny.moiz.presentation.common.BaseFragment
-import com.jerny.moiz.presentation.createTravelList.SpinnerAdapter
+import com.jerny.moiz.presentation.travel.create.SpinnerAdapter
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo

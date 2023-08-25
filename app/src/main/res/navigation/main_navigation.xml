@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/createTravelListFragment"
-        android:name="com.jerny.moiz.presentation.createTravelList.CreateTravelListFragment"
+        android:name="com.jerny.moiz.presentation.travel.create.CreateTravelListFragment"
         android:label="CreateTravelListFragment"
         tools:layout="@layout/create_travel_list_fragment" />
 
@@ -65,7 +65,7 @@
 
     <fragment
         android:id="@+id/editTravelListFragment"
-        android:name="com.jerny.moiz.presentation.editTravelList.EditTravelListFragment"
+        android:name="com.jerny.moiz.presentation.travel.edit.EditTravelListFragment"
         android:label="EditTravelListFragment"
         tools:layout="@layout/edit_travel_list_fragment">
         <argument

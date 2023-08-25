@@ -14,12 +14,10 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.jerny.moiz.databinding.CustomDialogBinding
 import com.jerny.moiz.databinding.DialogScheduleBinding
-import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
+import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 
 class ScheduleDialog(
     private val tempStartDate: String?,

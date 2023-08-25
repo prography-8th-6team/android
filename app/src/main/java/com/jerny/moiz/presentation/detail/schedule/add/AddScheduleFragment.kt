@@ -27,7 +27,7 @@ import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddScheduleBinding
-import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
+import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
