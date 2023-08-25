@@ -95,12 +95,7 @@ class AddBillingFragment : Fragment() {
         rvPaidForMembers.adapter = adapter
 
         root.setOnClickListener {
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                root.windowToken,
-                0
-            )
+            it.hideKeyboard()
 
             if (etPrice.text.isNotEmpty()) {
                 viewModel.totalAmount = etPrice.text.toString().toDouble()
@@ -131,22 +126,7 @@ class AddBillingFragment : Fragment() {
         val calendar = Calendar.getInstance()
         val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
-        viewModel.updateParam(3, format.format(calendar.time).replace(".","-"))
-
-        root.setOnClickListener {
-            it.hideKeyboard()
-
-            if (etPrice.text.isNotEmpty() && !etPrice.text.toString().startsWith("0")) {
-                viewModel.totalAmount = etPrice.text.toString().toDouble()
-                viewModel.updateTotalAmount()
-                etPrice.clearFocus()
-            }
-
-            if (etName.text.isNotEmpty()) {
-                viewModel.updateParam(0, etName.text.toString())
-                etName.clearFocus()
-            }
-        }
+        viewModel.updateParam(3, format.format(calendar.time).replace(".", "-"))
 
         etPrice.setOnEditorActionListener { _, _, _ ->
             if (etPrice.text.isEmpty() || etPrice.text.toString().startsWith("0")) {
@@ -343,7 +323,7 @@ class AddBillingFragment : Fragment() {
                         val tempDate =
                             year.toString() + "." + (month + 1).toString() + "." + day.toString()
                         tvPickerDate.text = tempDate
-                        viewModel.updateParam(3, tempDate.replace(".","-"))
+                        viewModel.updateParam(3, tempDate.replace(".", "-"))
                     }
                 }, year, month, day)
             }?.show()
