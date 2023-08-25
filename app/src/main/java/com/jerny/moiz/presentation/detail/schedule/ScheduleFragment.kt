@@ -166,6 +166,8 @@ class ScheduleFragment(
                 cur = cur.plusDays(1)
                 idx += 1
             }
+            fragmentList.add(idx, ScheduleItemFragment(id, end.toString()))
+            tabTitles.add(idx, "${end.monthValue}.${end.dayOfMonth}")
         }
 
 
