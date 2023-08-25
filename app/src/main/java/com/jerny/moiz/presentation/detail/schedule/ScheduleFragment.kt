@@ -72,19 +72,19 @@ class ScheduleFragment(
                 wishList.add(
                     WishListItemFragment(
                         list,
-                        false,
-                        { setInit(it) },
-                        { deleteSchedule(it) }) {
-                        findNavController().navigate(
+                                                  false,
+                                                  { setInit(it) },
+                                                  { deleteSchedule(it) }) {
+                    findNavController().navigate(
                             R.id.action_detailFragment_to_scheduleDetailFragment,
                             bundleOf(
-                                "travelId" to id,
-                                "scheduleId" to it,
-                                "startDate" to startDate,
+                            "travelId" to id,
+                            "scheduleId" to it,
+                            "startDate" to startDate,
                                 "endDate" to endDate
                             )
                         )
-                    })
+                })
             }.run {
                 viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
 
@@ -112,18 +112,18 @@ class ScheduleFragment(
             wishList.add(
                 WishListItemFragment(
                     list,
-                    isFlag,
-                    { setInit(it) },
-                    { deleteSchedule(it) }) {
-                    findNavController().navigate(
-                        R.id.action_detailFragment_to_scheduleDetailFragment, bundleOf(
-                            "travelId" to id,
-                            "scheduleId" to it,
-                            "startDate" to startDate,
+                                              isFlag,
+                                              { setInit(it) },
+                                              { deleteSchedule(it) }) {
+                findNavController().navigate(
+                    R.id.action_detailFragment_to_scheduleDetailFragment, bundleOf(
+                        "travelId" to id,
+                        "scheduleId" to it,
+                        "startDate" to startDate,
                             "endDate" to endDate
                         )
                     )
-                })
+            })
         }.run {
             viewPagerAdapter = ViewPagerAdapter(wishList, childFragmentManager, lifecycle)
 
@@ -155,13 +155,19 @@ class ScheduleFragment(
         var cur = start
         var idx = 0
 
-        // 시작 날짜부터 종료 날짜까지 tab layout item 으로 추가
-        while (cur.compareTo(end) != 0) {
-            fragmentList.add(idx, ScheduleItemFragment(id, cur.toString()))
-            tabTitles.add(idx, "${cur.monthValue}.${cur.dayOfMonth}")
-            cur = cur.plusDays(1)
-            idx += 1
+        if (start == end) {
+            fragmentList.add(0, ScheduleItemFragment(id, start.toString()))
+            tabTitles.add(0, "${start.monthValue}.${start.dayOfMonth}")
+        } else {
+            // 시작 날짜부터 종료 날짜까지 tab layout item 으로 추가
+            while (cur.compareTo(end) != 0) {
+                fragmentList.add(idx, ScheduleItemFragment(id, cur.toString()))
+                tabTitles.add(idx, "${cur.monthValue}.${cur.dayOfMonth}")
+                cur = cur.plusDays(1)
+                idx += 1
+            }
         }
+
 
         val viewPagerAdapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
 
