@@ -108,7 +108,7 @@ class ScheduleDetailFragment : Fragment() {
                 tvWishList.setOnClickListener {
                     if (type != "pending") {
                         val dialog =
-                            CustomDialog("일정에서 장바구니로 이동시키면 날짜와 시간이 모두 초기화됩니다.", "취소", "장바구니로 이동") {
+                            CustomDialog("일정에서 위시리스트로 이동시키면 날짜와 시간이 모두 초기화됩니다.", "취소", "위시리스트로 이동") {
                                 setTop("pending")
                                 viewModel.updateParam("pending")
                                 scheduleGroup.gone()
