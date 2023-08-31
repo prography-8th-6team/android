@@ -8,6 +8,10 @@ import com.jerny.moiz.data.network.dto.PostScheduleDto
 import com.jerny.moiz.domain.usecase.PostScheduleUseCase
 import com.jerny.moiz.presentation.util.FileResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,74 +21,62 @@ class AddScheduleViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _isValidated = MutableLiveData<Boolean>()
-    val isValidated: LiveData<Boolean> = _isValidated
+    var title = MutableStateFlow("")
+    var category = MutableStateFlow("")
+    var description = MutableStateFlow("")
+    var date = MutableStateFlow("")
+    var startAt = MutableStateFlow("")
+    var endAt = MutableStateFlow("")
+    var type = MutableStateFlow("")
 
-    private var paramList: MutableLiveData<PostScheduleDto> = PostScheduleDto(
-        title = "",
-        description = "",
-        type = "",
-        category = "",
-        date = "",
-        start_at = "",
-        end_at = ""
-    ).let { MutableLiveData(it) }
-
-    private fun isValidate() = with(paramList.value!!) {
-        _isValidated.value = when (type) {
-            // type pending : 위시리스트, type confirmed : 일정
-            "pending" -> {
-                title != ""
-            }
-
-            else -> {
-                title != "" && date != "" && start_at != "" && end_at != ""
+    var totalValidation: Flow<Boolean>
+        get() = if (type.value == "pending") {
+            wishListValidated
+        } else {
+            combine(wishListValidated, scheduleValidate) { wishListValidated, scheduleValidate ->
+                wishListValidated && scheduleValidate
             }
         }
+        set(_) {}
+    
+    private var wishListValidated: Flow<Boolean> = combine(
+        title, category
+    ) { title, _ -> title != "" }
+
+    private var scheduleValidate: Flow<Boolean> = combine(
+        date, startAt, endAt
+    ) { date, startAt, endAt ->
+        date != "" && startAt != "" && endAt != ""
     }
 
-    fun updateParam(type: Int, value: Any?) {
-        when (type) {
-            0 -> {
-                paramList.value?.title = value as String?
-                isValidate()
-            }
-
-            1 -> {
-                paramList.value?.description = value as String?
-                isValidate()
-            }
-
-            2 -> {
-                paramList.value?.type = value as String?
-                isValidate()
-            }
-
-            3 -> {
-                paramList.value?.category = value as String?
-                isValidate()
-            }
-
-            4 -> {
-                paramList.value?.date = value as String?
-                isValidate()
-            }
-
-            5 -> {
-                paramList.value?.start_at = value as String?
-                isValidate()
-            }
-
-            6 -> {
-                paramList.value?.end_at = value as String?
-                isValidate()
-            }
+    fun updateParam(idx: Int, value: Any?) {
+        when (idx) {
+            0 -> title.value = value as String
+            1 -> description.value = value as String
+            2 -> type.value = value as String
+            3 -> category.value = value as String
+            4 -> date.value = value as String
+            5 -> startAt.value = value as String
+            6 -> endAt.value = value as String
         }
     }
 
     fun postSchedule(token: String, travelId: Int, imgList: List<FileResult>) {
         viewModelScope.launch {
-            postScheduleUseCase.invoke(token, travelId, paramList.value!!, imgList)
+            postScheduleUseCase.invoke(
+                token,
+                travelId,
+                PostScheduleDto(
+                    type.value,
+                    title.value,
+                    description.value,
+                    startAt.value,
+                    endAt.value,
+                    date.value,
+                    category.value
+                ),
+                imgList
+            )
         }
     }
 }

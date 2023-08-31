@@ -11,27 +11,31 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddScheduleBinding
+import com.jerny.moiz.databinding.ItemScheduleCategoryBinding
 import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
+import com.jerny.moiz.presentation.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -75,31 +79,33 @@ class AddScheduleFragment : Fragment() {
         viewModel.updateParam(5, dateTime)
         viewModel.updateParam(6, dateTime)
 
-        viewModel.isValidated.observe(viewLifecycleOwner) {
-            tvAddSchedule.isEnabled = it
-            tvAddSchedule.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (it) R.color.color_F55C5C else R.color.color_F1F0F0
-                )
-            )
-        }
-
         imgBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        etName.doOnTextChanged { text, start, before, count ->
+            viewModel.updateParam(0, text.toString())
+        }
+
+        etMemo.doOnTextChanged { text, start, before, count ->
+            viewModel.updateParam(1, text.toString())
+        }
+
+        lifecycleScope.launch {
+            viewModel.totalValidation.collect {
+                tvAddSchedule.isEnabled = it
+                tvAddSchedule.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (it) R.color.color_F55C5C else R.color.color_F1F0F0
+                    )
+                )
+            }
+        }
+
         root.setOnClickListener {
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                root.windowToken,
-                0
-            )
-            if (etMemo.text.isNotEmpty())
-                viewModel.updateParam(1, etMemo.text.toString())
-            if (etName.text.isNotEmpty())
-                viewModel.updateParam(0, etName.text.toString())
+            it.hideKeyboard()
+
             etName.clearFocus()
             etMemo.clearFocus()
         }
@@ -158,8 +164,8 @@ class AddScheduleFragment : Fragment() {
         ivCategory.setOnClickListener {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
 
+            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
             val popupWindow =
                 PopupWindow(
                     popupView,
@@ -170,49 +176,39 @@ class AddScheduleFragment : Fragment() {
                     isFocusable = true
                 }
 
+            val categoryBinding = ItemScheduleCategoryBinding.bind(popupView)
+
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)
                 popupWindow.dismiss()
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_shopping).setOnClickListener {
+            categoryBinding.llShopping.setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_shopping)
                 viewModel.updateParam(3, "shopping")
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_market).setOnClickListener {
+            categoryBinding.llMarket.setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_market)
                 viewModel.updateParam(3, "market")
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_food).setOnClickListener {
+            categoryBinding.llFood.setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_food)
                 viewModel.updateParam(3, "food")
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_hotel).setOnClickListener {
+            categoryBinding.llHotel.setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_hotel)
                 viewModel.updateParam(3, "hotel")
             }
 
-            popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
+            categoryBinding.llTransportation.setOnClickListener {
                 categoryClickListener(R.drawable.ic_category_transportation)
                 viewModel.updateParam(3, "transportation")
             }
 
             popupWindow.showAsDropDown(ivCategory, -132, 20)
-        }
-
-        etName.setOnEditorActionListener { _, _, _ ->
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                etName.windowToken,
-                0
-            )
-            viewModel.updateParam(0, etName.text.toString())
-            etName.clearFocus()
-            true
         }
 
         tvAddSchedule.setOnClickListener {
