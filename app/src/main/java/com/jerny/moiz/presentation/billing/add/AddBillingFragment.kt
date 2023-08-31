@@ -33,10 +33,11 @@ import com.jerny.moiz.databinding.FragmentAddBillingBinding
 import com.jerny.moiz.domain.model.Currency
 import com.jerny.moiz.domain.model.InputCostEntity
 import com.jerny.moiz.presentation.billing.BillingViewModel
-import com.jerny.moiz.presentation.createTravelList.SpinnerAdapter
+import com.jerny.moiz.presentation.travel.create.SpinnerAdapter
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
+import com.jerny.moiz.presentation.util.hideKeyboard
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
@@ -94,12 +95,7 @@ class AddBillingFragment : Fragment() {
         rvPaidForMembers.adapter = adapter
 
         root.setOnClickListener {
-            val mInputMethodManager =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                root.windowToken,
-                0
-            )
+            it.hideKeyboard()
 
             if (etPrice.text.isNotEmpty()) {
                 viewModel.totalAmount = etPrice.text.toString().toDouble()
@@ -128,9 +124,9 @@ class AddBillingFragment : Fragment() {
         }
 
         val calendar = Calendar.getInstance()
-        val format = SimpleDateFormat("yyyy-MM-dd")
+        val format = SimpleDateFormat("yyyy.MM.dd")
         tvPickerDate.text = format.format(calendar.time)
-        viewModel.updateParam(3, format.format(calendar.time))
+        viewModel.updateParam(3, format.format(calendar.time).replace(".", "-"))
 
         etPrice.setOnEditorActionListener { _, _, _ ->
             if (etPrice.text.isEmpty() || etPrice.text.toString().startsWith("0")) {
@@ -325,9 +321,9 @@ class AddBillingFragment : Fragment() {
                 DatePickerDialog(it1, { _, year, month, day ->
                     run {
                         val tempDate =
-                            year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                            year.toString() + "." + (month + 1).toString() + "." + day.toString()
                         tvPickerDate.text = tempDate
-                        viewModel.updateParam(3, tempDate)
+                        viewModel.updateParam(3, tempDate.replace(".", "-"))
                     }
                 }, year, month, day)
             }?.show()

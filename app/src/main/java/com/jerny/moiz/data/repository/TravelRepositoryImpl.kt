@@ -1,5 +1,6 @@
 package com.jerny.moiz.data.repository
 
+import com.google.gson.Gson
 import com.jerny.moiz.data.network.dto.BillingDetailDto
 import com.jerny.moiz.data.network.dto.BillingMembersDto
 import com.jerny.moiz.data.network.dto.PostBillingDto
@@ -14,7 +15,6 @@ import com.jerny.moiz.data.network.dto.TravelCreateDto
 import com.jerny.moiz.data.network.service.TravelService
 import com.jerny.moiz.domain.repository.TravelRepository
 import com.jerny.moiz.presentation.util.FileResult
-import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -28,11 +28,13 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
     TravelRepository {
 
     override suspend fun getTravelList(token: String): ResponseTravelListDto {
-        return if (travelService.getTravelList(token).isSuccessful) {
-            travelService.getTravelList(token).body()!!
+        val result = travelService.getTravelList(token)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseTravelListDto(
-                message = travelService.getTravelList(token).message(), results = null)
+                message = result.message(), results = null
+            )
         }
 
     }
@@ -46,21 +48,27 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
             result.body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.postTravel(data, token).message(), results = null
+                message = result.message(), results = null
             )
         }
     }
 
     override suspend fun postJoinCode(token: String, data: PostJoinCodeDto) {
-        travelService.postJoinCode(token, data)
+        try {
+            travelService.postJoinCode(token, data)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 
     override suspend fun getTravelDetail(travelId: Int, token: String): ResponseTravelDetailDto {
-        return if (travelService.getTravelDetail(token, travelId).isSuccessful) {
-            travelService.getTravelDetail(token, travelId).body()!!
+        val result = travelService.getTravelDetail(token, travelId)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseTravelDetailDto(
-                message = travelService.getTravelDetail(token, travelId).message(), results = null)
+                message = result.message(), results = null
+            )
         }
     }
 
@@ -81,7 +89,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
                 total_amount_currency = null,
                 captured_amount = null,
                 images = null,
-                participants = null)
+                participants = null
+            )
         }
     }
 
@@ -90,11 +99,13 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         data: TravelCreateDto,
         id: Int,
     ): ResponseTravelCreateDto {
-        return if (travelService.putTravel(token, data, id).isSuccessful) {
-            travelService.putTravel(token, data, id).body()!!
+        val result = travelService.putTravel(token, data, id)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseTravelCreateDto(
-                message = travelService.putTravel(token, data, id).message(), results = null)
+                message = result.message(), results = null
+            )
         }
     }
 
@@ -103,8 +114,9 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
     }
 
     override suspend fun getBillingMembers(travelId: Int, token: String): List<BillingMembersDto> {
-        return if (travelService.getBillingMembers(token, travelId).isSuccessful) {
-            travelService.getBillingMembers(token, travelId).body()!!
+        val result = travelService.getBillingMembers(token, travelId)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             emptyList()
         }
@@ -129,19 +141,22 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
 
         travelService.postBillings(token, travelId, temp, imgFile)
     }
 
     override suspend fun getBillingsHelper(travelId: Int, token: String): ResponseBillingHelper {
-        return if (travelService.getBillingsHelper(token, travelId).isSuccessful) {
-            travelService.getBillingsHelper(token, travelId).body()!!
+        val result = travelService.getBillingsHelper(token, travelId)
+        return if (result.isSuccessful) {
+            result.body()!!
         } else {
             ResponseBillingHelper(
-                message = travelService.getBillingsHelper(token, travelId).message(),
-                results = null)
+                message = result.message(),
+                results = null
+            )
         }
     }
 
@@ -164,7 +179,8 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
 
         val imgFile = imgList?.map {
             MultipartBody.Part.createFormData(
-                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull()))
+                "images", it.file.name, it.file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
 
         travelService.putBillings(token, billingId, temp, imgFile)
@@ -175,7 +191,6 @@ class TravelRepositoryImpl @Inject constructor(private val travelService: Travel
         return if (result.isSuccessful) {
             result.body()!!
         } else {
-            Timber.d(result.message())
             ShareTokenDto(message = result.message(), toekn = null)
         }
     }

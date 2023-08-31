@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.createTravelList
+package com.jerny.moiz.presentation.travel.create
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.data.network.dto.TravelCreateDto
 import com.jerny.moiz.databinding.CreateTravelListFragmentBinding
 import com.jerny.moiz.domain.model.Currency
+import com.jerny.moiz.presentation.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +43,10 @@ class CreateTravelListFragment : Fragment() {
         setRadioGroup()
 
         binding.imgBack.setOnClickListener { findNavController().popBackStack() }
+
+        binding.root.setOnClickListener {
+            it.hideKeyboard()
+        }
 
         binding.btnCreate.setOnClickListener { postTravel() }
         viewModel.isEnabled.observe(viewLifecycleOwner) {

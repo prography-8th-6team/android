@@ -139,6 +139,8 @@ class BillingViewModel @Inject constructor(
         }
         _temp.value = temp
 
+        updateParam(5, null)
+
         if (!isDutch) updateTotalAmount()
     }
 

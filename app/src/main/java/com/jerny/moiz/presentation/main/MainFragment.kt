@@ -21,6 +21,7 @@ import com.jerny.moiz.databinding.MainFragmentBinding
 import com.jerny.moiz.presentation.login.LoginActivity
 import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -50,6 +51,16 @@ class MainFragment : Fragment() {
             imgClose.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
             tvVersion.text = "현재버전 ${BuildConfig.VERSION_NAME}"
             tvPrivacy.setOnClickListener { goToPrivacyPage() }
+
+            tvLogout.setOnClickListener {
+                runBlocking {
+                    UserDataStore.clear(requireContext())
+                }
+                val intent = Intent(
+                    requireContext(), LoginActivity::class.java
+                )
+                startActivity(intent)
+            }
         }
 
         getTravelList()
@@ -76,7 +87,7 @@ class MainFragment : Fragment() {
         }
 
         viewModel.response.observe(viewLifecycleOwner) {
-            if (it.message == "Forbidden") {
+            if (it.message == "Forbidden" || it.message == "Unauthorized") {
                 val intent = Intent(
                     requireContext(), LoginActivity::class.java
                 )

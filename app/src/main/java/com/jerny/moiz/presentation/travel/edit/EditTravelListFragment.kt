@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.editTravelList
+package com.jerny.moiz.presentation.travel.edit
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -18,12 +18,13 @@ import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.data.network.dto.TravelCreateDto
 import com.jerny.moiz.databinding.EditTravelListFragmentBinding
 import com.jerny.moiz.domain.model.Currency
-import com.jerny.moiz.presentation.createTravelList.DatePickerDialog
-import com.jerny.moiz.presentation.createTravelList.SpinnerAdapter
+import com.jerny.moiz.presentation.travel.create.DatePickerDialog
+import com.jerny.moiz.presentation.travel.create.SpinnerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint class EditTravelListFragment : Fragment() {
+@AndroidEntryPoint
+class EditTravelListFragment : Fragment() {
     private lateinit var binding: EditTravelListFragmentBinding
     private var currencyList = ArrayList<Currency>()
     val viewModel by viewModels<EditTravelListViewModel>()
@@ -42,6 +43,11 @@ import kotlinx.coroutines.launch
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        binding.imgBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         getTravelDetail()
         initSpinner()
         initDatePickerDialog()
@@ -128,7 +134,7 @@ import kotlinx.coroutines.launch
 
     private fun initDatePickerDialog() {
         binding.dpStartDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog()
+            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setStartDate("$year-$month-$day")
             }
@@ -136,7 +142,7 @@ import kotlinx.coroutines.launch
         }
 
         binding.dpEndDate.setOnClickListener {
-            val datePickerFragment = DatePickerDialog(viewModel.startDate.value)
+            val datePickerFragment = DatePickerDialog(viewModel.endDate.value)
             datePickerFragment.setOnOkClickListener { year, month, day ->
                 viewModel.setEndDate("$year-$month-$day")
             }

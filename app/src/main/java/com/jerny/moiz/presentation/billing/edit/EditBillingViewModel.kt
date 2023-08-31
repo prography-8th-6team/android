@@ -92,13 +92,13 @@ class EditBillingViewModel @Inject constructor(
         }
     }
 
-    private fun isValidate() = with(paramList.value!!) {
-        _isValidated.value = title != "" &&
-                category != "" &&
-                currency != "" &&
-                paid_date != "" &&
-                paid_by != 0 &&
-                settlements.isNotEmpty()
+    private fun isValidate() = paramList.value?.let {
+        _isValidated.value = it.title != "" &&
+                it.category != "" &&
+                it.currency != "" &&
+                it.paid_date != "" &&
+                it.paid_by != 0 &&
+                it.settlements.isNotEmpty()
     }
 
     fun updateParam(type: Int, value: Any?) {

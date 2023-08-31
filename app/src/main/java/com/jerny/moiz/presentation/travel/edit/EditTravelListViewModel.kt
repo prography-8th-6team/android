@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.editTravelList
+package com.jerny.moiz.presentation.travel.edit
 
 import android.text.Editable
 import android.text.TextWatcher

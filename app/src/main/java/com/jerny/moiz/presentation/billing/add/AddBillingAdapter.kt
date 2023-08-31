@@ -20,7 +20,7 @@ class AddBillingAdapter(
 ) : ListAdapter<InputCostEntity, AddBillingAdapter.ViewHolder>(DiffCallback) {
 
     // false : 1/n빵 true : 직접입력
-    var billingType: Boolean = true
+    var billingType: Boolean = false
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<InputCostEntity>() {

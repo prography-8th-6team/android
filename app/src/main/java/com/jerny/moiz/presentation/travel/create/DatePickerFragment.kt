@@ -1,4 +1,4 @@
-package com.jerny.moiz.presentation.createTravelList
+package com.jerny.moiz.presentation.travel.create
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,8 @@ import com.jerny.moiz.databinding.DatePickerDialogBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-class DatePickerDialog(private val startDate: String? = null) : DialogFragment() {
+class DatePickerDialog(private val startDate: String? = null, private val endDate: String? = null) :
+    DialogFragment() {
     private lateinit var binding: DatePickerDialogBinding
     private lateinit var listener: DatePickerDialogClickListener
 
@@ -25,11 +26,18 @@ class DatePickerDialog(private val startDate: String? = null) : DialogFragment()
             binding.datePicker.minDate = cal.timeInMillis
         }
 
+        endDate?.let {
+            val cal = Calendar.getInstance()
+            cal.time = SimpleDateFormat("yyyy-MM-dd").parse(it)
+            binding.datePicker.maxDate = cal.timeInMillis
+        }
+
         binding.btnOk.setOnClickListener {
             listener.onOkClick(
                 binding.datePicker.year.toString(),
                 (binding.datePicker.month + 1).toString().padStart(2, '0'),
-                binding.datePicker.dayOfMonth.toString().padStart(2, '0'))
+                binding.datePicker.dayOfMonth.toString().padStart(2, '0')
+            )
             dismiss()
         }
         binding.btnCancel.setOnClickListener { dismiss() }

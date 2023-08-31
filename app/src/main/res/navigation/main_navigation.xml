@@ -20,9 +20,25 @@
 
     <fragment
         android:id="@+id/createTravelListFragment"
-        android:name="com.jerny.moiz.presentation.createTravelList.CreateTravelListFragment"
+        android:name="com.jerny.moiz.presentation.travel.create.CreateTravelListFragment"
         android:label="CreateTravelListFragment"
         tools:layout="@layout/create_travel_list_fragment" />
+
+    <fragment
+        android:id="@+id/AddScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.add.AddScheduleFragment"
+        android:label="AddScheduleFragment"
+        tools:layout="@layout/fragment_add_schedule">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+        <argument
+            android:name="startDate"
+            app:argType="string" />
+        <argument
+            android:name="endDate"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailBillingFragment"
@@ -49,7 +65,7 @@
 
     <fragment
         android:id="@+id/editTravelListFragment"
-        android:name="com.jerny.moiz.presentation.editTravelList.EditTravelListFragment"
+        android:name="com.jerny.moiz.presentation.travel.edit.EditTravelListFragment"
         android:label="EditTravelListFragment"
         tools:layout="@layout/edit_travel_list_fragment">
         <argument
@@ -65,6 +81,9 @@
         <action
             android:id="@+id/goto_add_billing"
             app:destination="@id/addBillingFragment" />
+        <action
+            android:id="@+id/goto_add_schedule"
+            app:destination="@id/AddScheduleFragment" />
         <argument
             android:name="travelId"
             app:argType="integer" />
@@ -74,13 +93,31 @@
         <action
             android:id="@+id/action_billingFragment_to_detailBillingFragment"
             app:destination="@id/detailBillingFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_addWishListFragment"
+            app:destination="@id/AddWishListFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_addScheduleFragment"
+            app:destination="@id/AddScheduleFragment" />
+        <action
+            android:id="@+id/action_detailFragment_to_scheduleDetailFragment"
+            app:destination="@id/scheduleDetailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/billingFragment"
         android:name="com.jerny.moiz.presentation.detail.billing.BillingFragment"
         android:label="BillingFragment"
-        tools:layout="@layout/fragment_billing">
+        tools:layout="@layout/fragment_billing"></fragment>
+
+    <fragment
+        android:id="@+id/AddWishListFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.add.AddWishListFragment"
+        android:label="AddWishListFragment"
+        tools:layout="@layout/fragment_add_wish_list">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
     </fragment>
 
     <fragment
@@ -92,6 +129,42 @@
             android:name="travelId"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/scheduleDetailFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.detail.ScheduleDetailFragment"
+        android:label="scheduleDetailFragment"
+        tools:layout="@layout/fragment_schedule_detail">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+        <argument
+            android:name="scheduleId"
+            app:argType="integer" />
+        <argument
+            android:name="startDate"
+            app:argType="string" />
+        <argument
+            android:name="endDate"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_scheduleDetailFragment_to_editScheduleFragment"
+            app:destination="@id/editScheduleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editScheduleFragment"
+        android:name="com.jerny.moiz.presentation.detail.schedule.edit.EditScheduleFragment"
+        android:label="editScheduleFragment"
+        tools:layout="@layout/fragment_edit_schedule">
+        <argument
+            android:name="travelId"
+            app:argType="integer" />
+        <argument
+            android:name="scheduleId"
+            app:argType="integer" />
+    </fragment>
+
     <fragment
         android:id="@+id/billingHelperFragment"
         android:name="com.jerny.moiz.presentation.billingHelper.BillingHelperFragment"
