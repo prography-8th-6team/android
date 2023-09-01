@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -31,6 +30,7 @@ import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
+import com.jerny.moiz.presentation.util.setCategorySelectView
 import com.jerny.moiz.presentation.util.showOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -111,57 +111,8 @@ class EditScheduleFragment : BaseFragment(R.layout.fragment_edit_schedule) {
             }
         }
 
-        ivCategory.setOnClickListener {
-            val inflater =
-                view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_category, null)
-
-            val popupWindow =
-                PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    isOutsideTouchable = true
-                    isFocusable = true
-                }
-
-            val categoryClickListener: (Int) -> Unit = { resId ->
-                ivCategory.setImageResource(resId)
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_shopping).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_shopping)
-                viewModel.updateParam(3, "shopping")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_market).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_market)
-                viewModel.updateParam(3, "market")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_food).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_food)
-                viewModel.updateParam(3, "food")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_hotel).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_hotel)
-                viewModel.updateParam(3, "hotel")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_transportation)
-                viewModel.updateParam(3, "transportation")
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_other).setOnClickListener {
-                categoryClickListener(R.drawable.ic_category_other)
-                viewModel.updateParam(3, "other")
-            }
-
-            popupWindow.showAsDropDown(ivCategory, -132, 20)
+        ivCategory.setCategorySelectView(false) {
+            viewModel.updateParam(1, it)
         }
 
         dpDate.setOnClickListener {
