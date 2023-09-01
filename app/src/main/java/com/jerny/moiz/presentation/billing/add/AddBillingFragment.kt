@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +37,7 @@ import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
 import com.jerny.moiz.presentation.util.hideKeyboard
+import com.jerny.moiz.presentation.util.setCategorySelectView
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
@@ -214,57 +214,8 @@ class AddBillingFragment : Fragment() {
             }
         }
 
-        ivCategory.setOnClickListener {
-            val inflater =
-                view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val popupView = inflater.inflate(R.layout.item_billing_category, null)
-
-            val popupWindow =
-                PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            popupWindow.isOutsideTouchable = true
-            popupWindow.isFocusable = true
-            popupWindow.showAsDropDown(ivCategory, -132, 20)
-
-            popupView.findViewById<LinearLayout>(R.id.ll_shopping).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_shopping)
-                viewModel.updateParam(1, "shopping")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_market).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_market)
-                viewModel.updateParam(1, "market")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_food).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_food)
-                viewModel.updateParam(1, "food")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_hotel).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_hotel)
-                viewModel.updateParam(1, "hotel")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_transportation).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_transportation)
-                viewModel.updateParam(1, "transportation")
-                popupWindow.dismiss()
-            }
-
-            popupView.findViewById<LinearLayout>(R.id.ll_other).setOnClickListener {
-                ivCategory.setImageResource(R.drawable.ic_category_other)
-                viewModel.updateParam(1, "other")
-                popupWindow.dismiss()
-            }
-
+        ivCategory.setCategorySelectView {
+            viewModel.updateParam(1, it)
         }
 
         ivImg.setOnClickListener {
