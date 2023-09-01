@@ -27,14 +27,13 @@ import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddScheduleBinding
-import com.jerny.moiz.databinding.ItemScheduleCategoryBinding
+import com.jerny.moiz.databinding.ItemCategoryBinding
 import com.jerny.moiz.presentation.travel.create.DatePickerDialog
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
 import com.jerny.moiz.presentation.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -165,7 +164,7 @@ class AddScheduleFragment : Fragment() {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
+            val popupView = inflater.inflate(R.layout.item_category, null)
             val popupWindow =
                 PopupWindow(
                     popupView,
@@ -176,7 +175,7 @@ class AddScheduleFragment : Fragment() {
                     isFocusable = true
                 }
 
-            val categoryBinding = ItemScheduleCategoryBinding.bind(popupView)
+            val categoryBinding = ItemCategoryBinding.bind(popupView)
 
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)

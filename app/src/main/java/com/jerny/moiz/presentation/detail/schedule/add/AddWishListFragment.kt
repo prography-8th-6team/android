@@ -10,8 +10,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -28,7 +26,7 @@ import androidx.navigation.fragment.navArgs
 import com.jerny.moiz.R
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.FragmentAddWishListBinding
-import com.jerny.moiz.databinding.ItemScheduleCategoryBinding
+import com.jerny.moiz.databinding.ItemCategoryBinding
 import com.jerny.moiz.presentation.util.FileResult
 import com.jerny.moiz.presentation.util.PermissionUtil
 import com.jerny.moiz.presentation.util.getFileInfo
@@ -95,7 +93,7 @@ class AddWishListFragment : Fragment() {
             val inflater =
                 view?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-            val popupView = inflater.inflate(R.layout.item_schedule_category, null)
+            val popupView = inflater.inflate(R.layout.item_category, null)
             val popupWindow =
                 PopupWindow(
                     popupView,
@@ -106,7 +104,7 @@ class AddWishListFragment : Fragment() {
                     isFocusable = true
                 }
 
-            val categoryBinding = ItemScheduleCategoryBinding.bind(popupView)
+            val categoryBinding = ItemCategoryBinding.bind(popupView)
 
             val categoryClickListener: (Int) -> Unit = { resId ->
                 ivCategory.setImageResource(resId)
