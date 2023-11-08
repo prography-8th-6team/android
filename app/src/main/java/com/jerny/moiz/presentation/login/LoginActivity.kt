@@ -4,14 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.jerny.moiz.data.UserDataStore
 import com.jerny.moiz.databinding.ActivityLoginBinding
+import com.jerny.moiz.presentation.UiState
 import com.jerny.moiz.presentation.main.MainActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
@@ -38,19 +42,33 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModel.token.observe(this) {
-            runBlocking {
-                UserDataStore.setUserToken(this@LoginActivity, it)
-            }
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)
+        lifecycleScope.launch {
+            viewModel.userInfo.collectLatest { state ->
+                when (state) {
+                    is UiState.Loading -> {}
 
-            finish()
-        }
+                    is UiState.Success -> {
+                        runBlocking {
+                            UserDataStore.setUserToken(
+                                this@LoginActivity,
+                                state.data.token.toString()
+                            )
+                        }
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
 
-        viewModel.userId.observe(this) {
-            runBlocking {
-                UserDataStore.setUserId(this@LoginActivity, it.toString())
+                        finish()
+
+                        runBlocking {
+                            UserDataStore.setUserId(
+                                this@LoginActivity,
+                                state.data.user_id.toString()
+                            )
+                        }
+                    }
+
+                    is UiState.Error -> {}
+                }
             }
         }
     }
